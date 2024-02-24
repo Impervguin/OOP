@@ -116,6 +116,8 @@ Window::Window(QWidget *parent) :
     saveButton = new QPushButton("Save figure", saveBox);
     saveButton->setGeometry(50, 300, 100, 30);
 
+    drawwwww = new OGLWidget(this);
+    drawwwww->setGeometry(0,0, 600, 600);
 //  fig = init_figure();
 //  read_figure("./data/cube.txt", fig);
 //  m_button = new QPushButton("Hello World", this);

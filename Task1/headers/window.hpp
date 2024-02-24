@@ -13,6 +13,7 @@ extern "C" {
 #include <QDoubleSpinBox>
 #include <QPushButton>
 #include <QGroupBox>
+#include "myopengl.hpp"
 
 class QPushButton;
 class Window : public QWidget
@@ -57,7 +58,8 @@ class Window : public QWidget
         QLabel *saveLabel;
         QLineEdit *saveLine;
         QPushButton *saveButton;
-
+        //
+        OGLWidget *drawwwww;
 //  private slots:
 //   void butt_click();
 };
