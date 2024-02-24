@@ -8,6 +8,6 @@ typedef enum {
     ERR_NULL_POINTER, 
     ERR_MEMORY,
     ERR_ARGUMENTS
-} error_t;
+} myerror_t;
 
 #endif // ERRS_H__

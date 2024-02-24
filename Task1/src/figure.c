@@ -17,17 +17,17 @@ void clear_figure(figure_t *fig)
     clear_edges(&fig->edges);
 }
 
-error_t copy_figure(const figure_t *src, figure_t *dst)
+myerror_t copy_figure(const figure_t *src, figure_t *dst)
 {
     if (src == NULL || dst == NULL)
         return ERR_NULL_POINTER;
-    error_t err = copy_points(&src->points, &dst->points);
+    myerror_t err = copy_points(&src->points, &dst->points);
     if (!err)
         err = copy_edges(&src->edges, &dst->edges);
     return err; 
 }
 
-error_t read_figure(const char *fname, figure_t *fig)
+myerror_t read_figure(const char *fname, figure_t *fig)
 {
     if (!fig)
         return ERR_NULL_POINTER;
@@ -38,7 +38,7 @@ error_t read_figure(const char *fname, figure_t *fig)
     
     figure_t tmp = {{0, NULL}, {0, NULL}};
 
-    error_t err = read_points(f, &tmp.points);
+    myerror_t err = read_points(f, &tmp.points);
     if (!err)
         err = read_edges(f, &tmp.edges);
     
@@ -49,7 +49,7 @@ error_t read_figure(const char *fname, figure_t *fig)
     return err;
 }
 
-error_t write_figure(const char *fname, figure_t *fig)
+myerror_t write_figure(const char *fname, figure_t *fig)
 {
     if (!fig)
         return ERR_NULL_POINTER;
@@ -58,7 +58,7 @@ error_t write_figure(const char *fname, figure_t *fig)
     if (!f)
         return ERR_NO_FILE;
     
-    error_t err = write_points(f, &fig->points);
+    myerror_t err = write_points(f, &fig->points);
     if (!err)
         err = write_edges(f, &fig->edges);
     
@@ -66,17 +66,17 @@ error_t write_figure(const char *fname, figure_t *fig)
     return err;
 }
 
-error_t move_figure(figure_t *fig, move_t *move)
+myerror_t move_figure(figure_t *fig, move_t *move)
 {
     return move_points(&fig->points, move);
 }
 
-error_t scale_figure(figure_t *fig, scale_t *scale)
+myerror_t scale_figure(figure_t *fig, scale_t *scale)
 {
     return scale_points(&fig->points, scale);
 }
 
-error_t rotate_figure(figure_t *fig, rotate_t *rotate)
+myerror_t rotate_figure(figure_t *fig, rotate_t *rotate)
 {
     return rotate_points(&fig->points, rotate);
 }

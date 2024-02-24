@@ -4,7 +4,7 @@
 #include "point.h"
 #include "actions.h"
 
-error_t read_point(FILE *f, point_t *p)
+myerror_t read_point(FILE *f, point_t *p)
 {
     if (!f)
         return ERR_NO_FILE;
@@ -22,7 +22,7 @@ error_t read_point(FILE *f, point_t *p)
     return OK;
 }
 
-error_t write_point(FILE *f, point_t *p)
+myerror_t write_point(FILE *f, point_t *p)
 {
     if (!f)
         return ERR_NO_FILE;
@@ -34,7 +34,7 @@ error_t write_point(FILE *f, point_t *p)
     return OK;
 }
 
-error_t move_point(point_t *p, move_t *move)
+myerror_t move_point(point_t *p, move_t *move)
 {
     if (!move || !p)
         return ERR_NULL_POINTER;
@@ -45,7 +45,7 @@ error_t move_point(point_t *p, move_t *move)
 }
 
 // Угол в радианах против часовой стрелке
-static error_t rotate_around_axis(double x, double y, double angle, double *new_x, double *new_y)
+static myerror_t rotate_around_axis(double x, double y, double angle, double *new_x, double *new_y)
 {
     if (!new_x || !new_y)
         return ERR_NULL_POINTER;
@@ -54,7 +54,7 @@ static error_t rotate_around_axis(double x, double y, double angle, double *new_
     return OK;
 }
 
-error_t rotate_point(point_t *p, rotate_t *rotate)
+myerror_t rotate_point(point_t *p, rotate_t *rotate)
 {
     if (!rotate || !p)
         return ERR_NULL_POINTER;
@@ -65,7 +65,7 @@ error_t rotate_point(point_t *p, rotate_t *rotate)
 }
 
 
-error_t scale_point(point_t *p, scale_t *scale)
+myerror_t scale_point(point_t *p, scale_t *scale)
 {
     if (!scale || !p)
         return ERR_NULL_POINTER;

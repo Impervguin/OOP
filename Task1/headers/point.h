@@ -13,11 +13,11 @@ struct point
 };
 
 
-error_t read_point(FILE *f, point_t *p);
-error_t write_point(FILE *f, point_t *p);
+myerror_t read_point(FILE *f, point_t *p);
+myerror_t write_point(FILE *f, point_t *p);
 
-error_t move_point(point_t *p, move_t *move);
-error_t rotate_point(point_t *p, rotate_t *rotate);
-error_t scale_point(point_t *p, scale_t *scale);
+myerror_t move_point(point_t *p, move_t *move);
+myerror_t rotate_point(point_t *p, rotate_t *rotate);
+myerror_t scale_point(point_t *p, scale_t *scale);
 
 #endif // POINT_H__

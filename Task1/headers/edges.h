@@ -19,14 +19,14 @@ struct edge {
 };
 
 
-error_t edges_init(edges_t *edges, size_t size);
+myerror_t edges_init(edges_t *edges, size_t size);
 void clear_edges(edges_t *edges);
-error_t copy_edges(const edges_t *src, edges_t *dst);
+myerror_t copy_edges(const edges_t *src, edges_t *dst);
 
-error_t read_edges(FILE *f, edges_t *edges);
-error_t write_edges(FILE *f, edges_t *edges);
+myerror_t read_edges(FILE *f, edges_t *edges);
+myerror_t write_edges(FILE *f, edges_t *edges);
 
-error_t read_edge(FILE *f, edge_t *edge);
-error_t write_edge(FILE *f, edge_t *edge);
+myerror_t read_edge(FILE *f, edge_t *edge);
+myerror_t write_edge(FILE *f, edge_t *edge);
 
 #endif // EDGES_H__

@@ -17,15 +17,15 @@ struct points
     point_t *arr;
 };
 
-error_t points_init(points_t *points, size_t size);
+myerror_t points_init(points_t *points, size_t size);
 void clear_points(points_t *points);
-error_t copy_points(const points_t *src, points_t *dst);
+myerror_t copy_points(const points_t *src, points_t *dst);
 
-error_t read_points(FILE *f, points_t *points);
-error_t write_points(FILE *f, points_t *points);
+myerror_t read_points(FILE *f, points_t *points);
+myerror_t write_points(FILE *f, points_t *points);
 
-error_t move_points(points_t *points, move_t *move);
-error_t scale_points(points_t *points, scale_t *move);
-error_t rotate_points(points_t *points, rotate_t *move);
+myerror_t move_points(points_t *points, move_t *move);
+myerror_t scale_points(points_t *points, scale_t *move);
+myerror_t rotate_points(points_t *points, rotate_t *move);
 
 #endif // POINTS_H__

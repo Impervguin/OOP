@@ -5,7 +5,7 @@
 #include "points.h"
 #include "point.h"
 
-error_t points_init(points_t *points, size_t size)
+myerror_t points_init(points_t *points, size_t size)
 {
     if (!points)
         return ERR_NULL_POINTER;
@@ -32,7 +32,7 @@ void clear_points(points_t *points)
     points->size = 0;
 }
 
-error_t copy_points(const points_t *src, points_t *dst)
+myerror_t copy_points(const points_t *src, points_t *dst)
 {
     if (!src || !dst)
         return ERR_NULL_POINTER;
@@ -53,7 +53,7 @@ error_t copy_points(const points_t *src, points_t *dst)
     return OK;
 }
 
-error_t read_points(FILE *f, points_t *points)
+myerror_t read_points(FILE *f, points_t *points)
 {
     if (!f)
         return ERR_NO_FILE;
@@ -65,7 +65,7 @@ error_t read_points(FILE *f, points_t *points)
     if (fscanf(f, "%zu", &num) != 1)
         return ERR_FILE_FORMAT;
     
-    error_t err = points_init(&tmp, num);
+    myerror_t err = points_init(&tmp, num);
     if (err)
         return err;
     
@@ -78,7 +78,7 @@ error_t read_points(FILE *f, points_t *points)
     return err;
 }
 
-error_t write_points(FILE *f, points_t *points)
+myerror_t write_points(FILE *f, points_t *points)
 {
     if (!points)
         return ERR_NULL_POINTER;
@@ -90,14 +90,14 @@ error_t write_points(FILE *f, points_t *points)
 
     for (size_t i = 0; i < points->size; i++)
     {
-        error_t err = write_point(f, &points->arr[i]);
+        myerror_t err = write_point(f, &points->arr[i]);
         if (err)
             return err;
     }
     return OK;
 }
 
-error_t move_points(points_t *points, move_t *move)
+myerror_t move_points(points_t *points, move_t *move)
 {
     if (!points)
         return ERR_NULL_POINTER;
@@ -108,7 +108,7 @@ error_t move_points(points_t *points, move_t *move)
     
     for (size_t i = 0; i < points->size; i++)
     {
-        error_t err = move_point(&points->arr[i], move);
+        myerror_t err = move_point(&points->arr[i], move);
         if (err)
             return err;
     }
@@ -116,7 +116,7 @@ error_t move_points(points_t *points, move_t *move)
 
 }
 
-error_t scale_points(points_t *points, scale_t *scale)
+myerror_t scale_points(points_t *points, scale_t *scale)
 {
     if (!points)
         return ERR_NULL_POINTER;
@@ -127,7 +127,7 @@ error_t scale_points(points_t *points, scale_t *scale)
     
     for (size_t i = 0; i < points->size; i++)
     {
-        error_t err = scale_point(&points->arr[i], scale);
+        myerror_t err = scale_point(&points->arr[i], scale);
         if (err)
             return err;
     }
@@ -135,7 +135,7 @@ error_t scale_points(points_t *points, scale_t *scale)
 
 }
 
-error_t rotate_points(points_t *points, rotate_t *rotate)
+myerror_t rotate_points(points_t *points, rotate_t *rotate)
 {
     if (!points)
         return ERR_NULL_POINTER;
@@ -146,7 +146,7 @@ error_t rotate_points(points_t *points, rotate_t *rotate)
     
     for (size_t i = 0; i < points->size; i++)
     {
-        error_t err = rotate_point(&points->arr[i], rotate);
+        myerror_t err = rotate_point(&points->arr[i], rotate);
         if (err)
             return err;
     }

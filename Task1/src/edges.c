@@ -4,7 +4,7 @@
 #include "edges.h"
 #include "errs.h"
 
-error_t edges_init(edges_t *edges, size_t size)
+myerror_t edges_init(edges_t *edges, size_t size)
 {
     if (!edges)
         return ERR_NULL_POINTER;
@@ -30,7 +30,7 @@ void clear_edges(edges_t *edges)
     }
     edges->size = 0;
 }
-error_t copy_edges(const edges_t *src, edges_t *dst)
+myerror_t copy_edges(const edges_t *src, edges_t *dst)
 {
     if (!src || !dst)
         return ERR_NULL_POINTER;
@@ -51,7 +51,7 @@ error_t copy_edges(const edges_t *src, edges_t *dst)
     return OK;
 }
 
-error_t read_edges(FILE *f, edges_t *edges)
+myerror_t read_edges(FILE *f, edges_t *edges)
 {
     if (!f)
         return ERR_NO_FILE;
@@ -63,7 +63,7 @@ error_t read_edges(FILE *f, edges_t *edges)
     if (fscanf(f, "%zu", &num) != 1)
         return ERR_FILE_FORMAT;
     
-    error_t err = edges_init(&tmp, num);
+    myerror_t err = edges_init(&tmp, num);
     if (err)
         return err;
     
@@ -76,7 +76,7 @@ error_t read_edges(FILE *f, edges_t *edges)
     return err;
 }
 
-error_t write_edges(FILE *f, edges_t *edges)
+myerror_t write_edges(FILE *f, edges_t *edges)
 {
     if (!edges)
         return ERR_NULL_POINTER;
@@ -88,14 +88,14 @@ error_t write_edges(FILE *f, edges_t *edges)
 
     for (size_t i = 0; i < edges->size; i++)
     {
-        error_t err = write_edge(f, &edges->arr[i]);
+        myerror_t err = write_edge(f, &edges->arr[i]);
         if (err)
             return err;
     }
     return OK;
 }
 
-error_t read_edge(FILE *f, edge_t *edge)
+myerror_t read_edge(FILE *f, edge_t *edge)
 {
     if (!f)
         return ERR_NO_FILE;
@@ -115,7 +115,7 @@ error_t read_edge(FILE *f, edge_t *edge)
     return OK;
 }
 
-error_t write_edge(FILE *f, edge_t *edge)
+myerror_t write_edge(FILE *f, edge_t *edge)
 {
     if (!f)
         return ERR_NO_FILE;
