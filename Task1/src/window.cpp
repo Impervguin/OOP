@@ -1,6 +1,7 @@
 #include "window.hpp"
 #include <QPushButton>
 #include <cstdlib>
+#include <cmath>
 
 
 Window::Window(QWidget *parent) :
@@ -116,7 +117,10 @@ Window::Window(QWidget *parent) :
     saveButton = new QPushButton("Save figure", saveBox);
     saveButton->setGeometry(50, 300, 100, 30);
 
-    drawwwww = new OGLWidget(this);
+    fig = init_figure();
+    read_figure("./data/cube.txt", fig);
+
+    drawwwww = new OGLWidget(this, fig);
     drawwwww->setGeometry(0,0, 600, 600);
 //  fig = init_figure();
 //  read_figure("./data/cube.txt", fig);

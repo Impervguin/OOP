@@ -58,7 +58,7 @@ myerror_t rotate_point(point_t *p, rotate_t *rotate)
 {
     if (!rotate || !p)
         return ERR_NULL_POINTER;
-    rotate_around_axis(p->x, p->y, rotate->oz, &p->x, &p->y);
+    rotate_around_axis(p->y, p->x, rotate->oz, &p->y, &p->x);
     rotate_around_axis(p->x, p->z, rotate->oy, &p->x, &p->z);
     rotate_around_axis(p->z, p->y, rotate->ox, &p->z, &p->y);
     return OK;

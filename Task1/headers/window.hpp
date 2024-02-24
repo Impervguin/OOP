@@ -58,8 +58,10 @@ class Window : public QWidget
         QLabel *saveLabel;
         QLineEdit *saveLine;
         QPushButton *saveButton;
-        //
+        // GLwidget
         OGLWidget *drawwwww;
+        // Figure
+        figure_t *fig;
 //  private slots:
 //   void butt_click();
 };
