@@ -11,8 +11,6 @@ figure_t *init_figure(void)
     return fig;
 }
 
-
-
 void clear_figure(figure_t *fig)
 {
     clear_points(&fig->points);
