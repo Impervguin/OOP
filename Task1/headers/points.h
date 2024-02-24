@@ -18,7 +18,7 @@ struct points
 };
 
 error_t points_init(points_t *points, size_t size);
-void clear_points(const points_t *points);
+void clear_points(points_t *points);
 error_t copy_points(const points_t *src, points_t *dst);
 
 error_t read_points(FILE *f, points_t *points);

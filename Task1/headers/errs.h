@@ -6,7 +6,8 @@ typedef enum {
     ERR_NO_FILE,
     ERR_FILE_FORMAT,
     ERR_NULL_POINTER, 
-    ERR_MEMORY
+    ERR_MEMORY,
+    ERR_ARGUMENTS
 } error_t;
 
 #endif // ERRS_H__

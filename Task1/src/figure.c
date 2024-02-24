@@ -7,7 +7,7 @@
 
 figure_t *init_figure(void)
 {
-    figure_t *fig = malloc(sizeof(figure_t));
+    figure_t *fig = calloc(1, sizeof(figure_t));
     return fig;
 }
 
@@ -38,7 +38,7 @@ error_t read_figure(const char *fname, figure_t *fig)
     if (!f)
         return ERR_NO_FILE;
     
-    figure_t tmp;
+    figure_t tmp = {{0, NULL}, {0, NULL}};
 
     error_t err = read_points(f, &tmp.points);
     if (!err)
@@ -47,6 +47,7 @@ error_t read_figure(const char *fname, figure_t *fig)
     fclose(f);
     if (!err)
         err = copy_figure(&tmp, fig);
+    clear_figure(&tmp);
     return err;
 }
 
