@@ -1,4 +1,6 @@
 #include "window.hpp"
+#include "actions.h"
+#include <QString>
 #include <QPushButton>
 #include <cstdlib>
 #include <cmath>
@@ -22,18 +24,24 @@ Window::Window(QWidget *parent) :
 
     xScaleInp = new QDoubleSpinBox(scaleBox);
     xScaleInp->setGeometry(30, 60, 75, 48);
+    xScaleInp->setRange(-5, 5);
+    xScaleInp->setValue(1);
 
     scaleyLabel = new QLabel("Y:", scaleBox);
     scaleyLabel->setGeometry(5, 168, 25, 48);
 
     yScaleInp = new QDoubleSpinBox(scaleBox);
     yScaleInp->setGeometry(30, 168, 75, 48);
+    yScaleInp->setRange(-5, 5);
+    yScaleInp->setValue(1);
 
     scalezLabel = new QLabel("Z:", scaleBox);
     scalezLabel->setGeometry(5, 276, 25, 48);
 
     zScaleInp = new QDoubleSpinBox(scaleBox);
     zScaleInp->setGeometry(30, 276, 75, 48);
+    zScaleInp->setRange(-5, 5);
+    zScaleInp->setValue(1);
 
     scaleButton = new QPushButton("Scale", scaleBox);
     scaleButton->setGeometry(5, 412, 100, 48);
@@ -51,18 +59,21 @@ Window::Window(QWidget *parent) :
 
     xrotateInp = new QDoubleSpinBox(rotateBox);
     xrotateInp->setGeometry(30, 60, 75, 48);
+    xrotateInp->setRange(-360, 360);
 
     rotateyLabel = new QLabel("oY:", rotateBox);
     rotateyLabel->setGeometry(5, 168, 25, 48);
 
     yrotateInp = new QDoubleSpinBox(rotateBox);
     yrotateInp->setGeometry(30, 168, 75, 48);
+    yrotateInp->setRange(-360, 360);
 
     rotatezLabel = new QLabel("oZ:", rotateBox);
     rotatezLabel->setGeometry(5, 276, 25, 48);
 
     zrotateInp = new QDoubleSpinBox(rotateBox);
     zrotateInp->setGeometry(30, 276, 75, 48);
+    zrotateInp->setRange(-360, 360);
 
     rotateButton = new QPushButton("Rotate", rotateBox);
     rotateButton->setGeometry(5, 412, 100, 48);
@@ -76,18 +87,21 @@ Window::Window(QWidget *parent) :
 
     xmoveInp = new QDoubleSpinBox(moveBox);
     xmoveInp->setGeometry(30, 60, 75, 48);
+    xmoveInp->setRange(-5, 5);
 
     moveyLabel = new QLabel("Y:", moveBox);
     moveyLabel->setGeometry(5, 168, 25, 48);
 
     ymoveInp = new QDoubleSpinBox(moveBox);
     ymoveInp->setGeometry(30, 168, 75, 48);
+    ymoveInp->setRange(-5, 5);
 
     movezLabel = new QLabel("Z:", moveBox);
     movezLabel->setGeometry(5, 276, 25, 48);
 
     zmoveInp = new QDoubleSpinBox(moveBox);
     zmoveInp->setGeometry(30, 276, 75, 48);
+    zmoveInp->setRange(-5, 5);
 
     moveButton = new QPushButton("Move", moveBox);
     moveButton->setGeometry(5, 412, 100, 48);
@@ -101,8 +115,9 @@ Window::Window(QWidget *parent) :
 
     loadLine = new QLineEdit(loadBox);
     loadLine->setGeometry(5, 125, 190, 30);
+    loadLine->setText("./data/cube.txt");
 
-    loadButton = new QPushButton("Save figure", loadBox);
+    loadButton = new QPushButton("Load figure", loadBox);
     loadButton->setGeometry(50, 300, 100, 30);
     // Save
     saveBox = new QGroupBox("Save box", this);
@@ -117,23 +132,57 @@ Window::Window(QWidget *parent) :
     saveButton = new QPushButton("Save figure", saveBox);
     saveButton->setGeometry(50, 300, 100, 30);
 
-    fig = init_figure();
-    read_figure("./data/cube.txt", fig);
+    connect(rotateButton, &QPushButton::clicked, this, &Window::rotate_click);
+    connect(moveButton, &QPushButton::clicked, this, &Window::move_click);
+    connect(scaleButton, &QPushButton::clicked, this, &Window::scale_click);
+    connect(loadButton, &QPushButton::clicked, this, &Window::load_click);
+    connect(saveButton, &QPushButton::clicked, this, &Window::save_click);
 
-    drawwwww = new OGLWidget(this, fig);
+    drawwwww = new OGLWidget(this);
     drawwwww->setGeometry(0,0, 600, 600);
-//  fig = init_figure();
-//  read_figure("./data/cube.txt", fig);
-//  m_button = new QPushButton("Hello World", this);
-//  m_button->setGeometry(10, 10, 80, 30);
-//  lable = new QLabel("HIIIIII", this);
-//  lable->setGeometry(90, 90, 100, 100);
-//  connect(m_button, &QPushButton::clicked, this, &Window::butt_click);
 }
 
-// void Window::butt_click()
-// {
-//     // printf("HIIIIIII %d\n", a);
-//     write_figure("test", fig);
-//     clear_figure(fig);
-// }
+void Window::rotate_click()
+{
+    double oy = degrees_to_radians(yrotateInp->value());
+    double ox = degrees_to_radians(xrotateInp->value());
+    double oz = degrees_to_radians(zrotateInp->value());
+    rotate_t act = {.ox = ox, .oy = oy, .oz = oz};
+    drawwwww->rotate(&act);
+    drawwwww->update();
+}
+
+void Window::scale_click()
+{
+    double sx = xScaleInp->value();
+    double sy = yScaleInp->value();
+    double sz = zScaleInp->value();
+    scale_t act = {.x = sx, .y = sy, .z = sz};
+    drawwwww->scale(&act);
+    drawwwww->update();
+}
+
+void Window::move_click()
+{
+    double x = xmoveInp->value();
+    double y = ymoveInp->value();
+    double z = zmoveInp->value();
+    move_t act = {.x = x, .y = y, .z = z};
+    drawwwww->move(&act);
+    drawwwww->update();
+}
+
+void Window::load_click()
+{
+    std::string str = loadLine->text().toStdString();
+    const char* fname = str.c_str();
+    drawwwww->read(fname);
+    drawwwww->update();
+}
+
+void Window::save_click()
+{
+    std::string str = saveLine->text().toStdString();
+    const char* fname = str.c_str();
+    drawwwww->write(fname);
+}

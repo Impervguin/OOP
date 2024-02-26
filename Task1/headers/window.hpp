@@ -62,8 +62,12 @@ class Window : public QWidget
         OGLWidget *drawwwww;
         // Figure
         figure_t *fig;
-//  private slots:
-//   void butt_click();
+    private slots:
+        void rotate_click();
+        void scale_click();
+        void move_click();
+        void save_click();
+        void load_click();
 };
 
 #endif // WINDOW_H
