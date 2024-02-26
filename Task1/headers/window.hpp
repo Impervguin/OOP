@@ -7,12 +7,14 @@ extern "C" {
     #include "errs.h"
 }
 
+#include <QString>
 #include <QWidget>
 #include <QLineEdit>
 #include <QLabel>
 #include <QDoubleSpinBox>
 #include <QPushButton>
 #include <QGroupBox>
+#include <QTextEdit>
 #include "myopengl.hpp"
 
 class QPushButton;
@@ -60,14 +62,20 @@ class Window : public QWidget
         QPushButton *saveButton;
         // GLwidget
         OGLWidget *drawwwww;
-        // Figure
-        figure_t *fig;
+        // Log
+        QGroupBox *logBox;
+        QLabel *logLabel;
+        QTextEdit *logText;
+        QString *logString;
+    
+        void log(const char *str);
     private slots:
         void rotate_click();
         void scale_click();
         void move_click();
         void save_click();
         void load_click();
+    
 };
 
 #endif // WINDOW_H

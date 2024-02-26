@@ -4,13 +4,14 @@
 #include <QPushButton>
 #include <cstdlib>
 #include <cmath>
+#include <cstring>
 
 
 Window::Window(QWidget *parent) :
  QWidget(parent)
  {
  // Set size of the window
- setFixedSize(1000, 1000);
+ setFixedSize(1000, 800);
 
  // Create and position the button
     scaleBox = new QGroupBox("Scale box", this);
@@ -108,7 +109,7 @@ Window::Window(QWidget *parent) :
 
     // Load
     loadBox = new QGroupBox("Load box", this);
-    loadBox->setGeometry(600, 500, 200, 500);
+    loadBox->setGeometry(600, 500, 200, 300);
 
     loadLabel = new QLabel("Load file:", loadBox);
     loadLabel->setGeometry(5, 100, 190, 25);
@@ -118,10 +119,10 @@ Window::Window(QWidget *parent) :
     loadLine->setText("./data/cube.txt");
 
     loadButton = new QPushButton("Load figure", loadBox);
-    loadButton->setGeometry(50, 300, 100, 30);
+    loadButton->setGeometry(50, 250, 100, 30);
     // Save
     saveBox = new QGroupBox("Save box", this);
-    saveBox->setGeometry(800, 500, 200, 500);
+    saveBox->setGeometry(800, 500, 200, 300);
 
     saveLabel = new QLabel("Save file:", saveBox);
     saveLabel->setGeometry(5, 100, 190, 25);
@@ -130,7 +131,7 @@ Window::Window(QWidget *parent) :
     saveLine->setGeometry(5, 125, 190, 30);
 
     saveButton = new QPushButton("Save figure", saveBox);
-    saveButton->setGeometry(50, 300, 100, 30);
+    saveButton->setGeometry(50, 250, 100, 30);
 
     connect(rotateButton, &QPushButton::clicked, this, &Window::rotate_click);
     connect(moveButton, &QPushButton::clicked, this, &Window::move_click);
@@ -140,6 +141,15 @@ Window::Window(QWidget *parent) :
 
     drawwwww = new OGLWidget(this);
     drawwwww->setGeometry(0,0, 600, 600);
+    // Log
+    logBox = new QGroupBox("Log", this);
+    logBox->setGeometry(0, 600, 600, 200);
+    // QLabel *logLabel;
+    logText = new QTextEdit(logBox);
+    logText->setGeometry(25, 25, 550, 170);
+    logString = new QString("");
+    log("HIe");
+    log("Hue");
 }
 
 void Window::rotate_click()
@@ -148,7 +158,7 @@ void Window::rotate_click()
     double ox = degrees_to_radians(xrotateInp->value());
     double oz = degrees_to_radians(zrotateInp->value());
     rotate_t act = {.ox = ox, .oy = oy, .oz = oz};
-    drawwwww->rotate(&act);
+    myerror_t err = drawwwww->rotate(&act);
     drawwwww->update();
 }
 
@@ -185,4 +195,14 @@ void Window::save_click()
     std::string str = saveLine->text().toStdString();
     const char* fname = str.c_str();
     drawwwww->write(fname);
+}
+
+void Window::log(const char *str)
+{
+    char tmp[strlen(str) + 2];
+    strcpy(tmp, str);
+    strcat(tmp, "\n");
+    logString->append(tmp);
+    QString& t = *logString;
+    logText->setText(t);
 }
