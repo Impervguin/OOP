@@ -17,6 +17,6 @@ struct rotate {
     double ox, oy, oz;
 };
 
-
+double degrees_to_radians(double deg);
 
 #endif // ACTIONS_H__

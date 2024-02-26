@@ -1,14 +1,21 @@
 #include "myopengl.hpp"
+#include <cmath>
 
-OGLWidget::OGLWidget(QWidget *parent, figure_t *figure)
+extern "C" {
+    #include "figure.h"
+    // #include "actions.h"
+}
+
+OGLWidget::OGLWidget(QWidget *parent)
     : QOpenGLWidget(parent)
 {
-    fig = figure;
+    fig = init_figure();
 }
 
 OGLWidget::~OGLWidget()
 {
-
+    clear_figure(fig);
+    free(fig);
 }
 
 void OGLWidget::initializeGL()
@@ -21,58 +28,15 @@ void OGLWidget::initializeGL()
 void OGLWidget::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     glBegin(GL_LINES);
         glColor3f(1, 1, 1);
-        for (size_t i = 0; i < fig->edges.size; i++)
+        for (size_t i = 0; i < fig->edges.size; ++i)
         {
             glVertex3d(fig->points.arr[fig->edges.arr[i].p1].x,fig->points.arr[fig->edges.arr[i].p1].y,fig->points.arr[fig->edges.arr[i].p1].z);
             glVertex3d(fig->points.arr[fig->edges.arr[i].p2].x,fig->points.arr[fig->edges.arr[i].p2].y,fig->points.arr[fig->edges.arr[i].p2].z);
         }
-        // glColor3f(1, 1, 1);
-        // glVertex3d(1.000000, 1.000000, 1.000000);
-        // glVertex3d(1.000000, 1.000000, -1.000000);
-        // // glColor3f(1, 1, 1);
-        // glVertex3d(1.000000, 1.000000, 1.000000);
-        // glVertex3d(1.000000, -1.000000, 1.000000);
-        // // glColor3f(1, 1, 1);
-        // glVertex3d(1.000000, 1.000000, 1.000000);
-        // glVertex3d(-1.000000, 1.000000, 1.000000);
-        // // glColor3f(1, 1, 1);
-        // glVertex3d(-1.000000, 1.000000, 1.000000);
-        // glVertex3d(-1.000000, 1.000000, -1.000000);
-        // // glColor3f(1, 1, 1);  
-        // glVertex3d(-1.000000, 1.000000, 1.000000);
-        // glVertex3d(-1.000000, -1.000000, 1.000000);
-        // // glColor3f(1, 1, 1);
-        // glVertex3d(-1.000000, -1.000000, -1.000000);
-        // glVertex3d(-1.000000, 1.000000, -1.000000);
-        // // glColor3f(1, 1, 1);
-        // glVertex3d(-1.000000, -1.000000, -1.000000);
-        // glVertex3d(1.000000, -1.000000, -1.000000);
-        // // glColor3f(1, 1, 1);
-        // glVertex3d(-1.000000, -1.000000, -1.000000);
-        // glVertex3d(-1.000000, -1.000000, 1.000000);
-        // // glColor3f(1, 1, 1);
-        // glVertex3d(1.000000, 1.000000, -1.000000);
-        // glVertex3d(-1.000000, 1.000000, -1.000000);
-        // // glColor3f(1, 1, 1);
-        // glVertex3d(1.000000, 1.000000, -1.000000);
-        // glVertex3d(1.000000, -1.000000, -1.000000);
-        // // glColor3f(1, 1, 1);
-        // glVertex3d(1, -1, 1);
-        // glVertex3d(-1, -1, 1);
-        // // glColor3f(1, 1, 1);
-        // glVertex3d(1.000000, -1.000000, -1.000000);
-        // glVertex3d(1.000000, -1.000000, 1.000000);
     glEnd();
 
-    // glBegin(GL_LINES);
-    //     glColor3f(1, 1, 1);
-    //     glVertex3d(1, 1, 1);
-    //     glVertex3d(1,)
-    // glEnd();
-    // glBegin(GL_2D)
 }
 
 void OGLWidget::resizeGL(int w, int h)
@@ -84,4 +48,40 @@ void OGLWidget::resizeGL(int w, int h)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     gluLookAt(-5,0,0,0,0,0,0,0,1);
+}
+
+
+myerror_t OGLWidget::rotate(rotate_t *act)
+{
+    if (!fig)
+        return OK;
+    return rotate_figure(fig, act);
+}
+
+myerror_t OGLWidget::move(move_t *act)
+{
+    if (!fig)
+        return OK;
+    return move_figure(fig, act);
+}
+
+myerror_t OGLWidget::scale(scale_t *act)
+{
+    if (!fig)
+        return OK;
+    return scale_figure(fig, act);
+}
+
+myerror_t OGLWidget::read(const char *fname)
+{
+    if (!fname)
+        return ERR_NULL_POINTER;
+    return read_figure(fname, fig);
+}
+
+myerror_t OGLWidget::write(const char *fname)
+{
+    if (!fname)
+        return ERR_NULL_POINTER;
+    return write_figure(fname, fig);
 }
