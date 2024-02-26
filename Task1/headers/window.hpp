@@ -64,7 +64,6 @@ class Window : public QWidget
         OGLWidget *drawwwww;
         // Log
         QGroupBox *logBox;
-        QLabel *logLabel;
         QTextEdit *logText;
         QString *logString;
     

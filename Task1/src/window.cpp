@@ -144,12 +144,12 @@ Window::Window(QWidget *parent) :
     // Log
     logBox = new QGroupBox("Log", this);
     logBox->setGeometry(0, 600, 600, 200);
-    // QLabel *logLabel;
+
     logText = new QTextEdit(logBox);
     logText->setGeometry(25, 25, 550, 170);
+    logText->setTextInteractionFlags(Qt::NoTextInteraction);
     logString = new QString("");
-    log("HIe");
-    log("Hue");
+
 }
 
 void Window::rotate_click()
@@ -159,7 +159,10 @@ void Window::rotate_click()
     double oz = degrees_to_radians(zrotateInp->value());
     rotate_t act = {.ox = ox, .oy = oy, .oz = oz};
     myerror_t err = drawwwww->rotate(&act);
-    drawwwww->update();
+    if (err)
+        log(err_message(err));
+    else
+        drawwwww->update();
 }
 
 void Window::scale_click()
@@ -168,8 +171,11 @@ void Window::scale_click()
     double sy = yScaleInp->value();
     double sz = zScaleInp->value();
     scale_t act = {.x = sx, .y = sy, .z = sz};
-    drawwwww->scale(&act);
-    drawwwww->update();
+    myerror_t err = drawwwww->scale(&act);
+    if (err)
+        log(err_message(err));
+    else
+        drawwwww->update();
 }
 
 void Window::move_click()
@@ -178,23 +184,31 @@ void Window::move_click()
     double y = ymoveInp->value();
     double z = zmoveInp->value();
     move_t act = {.x = x, .y = y, .z = z};
-    drawwwww->move(&act);
-    drawwwww->update();
+    myerror_t err = drawwwww->move(&act);
+    if (err)
+        log(err_message(err));
+    else
+        drawwwww->update();
 }
 
 void Window::load_click()
 {
     std::string str = loadLine->text().toStdString();
     const char* fname = str.c_str();
-    drawwwww->read(fname);
-    drawwwww->update();
+    myerror_t err = drawwwww->read(fname);
+    if (err)
+        log(err_message(err));
+    else
+        drawwwww->update();;
 }
 
 void Window::save_click()
 {
     std::string str = saveLine->text().toStdString();
     const char* fname = str.c_str();
-    drawwwww->write(fname);
+    myerror_t err = drawwwww->write(fname);
+    if (err)
+        log(err_message(err));
 }
 
 void Window::log(const char *str)
