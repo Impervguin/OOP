@@ -10,4 +10,6 @@ typedef enum {
     ERR_ARGUMENTS
 } myerror_t;
 
+const char *err_message(myerror_t err);
+
 #endif // ERRS_H__

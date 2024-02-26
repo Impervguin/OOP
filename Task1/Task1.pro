@@ -23,4 +23,5 @@ SOURCES += src/edges.c \
            src/points.c \
            src/window.cpp \
            src/myopengl.cpp \
-           src/actions.c
+           src/actions.c \
+           src/errs.c
