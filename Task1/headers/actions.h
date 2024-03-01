@@ -4,6 +4,8 @@
 typedef struct move move_t;
 typedef struct scale scale_t;
 typedef struct rotate rotate_t;
+typedef struct save save_t;
+typedef struct load load_t;
 
 /**
  * @brief Объект содержащий данные для перемещения некоторого объекта в пространстве.
@@ -28,6 +30,15 @@ struct scale {
 struct rotate {
     double ox, oy, oz;
 };
+
+struct load {
+    const char *fname;
+};
+
+struct save {
+    const char *fname;
+};
+
 
 /**
  * @brief Функция перевода угла в градусах в радианы.

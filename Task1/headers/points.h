@@ -22,7 +22,7 @@ struct points
  * Не освобождает память из-под выделенного до этого объекта, если она была выделена.
  * @param points - Указатель на инициализируемый объект.
  * @param size - Количество рёбер, под которые выделится память.
- * @return myerror_t - size = 0 => ERR_ARGUMENT, edges = NULL => ERR_NULL_POINTER, ошибка выделения памяти => ERR_MEMORY, else => OK
+ * @return myerror_t - points = NULL => ERR_NULL_POINTER, ошибка выделения памяти => ERR_MEMORY, else => OK
  */
 myerror_t points_init(points_t *points, size_t size);
 
@@ -41,7 +41,7 @@ void clear_points(points_t *points);
  * @param dst - Указатель на место копирования.
  * @return myerror_t - dst == NULL or src == NULL => ERR_NULL_POINTER, ошибка выделения памяти => ERR_MEMORY, else => OK
  */
-myerror_t copy_points(const points_t *src, points_t *dst);
+myerror_t copy_points(points_t *dst, const points_t *src);
 
 
 /**
@@ -58,7 +58,7 @@ myerror_t copy_points(const points_t *src, points_t *dst);
  * Ошибка выделения памяти => ERR_MEMORY
  * else => OK
  */
-myerror_t read_points(FILE *f, points_t *points);
+myerror_t read_points(points_t *points, FILE *f);
 
 /**
  * @brief Функция записывает точки в файл
@@ -78,29 +78,58 @@ myerror_t write_points(FILE *f, points_t *points);
  * 
  * @param points - Указатель на точки.
  * @param move - Указатель на объект сдвига
- * @return myerror_t - points = NULL или points.arr = NULL или move = NULL => ERR_NULL_POINTER,
+ * @return myerror_t - points = NULL или move = NULL => ERR_NULL_POINTER,
+ * points.arr = NULL или points.size = 0 => ERR_EMPTY
  * else => OK
  */
 myerror_t move_points(points_t *points, move_t *move);
 
 /**
- * @brief Масштабирует все точки относительно центра координат объектом scale_t.
+ * @brief Масштабирует все точки относительно заданной точки объектом scale_t.
  * 
  * @param points - Указатель на точки.
- * @param move - Указатель на объект масштабирования
- * @return myerror_t - points = NULL или points.arr = NULL или move = NULL => ERR_NULL_POINTER,
+ * @param move - Указатель на объект масштабирования.
+ * @param center - Центр масщтабирования.
+ * @return myerror_t - points = NULL или move = NULL или center = NULL => ERR_NULL_POINTER,
+ * points.arr = NULL или points.size = 0 => ERR_EMPTY
  * else => OK
  */
-myerror_t scale_points(points_t *points, scale_t *move);
+myerror_t scale_points(points_t *points, scale_t *scale, point_t *center);
 
 /**
- * @brief Поворачивает все точки объектом rotate_t вокруг координатных осей.
+ * @brief Поворачивает все точки объектом rotate_t вокруг заданной точки.
  * 
  * @param points - Указатель на точки.
  * @param move - Указатель на объект поворота.
- * @return myerror_t - points = NULL или points.arr = NULL или move = NULL => ERR_NULL_POINTER,
+ * @param center - Центр поворота
+ * @return myerror_t - points = NULL или move = NULL или center = NULL => ERR_NULL_POINTER,
+ * points.arr = NULL или points.size = 0 => ERR_EMPTY
  * else => OK
  */
-myerror_t rotate_points(points_t *points, rotate_t *move);
+myerror_t rotate_points(points_t *points, rotate_t *rotate, point_t *center);
+
+/**
+ * @brief Ищет противоположные углы минимального прямоугольного параллелепипеда, включающего все точки.
+ * 
+ * @param min_point - Указатель на угол параллелепипеда с наименьшими координатами.
+ * @param max_point - Указатель на угол параллелепипеда с наибольшими координатами. 
+ * @param points - Указатель на точки.
+ * @return myerror_t points = NULL или min_point = NULL или max_point = NULL => ERR_NULL_POINTER,
+ * points.arr = NULL или points.size = 0 => ERR_EMPTY
+ * else => OK
+ */
+myerror_t points_rect(point_t *min_point, point_t *max_point, points_t *points);
+
+/**
+ * @brief Функция ищет центр массива точек, то есть
+ * центр наименьшего параллелепипеда, включающего все точки.
+ * 
+ * @param center - Указатель на искомый центр.
+ * @param points - Указатель на точки.
+ * @return myerror_t points = NULL или center = NULL => ERR_NULL_POINTER,
+ * points.arr = NULL или points.size = 0 => ERR_EMPTY
+ * else => OK
+ */
+myerror_t points_center(point_t *center, points_t *points);
 
 #endif // POINTS_H__

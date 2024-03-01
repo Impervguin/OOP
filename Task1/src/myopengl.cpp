@@ -1,3 +1,5 @@
+// Opengl is now forbidden in this lab, so this file is not used
+
 #include "myopengl.hpp"
 #include <cmath>
 
@@ -9,7 +11,7 @@ extern "C" {
 OGLWidget::OGLWidget(QWidget *parent)
     : QOpenGLWidget(parent)
 {
-    fig = init_figure();
+    fig = create_figure();
 }
 
 OGLWidget::~OGLWidget()
@@ -76,7 +78,7 @@ myerror_t OGLWidget::read(const char *fname)
 {
     if (!fname)
         return ERR_NULL_POINTER;
-    return read_figure(fname, fig);
+    return read_figure(fig, fname);
 }
 
 myerror_t OGLWidget::write(const char *fname)

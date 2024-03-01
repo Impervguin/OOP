@@ -4,7 +4,7 @@
 #include "point.h"
 #include "actions.h"
 
-myerror_t read_point(FILE *f, point_t *p)
+myerror_t read_point(point_t *p, FILE *f)
 {
     if (!f)
         return ERR_NO_FILE;

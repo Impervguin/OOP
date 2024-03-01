@@ -30,28 +30,27 @@ void clear_edges(edges_t *edges)
     }
     edges->size = 0;
 }
-myerror_t copy_edges(const edges_t *src, edges_t *dst)
+myerror_t copy_edges(edges_t *dst, const edges_t *src)
 {
     if (!src || !dst)
         return ERR_NULL_POINTER;
-    if (src->arr)
+    
+    if (src->size != 0 && src->arr != NULL)
     {
-        edge_t *arr = malloc(sizeof(edge_t) * src->size);
+        edge_t *arr = realloc(dst->arr, sizeof(edge_t) * src->size);
         if (!arr)
             return ERR_MEMORY;
-        memcpy(arr, src->arr, sizeof(edge_t) * src->size);
-        if (dst->arr)
-            clear_edges(dst);
+        
         dst->size = src->size;
         dst->arr = arr;
+        memcpy(dst->arr, src->arr, sizeof(edge_t) * src->size);
     }
-    else
-        if (dst->arr)
-            clear_edges(dst);
+    else 
+        clear_edges(dst);
     return OK;
 }
 
-myerror_t read_edges(FILE *f, edges_t *edges)
+myerror_t read_edges(edges_t *edges, FILE *f)
 {
     if (!f)
         return ERR_NO_FILE;
@@ -68,10 +67,10 @@ myerror_t read_edges(FILE *f, edges_t *edges)
         return err;
     
     for (size_t i = 0; i < num && !err; i++)
-        err = read_edge(f, &tmp.arr[i]);
+        err = read_edge(&tmp.arr[i], f);
     
     if (!err)
-        copy_edges(&tmp, edges);
+        copy_edges(edges, &tmp);
     clear_edges(&tmp);
     return err;
 }
@@ -95,7 +94,7 @@ myerror_t write_edges(FILE *f, edges_t *edges)
     return OK;
 }
 
-myerror_t read_edge(FILE *f, edge_t *edge)
+myerror_t read_edge(edge_t *edge, FILE *f)
 {
     if (!f)
         return ERR_NO_FILE;

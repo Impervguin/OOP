@@ -28,6 +28,9 @@ const char *err_message(myerror_t err)
     case ERR_ARGUMENTS:
         return "Incorrect arguments passed to function.";
         break;
+    case ERR_EMPTY:
+        return "Empty figure.";
+        break;
     default:
         return "Unknown error.";
         break;

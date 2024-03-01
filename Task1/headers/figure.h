@@ -14,6 +14,7 @@ typedef struct figure figure_t;
  * 
  */
 struct figure {
+    point_t center; /// Центр фигуры
     points_t points; /// Точки фигуры.
     edges_t edges; /// Ребра фигуры.
 };
@@ -23,7 +24,9 @@ struct figure {
  * Инициализирует весь объект нулями.
  * @return figure_t* - Указатель на созданный объект, NULL - в случае неудачи выделения.
  */
-figure_t *init_figure(void);
+figure_t *create_figure(void);
+
+void figure_init(figure_t *fig);
 
 /**
  * @brief Функция, для очистки фигуры(очищает все вложенные).
@@ -39,7 +42,7 @@ void clear_figure(figure_t *fig);
  * @param dst - Указатель на место для копирования.
  * @return myerror_t - dst == NULL or src == NULL => ERR_NULL_POINTER, ошибка выделения памяти => ERR_MEMORY, else => OK
  */
-myerror_t copy_figure(const figure_t *src, figure_t *dst);
+myerror_t copy_figure(figure_t *dst, const figure_t *src);
 
 
 /**
@@ -58,7 +61,7 @@ myerror_t copy_figure(const figure_t *src, figure_t *dst);
  * Ошибка выделения памяти => ERR_MEMORY
  * else => OK
  */
-myerror_t read_figure(const char *fname, figure_t *fig);
+myerror_t read_figure(figure_t *fig, const char *fname);
 
 /**
  * @brief Функция для записи фигуры в файл.
@@ -106,5 +109,18 @@ myerror_t scale_figure(figure_t *fig, scale_t *scale);
  * else => OK
  */
 myerror_t rotate_figure(figure_t *fig, rotate_t *rotate);
+
+
+/**
+ * @brief Функция ищет центр фигуры, то есть
+ * центр наименьшего параллелепеда, включающего её
+ * 
+ * @param center - Указатель на искомый центр.
+ * @param figure - Указатель на фигуру.
+ * @return myerror_t - figure = NULL или center = NULL => ERR_NULL_POINTER,
+ * figure.points - пуста => ERR_EMPTY
+ * else => OK
+ */
+myerror_t figure_center(point_t *center, figure_t *figure);
 
 #endif // FIGURE_H__

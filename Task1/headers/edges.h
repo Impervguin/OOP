@@ -49,7 +49,7 @@ void clear_edges(edges_t *edges);
  * @param dst - Указатель на место копирования.
  * @return myerror_t - dst == NULL or src == NULL => ERR_NULL_POINTER, ошибка выделения памяти => ERR_MEMORY, else => OK
  */
-myerror_t copy_edges(const edges_t *src, edges_t *dst);
+myerror_t copy_edges(edges_t *dst, const edges_t *src);
 
 /**
  * @brief Читает ребра из файла в объект.
@@ -65,7 +65,7 @@ myerror_t copy_edges(const edges_t *src, edges_t *dst);
  * Ошибка выделения памяти => ERR_MEMORY
  * else => OK
  */
-myerror_t read_edges(FILE *f, edges_t *edges);
+myerror_t read_edges(edges_t *edges, FILE *f);
 
 /**
  * @brief Функция записывает ребра в файл
@@ -92,7 +92,7 @@ myerror_t write_edges(FILE *f, edges_t *edges);
  * Ошибка выделения памяти => ERR_MEMORY
  * else => OK
  */
-myerror_t read_edge(FILE *f, edge_t *edge);
+myerror_t read_edge(edge_t *edge, FILE *f);
 
 /**
  * @brief Функция для записи ребра в файл.

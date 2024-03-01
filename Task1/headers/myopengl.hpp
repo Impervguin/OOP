@@ -1,5 +1,7 @@
-#ifndef OGLWIDGET_H
-#define OGLWIDGET_H
+// Opengl is now forbidden in this lab, so this file is not used
+
+#ifndef MYOPENGL_H__
+#define MYOPENGL_H__
 
 #include <QWidget>
 #include <QOpenGLWidget>
@@ -31,5 +33,5 @@ private:
     figure_t *fig;
 };
 
-#endif // OGLWIDGET_H
+#endif // MYOPENGL_H__
 

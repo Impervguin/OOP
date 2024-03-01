@@ -23,7 +23,7 @@ struct point
  * некорректный формат файла или не удалось прочитать => ERR_FILE_FORMAT
  * else => OK
  */
-myerror_t read_point(FILE *f, point_t *p);
+myerror_t read_point(point_t *p, FILE *f);
 
 /**
  * @brief Функция для записи точки в файл.
