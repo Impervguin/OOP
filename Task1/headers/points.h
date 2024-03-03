@@ -82,7 +82,7 @@ myerror_t write_points(FILE *f, points_t *points);
  * points.arr = NULL или points.size = 0 => ERR_EMPTY
  * else => OK
  */
-myerror_t move_points(points_t *points, move_t *move);
+myerror_t move_points(points_t *points, const move_t *move);
 
 /**
  * @brief Масштабирует все точки относительно заданной точки объектом scale_t.
@@ -94,7 +94,7 @@ myerror_t move_points(points_t *points, move_t *move);
  * points.arr = NULL или points.size = 0 => ERR_EMPTY
  * else => OK
  */
-myerror_t scale_points(points_t *points, scale_t *scale, point_t *center);
+myerror_t scale_points(points_t *points, const scale_t *scale, const point_t *center);
 
 /**
  * @brief Поворачивает все точки объектом rotate_t вокруг заданной точки.
@@ -106,7 +106,7 @@ myerror_t scale_points(points_t *points, scale_t *scale, point_t *center);
  * points.arr = NULL или points.size = 0 => ERR_EMPTY
  * else => OK
  */
-myerror_t rotate_points(points_t *points, rotate_t *rotate, point_t *center);
+myerror_t rotate_points(points_t *points, const rotate_t *rotate, const point_t *center);
 
 /**
  * @brief Ищет противоположные углы минимального прямоугольного параллелепипеда, включающего все точки.

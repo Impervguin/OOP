@@ -88,7 +88,7 @@ myerror_t write_figure(const char *fname, figure_t *fig);
  * @return myerror_t - fig = NULL или fig->points = NULL или move = NULL => ERR_NULL_POINTER
  * else => OK
  */
-myerror_t move_figure(figure_t *fig, move_t *move);
+myerror_t move_figure(figure_t *fig, const move_t *move);
 
 /**
  * @brief Масштабирует фигуру относительно центра координат объектом scale_t.
@@ -98,7 +98,7 @@ myerror_t move_figure(figure_t *fig, move_t *move);
  * @return myerror_t - fig = NULL или fig->points = NULL или scale = NULL => ERR_NULL_POINTER
  * else => OK
  */
-myerror_t scale_figure(figure_t *fig, scale_t *scale);
+myerror_t scale_figure(figure_t *fig, const scale_t *scale);
 
 /**
  * @brief Сдвигает фигуру объектом rotate_t вокруг осей координат.
@@ -108,7 +108,7 @@ myerror_t scale_figure(figure_t *fig, scale_t *scale);
  * @return myerror_t - fig = NULL или fig->points = NULL или rotate = NULL => ERR_NULL_POINTER
  * else => OK
  */
-myerror_t rotate_figure(figure_t *fig, rotate_t *rotate);
+myerror_t rotate_figure(figure_t *fig, const rotate_t *rotate);
 
 
 /**

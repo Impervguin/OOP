@@ -23,6 +23,7 @@ class Window : public QWidget
 {
     public:
         explicit Window(QWidget *parent = 0);
+        ~Window();
     private:
         // Scale
         QGroupBox *scaleBox;

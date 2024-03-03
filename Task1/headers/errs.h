@@ -11,7 +11,8 @@ typedef enum {
     ERR_MEMORY, // Ошибка работы с памятью(выделение)
     ERR_ARGUMENTS, // Некорректный аргумент(вне области определения функции)
     ERR_EMPTY,
-    ERR_NO_SCENE
+    ERR_NO_SCENE,
+    ERR_UNKNOWN_ACTION
 } myerror_t;
 
 /**

@@ -1,25 +1,23 @@
 #include "window.hpp"
 #include "actions.h"
 #include "draw.hpp"
+#include "interface.hpp"
 #include <QString>
 #include <QPushButton>
 #include <cstdlib>
-#include <cmath>
 #include <cstring>
 #include <QGraphicsScene>
+
 
 Window::Window(QWidget *parent) :
  QWidget(parent)
  {
- // Set size of the window
- setFixedSize(1000, 800);
+    setFixedSize(1000, 800);
 
- // Create and position the button
+
+    /// Модуль масштабирования
     scaleBox = new QGroupBox("Scale box", this);
     scaleBox->setGeometry(620, 0, 110, 500);
-
-    // scaleLabel = new QLabel("<center>Scale</center>", scaleBox);
-    // scaleLabel->setGeometry(5, 60, 100, 48);
     
     scalexLabel = new QLabel("X:", scaleBox);
     scalexLabel->setGeometry(5, 60, 25, 48);
@@ -48,8 +46,7 @@ Window::Window(QWidget *parent) :
     scaleButton = new QPushButton("Scale", scaleBox);
     scaleButton->setGeometry(5, 412, 100, 48);
 
-
-// Create and position the button
+    /// Модуль поворота
     rotateBox = new QGroupBox("Rotate box", this);
     rotateBox->setGeometry(745, 0, 110, 500);
 
@@ -80,7 +77,7 @@ Window::Window(QWidget *parent) :
     rotateButton = new QPushButton("Rotate", rotateBox);
     rotateButton->setGeometry(5, 412, 100, 48);
 
- // Create and position the button
+    /// Модуль смещения
     moveBox = new QGroupBox("Move box", this);
     moveBox->setGeometry(870, 0, 110, 500);
     
@@ -108,7 +105,7 @@ Window::Window(QWidget *parent) :
     moveButton = new QPushButton("Move", moveBox);
     moveButton->setGeometry(5, 412, 100, 48);
 
-    // Load
+    /// Модуль загрузки
     loadBox = new QGroupBox("Load box", this);
     loadBox->setGeometry(600, 500, 200, 300);
 
@@ -121,7 +118,8 @@ Window::Window(QWidget *parent) :
 
     loadButton = new QPushButton("Load figure", loadBox);
     loadButton->setGeometry(50, 250, 100, 30);
-    // Save
+    
+    /// Модуль сохранения
     saveBox = new QGroupBox("Save box", this);
     saveBox->setGeometry(800, 500, 200, 300);
 
@@ -134,25 +132,19 @@ Window::Window(QWidget *parent) :
     saveButton = new QPushButton("Save figure", saveBox);
     saveButton->setGeometry(50, 250, 100, 30);
 
-    fig = create_figure();
-    printf("%p\n",fig);
-
+    /// Подключение кнопок
     connect(rotateButton, &QPushButton::clicked, this, &Window::rotate_click);
     connect(moveButton, &QPushButton::clicked, this, &Window::move_click);
     connect(scaleButton, &QPushButton::clicked, this, &Window::scale_click);
     connect(loadButton, &QPushButton::clicked, this, &Window::load_click);
     connect(saveButton, &QPushButton::clicked, this, &Window::save_click);
-
-    // drawwwww = new OGLWidget(this);
-    // drawwwww->setGeometry(0,0, 600, 600);
-
     
     draw = new QGraphicsView(this);
     draw->setGeometry(0, 0, 600, 600);
     draw->setScene(new QGraphicsScene(draw));
     draw->scene()->setSceneRect(0, 0, 600, 600);
 
-    // Log
+    /// Модуль логгирования
     logBox = new QGroupBox("Log", this);
     logBox->setGeometry(0, 600, 600, 200);
 
@@ -160,18 +152,32 @@ Window::Window(QWidget *parent) :
     logText->setGeometry(25, 25, 550, 170);
     logText->setTextInteractionFlags(Qt::NoTextInteraction);
     logString = new QString("");
-    
+
+    request_t init_req;
+    init_req.type = INIT;
+    process_request(init_req);
+}
+
+Window::~Window() {
+    request_t req;
+    req.type = CLEAR;
+    process_request(req);
 }
 
 void Window::draw_f() {
     auto rcontent = draw->contentsRect();
     draw->scene()->setSceneRect(0, 0, rcontent.width(), rcontent.height());
-    draw_t req = {
+    request_t req;
+
+    req.type = DRAW;
+    req.data.draw = {
         draw->scene(),
         rcontent.width(),
         rcontent.height()
     };
-    myerror_t err =  draw_figure(req, *fig);
+    myerror_t err = process_request(req);
+    if (err)
+        log(err_message(err));
 }
 
 void Window::rotate_click()
@@ -179,8 +185,20 @@ void Window::rotate_click()
     double oy = degrees_to_radians(yrotateInp->value());
     double ox = degrees_to_radians(xrotateInp->value());
     double oz = degrees_to_radians(zrotateInp->value());
-    rotate_t act = {.ox = ox, .oy = oy, .oz = oz};
-    myerror_t err = rotate_figure(fig, &act);
+
+    request_t req;
+
+    req.type = ROTATE;
+    req.data.rotate = {
+        .ox = ox,
+        .oy = oy,
+        .oz = oz
+    };
+    
+    
+    myerror_t err = process_request(req);
+    if (err)
+        log(err_message(err));
     draw_f();
 }
 
@@ -189,8 +207,19 @@ void Window::scale_click()
     double sx = xScaleInp->value();
     double sy = yScaleInp->value();
     double sz = zScaleInp->value();
-    scale_t act = {.x = sx, .y = sy, .z = sz};
-    myerror_t err = scale_figure(fig, &act);
+    request_t req;
+
+    req.type = SCALE;
+    req.data.scale = {
+        .x = sx,
+        .y = sy,
+        .z = sz
+    };
+    
+    
+    myerror_t err = process_request(req);
+    if (err)
+        log(err_message(err));
     draw_f();
 }
 
@@ -199,8 +228,18 @@ void Window::move_click()
     double x = xmoveInp->value();
     double y = ymoveInp->value();
     double z = zmoveInp->value();
-    move_t act = {.x = x, .y = y, .z = z};
-    myerror_t err = move_figure(fig, &act);
+    request_t req;
+
+    req.type = MOVE;
+    req.data.move = {
+        .x = x,
+        .y = y,
+        .z = z
+    };
+    
+    myerror_t err = process_request(req);
+    if (err)
+        log(err_message(err));
     draw_f();
 }
 
@@ -208,7 +247,17 @@ void Window::load_click()
 {
     std::string str = loadLine->text().toStdString();
     const char* fname = str.c_str();
-    myerror_t err = read_figure(fig, fname);
+    
+    request_t req;
+
+    req.type = LOAD;
+    req.data.load = {
+        .fname = fname
+    };
+
+    myerror_t err = process_request(req);
+    if (err)
+        log(err_message(err));
     draw_f();
 }
 
@@ -216,7 +265,17 @@ void Window::save_click()
 {
     std::string str = saveLine->text().toStdString();
     const char* fname = str.c_str();
-    myerror_t err = write_figure(fname, fig);
+    
+    request_t req;
+
+    req.type = SAVE;
+    req.data.save = {
+        .fname = fname
+    };
+    
+    myerror_t err = process_request(req);
+    if (err)
+        log(err_message(err));
     draw_f();
 }
 

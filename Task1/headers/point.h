@@ -44,7 +44,7 @@ myerror_t write_point(FILE *f, point_t *p);
  * @return myerror_t - p = NULL или move = NULL => ERR_NULL_POINTER
  * else => OK
  */
-myerror_t move_point(point_t *p, move_t *move);
+myerror_t move_point(point_t *p, const move_t *move);
 
 /**
  * @brief Поворачивает точку объектом rotate_t вокруг осей.
@@ -54,7 +54,7 @@ myerror_t move_point(point_t *p, move_t *move);
  * @return myerror_t - p = NULL или rotate = NULL => ERR_NULL_POINTER
  * else => OK
  */
-myerror_t rotate_point(point_t *p, rotate_t *rotate);
+myerror_t rotate_point(point_t *p, const rotate_t *rotate);
 
 /**
  * @brief Масштабирует точку относительно центра координат объектом scale_t .
@@ -64,6 +64,6 @@ myerror_t rotate_point(point_t *p, rotate_t *rotate);
  * @return myerror_t - p = NULL или scale = NULL => ERR_NULL_POINTER
  * else => OK
  */
-myerror_t scale_point(point_t *p, scale_t *scale);
+myerror_t scale_point(point_t *p, const scale_t *scale);
 
 #endif // POINT_H__

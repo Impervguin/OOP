@@ -15,7 +15,8 @@ HEADERS += headers/actions.h \
            headers/points.h \
            headers/window.hpp \
            headers/projection.h \
-           headers/draw.hpp
+           headers/draw.hpp \
+           headers/interface.hpp
 
 SOURCES += src/edges.c \
            src/figure.c \
@@ -26,4 +27,5 @@ SOURCES += src/edges.c \
            src/actions.c \
            src/errs.c \
            src/projection.c \
-           src/draw.cpp
+           src/draw.cpp \
+           src/interface.cpp

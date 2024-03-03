@@ -80,7 +80,7 @@ myerror_t write_figure(const char *fname, figure_t *fig)
     return err;
 }
 
-myerror_t move_figure(figure_t *fig, move_t *move)
+myerror_t move_figure(figure_t *fig, const move_t *move)
 {
     if (!fig)
         return ERR_NULL_POINTER;
@@ -98,14 +98,14 @@ myerror_t move_figure(figure_t *fig, move_t *move)
     return err;
 }
 
-myerror_t scale_figure(figure_t *fig, scale_t *scale)
+myerror_t scale_figure(figure_t *fig, const scale_t *scale)
 {
     if (!fig)
         return ERR_NULL_POINTER;
     return scale_points(&fig->points, scale, &fig->center);
 }
 
-myerror_t rotate_figure(figure_t *fig, rotate_t *rotate)
+myerror_t rotate_figure(figure_t *fig, const rotate_t *rotate)
 {
     if (!fig)
         return ERR_NULL_POINTER;
@@ -120,12 +120,3 @@ myerror_t figure_center(point_t *center, figure_t *figure)
     
     return points_center(center, &figure->points);
 }
-
-
-// int main (void)
-// {
-//     figure_t *fig = create_figure();
-//     figure_init(fig);
-//     myerror_t err = read_figure(fig, "./data/cube.txt");
-//     return err;
-// }

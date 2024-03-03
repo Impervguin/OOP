@@ -11,7 +11,8 @@ typedef enum {
     MOVE,
     ROTATE,
     SAVE,
-    LOAD
+    LOAD,
+    CLEAR
 } request_type_t;
 
 typedef struct request request_t;
@@ -21,7 +22,7 @@ typedef struct request request_t;
 struct request
 {
     request_type_t type;
-    union data
+    union 
     {
         draw_t draw;
         move_t move;
@@ -29,8 +30,9 @@ struct request
         rotate_t rotate;
         save_t save;
         load_t load;
-    };
+    } data;
 };
 
+myerror_t process_request(const request_t &req);
 
 #endif // INTERFACE_H__

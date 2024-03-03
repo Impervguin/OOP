@@ -34,7 +34,7 @@ myerror_t write_point(FILE *f, point_t *p)
     return OK;
 }
 
-myerror_t move_point(point_t *p, move_t *move)
+myerror_t move_point(point_t *p, const move_t *move)
 {
     if (!move || !p)
         return ERR_NULL_POINTER;
@@ -54,7 +54,7 @@ static myerror_t rotate_around_axis(double x, double y, double angle, double *ne
     return OK;
 }
 
-myerror_t rotate_point(point_t *p, rotate_t *rotate)
+myerror_t rotate_point(point_t *p, const rotate_t *rotate)
 {
     if (!rotate || !p)
         return ERR_NULL_POINTER;
@@ -65,7 +65,7 @@ myerror_t rotate_point(point_t *p, rotate_t *rotate)
 }
 
 
-myerror_t scale_point(point_t *p, scale_t *scale)
+myerror_t scale_point(point_t *p, const scale_t *scale)
 {
     if (!scale || !p)
         return ERR_NULL_POINTER;

@@ -105,7 +105,7 @@ myerror_t write_points(FILE *f, points_t *points)
     return OK;
 }
 
-myerror_t move_points(points_t *points, move_t *move)
+myerror_t move_points(points_t *points, const move_t *move)
 {
     if (!points)
         return ERR_NULL_POINTER;
@@ -128,7 +128,7 @@ myerror_t move_points(points_t *points, move_t *move)
     return err;
 }
 
-myerror_t scale_points(points_t *points, scale_t *scale, point_t *center)
+myerror_t scale_points(points_t *points, const scale_t *scale, const point_t *center)
 {
     if (!points)
         return ERR_NULL_POINTER;
@@ -162,7 +162,7 @@ myerror_t scale_points(points_t *points, scale_t *scale, point_t *center)
 
 }
 
-myerror_t rotate_points(points_t *points, rotate_t *rotate, point_t *center)
+myerror_t rotate_points(points_t *points, const rotate_t *rotate, const point_t *center)
 {
     if (!points)
         return ERR_NULL_POINTER;
