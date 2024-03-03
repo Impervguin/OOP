@@ -6,7 +6,6 @@ extern "C" {
     #include "errs.h"
 }
 
-#include <QOpenGLWidget>
 #include <QApplication>
 #include <QGraphicsView>
 #include "window.hpp"

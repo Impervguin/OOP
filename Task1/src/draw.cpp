@@ -1,10 +1,13 @@
+#include <QGraphicsScene>
 #include "draw.hpp"
 
 extern "C" {
     #include "errs.h"
     #include "figure.h"
     #include "point.h"
+    #include "edges.h"
     #include "points.h"
+    #include "projection.h"
 }
 
 myerror_t clear_scene(const draw_t& draw)

@@ -2,10 +2,11 @@
 #include "actions.h"
 #include "draw.hpp"
 #include "interface.hpp"
-#include <QString>
-#include <QPushButton>
+
 #include <cstdlib>
 #include <cstring>
+#include <QString>
+#include <QPushButton>
 #include <QGraphicsScene>
 
 
@@ -166,14 +167,14 @@ Window::~Window() {
 
 void Window::draw_f() {
     auto rcontent = draw->contentsRect();
-    draw->scene()->setSceneRect(0, 0, rcontent.width(), rcontent.height());
+    draw->scene()->setSceneRect(0, 0, rcontent.width(),  rcontent.height());
     request_t req;
 
     req.type = DRAW;
     req.data.draw = {
         draw->scene(),
-        rcontent.width(),
-        rcontent.height()
+        (double) rcontent.width(),
+        (double) rcontent.height()
     };
     myerror_t err = process_request(req);
     if (err)
@@ -199,7 +200,8 @@ void Window::rotate_click()
     myerror_t err = process_request(req);
     if (err)
         log(err_message(err));
-    draw_f();
+    else 
+        draw_f();
 }
 
 void Window::scale_click()
@@ -220,7 +222,8 @@ void Window::scale_click()
     myerror_t err = process_request(req);
     if (err)
         log(err_message(err));
-    draw_f();
+    else 
+        draw_f();
 }
 
 void Window::move_click()
@@ -240,7 +243,8 @@ void Window::move_click()
     myerror_t err = process_request(req);
     if (err)
         log(err_message(err));
-    draw_f();
+    else
+        draw_f();
 }
 
 void Window::load_click()
@@ -258,7 +262,8 @@ void Window::load_click()
     myerror_t err = process_request(req);
     if (err)
         log(err_message(err));
-    draw_f();
+    else
+        draw_f();
 }
 
 void Window::save_click()
@@ -276,7 +281,8 @@ void Window::save_click()
     myerror_t err = process_request(req);
     if (err)
         log(err_message(err));
-    draw_f();
+    else
+        draw_f();
 }
 
 void Window::log(const char *str)
