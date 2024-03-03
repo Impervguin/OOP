@@ -1,11 +1,12 @@
 #include "window.hpp"
 #include "actions.h"
+#include "draw.hpp"
 #include <QString>
 #include <QPushButton>
 #include <cstdlib>
 #include <cmath>
 #include <cstring>
-
+#include <QGraphicsScene>
 
 Window::Window(QWidget *parent) :
  QWidget(parent)
@@ -133,14 +134,24 @@ Window::Window(QWidget *parent) :
     saveButton = new QPushButton("Save figure", saveBox);
     saveButton->setGeometry(50, 250, 100, 30);
 
+    fig = create_figure();
+    printf("%p\n",fig);
+
     connect(rotateButton, &QPushButton::clicked, this, &Window::rotate_click);
     connect(moveButton, &QPushButton::clicked, this, &Window::move_click);
     connect(scaleButton, &QPushButton::clicked, this, &Window::scale_click);
     connect(loadButton, &QPushButton::clicked, this, &Window::load_click);
     connect(saveButton, &QPushButton::clicked, this, &Window::save_click);
 
-    drawwwww = new OGLWidget(this);
-    drawwwww->setGeometry(0,0, 600, 600);
+    // drawwwww = new OGLWidget(this);
+    // drawwwww->setGeometry(0,0, 600, 600);
+
+    
+    draw = new QGraphicsView(this);
+    draw->setGeometry(0, 0, 600, 600);
+    draw->setScene(new QGraphicsScene(draw));
+    draw->scene()->setSceneRect(0, 0, 600, 600);
+
     // Log
     logBox = new QGroupBox("Log", this);
     logBox->setGeometry(0, 600, 600, 200);
@@ -149,7 +160,18 @@ Window::Window(QWidget *parent) :
     logText->setGeometry(25, 25, 550, 170);
     logText->setTextInteractionFlags(Qt::NoTextInteraction);
     logString = new QString("");
+    
+}
 
+void Window::draw_f() {
+    auto rcontent = draw->contentsRect();
+    draw->scene()->setSceneRect(0, 0, rcontent.width(), rcontent.height());
+    draw_t req = {
+        draw->scene(),
+        rcontent.width(),
+        rcontent.height()
+    };
+    myerror_t err =  draw_figure(req, *fig);
 }
 
 void Window::rotate_click()
@@ -158,11 +180,8 @@ void Window::rotate_click()
     double ox = degrees_to_radians(xrotateInp->value());
     double oz = degrees_to_radians(zrotateInp->value());
     rotate_t act = {.ox = ox, .oy = oy, .oz = oz};
-    myerror_t err = drawwwww->rotate(&act);
-    if (err)
-        log(err_message(err));
-    else
-        drawwwww->update();
+    myerror_t err = rotate_figure(fig, &act);
+    draw_f();
 }
 
 void Window::scale_click()
@@ -171,11 +190,8 @@ void Window::scale_click()
     double sy = yScaleInp->value();
     double sz = zScaleInp->value();
     scale_t act = {.x = sx, .y = sy, .z = sz};
-    myerror_t err = drawwwww->scale(&act);
-    if (err)
-        log(err_message(err));
-    else
-        drawwwww->update();
+    myerror_t err = scale_figure(fig, &act);
+    draw_f();
 }
 
 void Window::move_click()
@@ -184,31 +200,24 @@ void Window::move_click()
     double y = ymoveInp->value();
     double z = zmoveInp->value();
     move_t act = {.x = x, .y = y, .z = z};
-    myerror_t err = drawwwww->move(&act);
-    if (err)
-        log(err_message(err));
-    else
-        drawwwww->update();
+    myerror_t err = move_figure(fig, &act);
+    draw_f();
 }
 
 void Window::load_click()
 {
     std::string str = loadLine->text().toStdString();
     const char* fname = str.c_str();
-    myerror_t err = drawwwww->read(fname);
-    if (err)
-        log(err_message(err));
-    else
-        drawwwww->update();;
+    myerror_t err = read_figure(fig, fname);
+    draw_f();
 }
 
 void Window::save_click()
 {
     std::string str = saveLine->text().toStdString();
     const char* fname = str.c_str();
-    myerror_t err = drawwwww->write(fname);
-    if (err)
-        log(err_message(err));
+    myerror_t err = write_figure(fname, fig);
+    draw_f();
 }
 
 void Window::log(const char *str)

@@ -10,7 +10,8 @@ typedef enum {
     ERR_NULL_POINTER, // Передан пустой указатель на объект
     ERR_MEMORY, // Ошибка работы с памятью(выделение)
     ERR_ARGUMENTS, // Некорректный аргумент(вне области определения функции)
-    ERR_EMPTY
+    ERR_EMPTY,
+    ERR_NO_SCENE
 } myerror_t;
 
 /**

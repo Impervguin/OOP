@@ -41,11 +41,9 @@ myerror_t read_figure(figure_t *fig, const char *fname)
 {
     if (!fig)
         return ERR_NULL_POINTER;
-    
     FILE *f = fopen(fname, "r");
     if (!f)
         return ERR_NO_FILE;
-    
     figure_t tmp;
     figure_init(&tmp);
 
@@ -59,8 +57,8 @@ myerror_t read_figure(figure_t *fig, const char *fname)
     
     if (!err)
         err = copy_figure(fig, &tmp);
-    clear_figure(&tmp);
 
+    clear_figure(&tmp);
 
     return err;
 }
@@ -122,3 +120,12 @@ myerror_t figure_center(point_t *center, figure_t *figure)
     
     return points_center(center, &figure->points);
 }
+
+
+// int main (void)
+// {
+//     figure_t *fig = create_figure();
+//     figure_init(fig);
+//     myerror_t err = read_figure(fig, "./data/cube.txt");
+//     return err;
+// }

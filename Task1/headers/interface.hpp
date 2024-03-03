@@ -2,6 +2,7 @@
 #define INTERFACE_H__
 
 #include "actions.h"
+#include "draw.hpp"
 
 typedef enum {
     INIT,
@@ -22,6 +23,7 @@ struct request
     request_type_t type;
     union data
     {
+        draw_t draw;
         move_t move;
         scale_t scale;
         rotate_t rotate;

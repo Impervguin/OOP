@@ -2,9 +2,9 @@
 TEMPLATE = app
 TARGET = app.exe
 INCLUDEPATH += ./headers
-QT += gui widgets opengl core
-LIBS += -lGLU -lGL
+QT += gui widgets core
 OBJECTS_DIR = ./obj
+
 
 # Input
 HEADERS += headers/actions.h \
@@ -14,7 +14,8 @@ HEADERS += headers/actions.h \
            headers/point.h \
            headers/points.h \
            headers/window.hpp \
-           headers/myopengl.hpp
+           headers/projection.h \
+           headers/draw.hpp
 
 SOURCES += src/edges.c \
            src/figure.c \
@@ -22,6 +23,7 @@ SOURCES += src/edges.c \
            src/point.c \
            src/points.c \
            src/window.cpp \
-           src/myopengl.cpp \
            src/actions.c \
-           src/errs.c
+           src/errs.c \
+           src/projection.c \
+           src/draw.cpp

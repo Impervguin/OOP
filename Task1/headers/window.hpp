@@ -15,6 +15,7 @@ extern "C" {
 #include <QPushButton>
 #include <QGroupBox>
 #include <QTextEdit>
+#include <QGraphicsView>
 #include "myopengl.hpp"
 
 class QPushButton;
@@ -66,9 +67,12 @@ class Window : public QWidget
         QGroupBox *logBox;
         QTextEdit *logText;
         QString *logString;
-    
+        QGraphicsView *draw;
+        figure_t *fig;
         void log(const char *str);
+        
     private slots:
+        void draw_f();
         void rotate_click();
         void scale_click();
         void move_click();

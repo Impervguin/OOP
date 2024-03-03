@@ -45,10 +45,13 @@ myerror_t copy_points(points_t *dst, const points_t *src)
     
     if (src->size != 0 && src->arr != NULL)
     {
-        point_t *arr = realloc(dst->arr, sizeof(point_t) * src->size);
+        point_t *arr = NULL;
+        if (dst->size != 0)
+            arr = realloc(dst->arr, sizeof(point_t) * src->size);
+        else 
+            arr = malloc(sizeof(point_t) * src->size);
         if (!arr)
             return ERR_MEMORY;
-        
         dst->size = src->size;
         dst->arr = arr;
         memcpy(dst->arr, src->arr, sizeof(point_t) * src->size);

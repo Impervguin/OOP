@@ -31,6 +31,9 @@ const char *err_message(myerror_t err)
     case ERR_EMPTY:
         return "Empty figure.";
         break;
+    case ERR_NO_SCENE:
+        return "No scene passed.";
+        break;
     default:
         return "Unknown error.";
         break;
