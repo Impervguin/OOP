@@ -1,64 +1,129 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "points.h"
 #include "actions.h"
 #include "edges.h"
 #include "figure.h"
 
-figure_t *create_figure(void)
-{
-    figure_t *fig = calloc(1, sizeof(figure_t));
-    return fig;
-}
-
 void figure_init(figure_t *fig)
 {
-    fig->center = (point_t){0, 0, 0};
-    fig->points = (points_t){0, NULL};
-    fig->edges = (edges_t){0, NULL};
+    if (!fig)
+        return;
+    point_init(&fig->center);
+    points_init(&fig->points);
+    edges_init(&fig->edges);
 }
 
 void clear_figure(figure_t *fig)
 {
-    fig->center = (point_t){0, 0, 0};
+    if (!fig)
+        return;
+    point_init(&fig->center);
     clear_points(&fig->points);
     clear_edges(&fig->edges);
 }
 
+// static myerror_t copy_figure_nsafe(figure_t *dst, const figure_t *src)
+// {
+//     if (src == NULL || dst == NULL)
+//         return ERR_NULL_POINTER;
+    
+//     myerror_t err = copy_points(&dst->points, &src->points);
+//     if (!err)
+//     {
+//         err = copy_edges(&dst->edges, &src->edges);
+//         if (err)
+//             clear_points(&dst->points);
+//     }
+        
+    
+//     if (!err)
+//         dst->center = src->center;
+
+    
+//     return err; 
+// }
+
+// myerror_t copy_figure(figure_t *dst, const figure_t *src)
+// {
+//     if (src == NULL || dst == NULL)
+//         return ERR_NULL_POINTER;
+    
+//     figure_t tmp;
+//     figure_init(&tmp);
+
+//     myerror_t err = copy_figure_nsafe(&tmp, src);
+
+//     if (!err)
+//     {
+//         clear_figure(dst);
+//         memcpy(dst, &tmp, sizeof(figure_t));
+//     }
+
+//     return err; 
+// }
+
 myerror_t copy_figure(figure_t *dst, const figure_t *src)
 {
-    if (src == NULL || dst == NULL)
+    if (!dst || !src)
         return ERR_NULL_POINTER;
-    myerror_t err = copy_points(&dst->points, &src->points);
+    
+    *dst = *src;
+    return OK;
+}
+
+static myerror_t read_figure_nsafe(figure_t *fig, FILE *f)
+{
+    myerror_t err = read_points(&fig->points, f);
+    
     if (!err)
-        err = copy_edges(&dst->edges, &src->edges);
+    {
+        err = figure_center(&fig->center, fig);
+        if (err)
+            clear_points(&fig->points);
+    }
+
     if (!err)
-        dst->center = src->center;
-    return err; 
+    {
+        err = read_edges(&fig->edges, f);
+        if (err)
+            clear_points(&fig->points);
+    }
+
+    return err;
+}
+
+static myerror_t figure_verify(figure_t *fig)
+{
+    size_t psize = get_points_size(&fig->points);
+    return edges_verify(&fig->edges, psize);
 }
 
 myerror_t read_figure(figure_t *fig, const char *fname)
 {
     if (!fig)
         return ERR_NULL_POINTER;
+    
     FILE *f = fopen(fname, "r");
     if (!f)
         return ERR_NO_FILE;
+    
     figure_t tmp;
     figure_init(&tmp);
-
-    myerror_t err = read_points(&tmp.points, f);
-    if (!err)
-        err = read_edges(&tmp.edges, f);
-    
+  
+    myerror_t err = read_figure_nsafe(&tmp, f);
     fclose(f);
-    if (!err)
-        err = figure_center(&tmp.center, &tmp);
-    
-    if (!err)
-        err = copy_figure(fig, &tmp);
 
-    clear_figure(&tmp);
+    if (!err)
+    {
+        err = figure_verify(&tmp);
+        if (!err)
+            err = copy_figure(fig, &tmp);
+        else
+            clear_figure(&tmp); 
+    }
+        
 
     return err;
 }
@@ -70,7 +135,8 @@ myerror_t write_figure(const char *fname, figure_t *fig)
     
     FILE *f = fopen(fname, "w");
     if (!f)
-        return ERR_NO_FILE;
+        return ERR_NO_FILE; 
+
     
     myerror_t err = write_points(f, &fig->points);
     if (!err)
@@ -90,10 +156,11 @@ myerror_t move_figure(figure_t *fig, const move_t *move)
     myerror_t err = move_point(&center, move);
     
     if (!err)
+    {
         err = move_points(&fig->points, move);
-    
-    if (!err)
-        fig->center = center;
+        if (!err)
+            fig->center = center;
+    }
     
     return err;
 }
@@ -113,7 +180,7 @@ myerror_t rotate_figure(figure_t *fig, const rotate_t *rotate)
     return rotate_points(&fig->points, rotate, &fig->center);
 }
 
-myerror_t figure_center(point_t *center, figure_t *figure)
+myerror_t figure_center(point_t *center, const figure_t *figure)
 {
     if (!center || !figure)
         return ERR_NULL_POINTER;

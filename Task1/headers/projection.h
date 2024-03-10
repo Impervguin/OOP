@@ -30,11 +30,9 @@ struct projection
     edges_t edges;
 };
 
-myerror_t create_projection(projection_t **projection, const figure_t *fig);
-void destroy_projection(projection_t *projection);
-myerror_t project_point(point2d_t *p2d, const point_t *p3d);
-
-
+void projection_init(projection_t *projection);
+myerror_t project_figure(projection_t *proj, const figure_t *fig);
+void clear_projection(projection_t *proj);
 
 
 #endif // PROJECTION_H__

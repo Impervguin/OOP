@@ -13,6 +13,8 @@ struct point
     double x, y, z;
 };
 
+void point_init(point_t *point);
+
 /**
  * @brief Функция для чтения точки из файла
  * Читает первые 3 вещественных числа - x,y,z.
@@ -46,24 +48,12 @@ myerror_t write_point(FILE *f, point_t *p);
  */
 myerror_t move_point(point_t *p, const move_t *move);
 
-/**
- * @brief Поворачивает точку объектом rotate_t вокруг осей.
- * 
- * @param p - Указатель на точку.
- * @param move - Указатель на объект поворота.
- * @return myerror_t - p = NULL или rotate = NULL => ERR_NULL_POINTER
- * else => OK
- */
-myerror_t rotate_point(point_t *p, const rotate_t *rotate);
+myerror_t rotate_point(point_t *point, const rotate_t *rotate, const point_t *center);
 
-/**
- * @brief Масштабирует точку относительно центра координат объектом scale_t .
- * 
- * @param p - Указатель на точку.
- * @param move - Указатель на объект масштабирования.
- * @return myerror_t - p = NULL или scale = NULL => ERR_NULL_POINTER
- * else => OK
- */
-myerror_t scale_point(point_t *p, const scale_t *scale);
+myerror_t scale_point(point_t *point, const scale_t *scale, const point_t *center);
+
+point_t max_point(point_t p1, point_t p2);
+point_t min_point(point_t p1, point_t p2);
+point_t rect_center(point_t min, point_t max);
 
 #endif // POINT_H__

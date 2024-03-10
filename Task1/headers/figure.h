@@ -121,6 +121,6 @@ myerror_t rotate_figure(figure_t *fig, const rotate_t *rotate);
  * figure.points - пуста => ERR_EMPTY
  * else => OK
  */
-myerror_t figure_center(point_t *center, figure_t *figure);
+myerror_t figure_center(point_t *center, const figure_t *figure);
 
 #endif // FIGURE_H__

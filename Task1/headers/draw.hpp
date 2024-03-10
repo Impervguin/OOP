@@ -1,6 +1,5 @@
 #ifndef DRAW_H__
 #define DRAW_H__
-
 #include <QGraphicsScene>
 
 extern "C" {
@@ -11,6 +10,8 @@ extern "C" {
     #include "edges.h"
     #include "projection.h"
 }
+
+
 
 struct draw {
     QGraphicsScene *scene;
@@ -24,14 +25,7 @@ myerror_t clear_scene(const draw_t& draw);
 
 myerror_t draw_line(const draw_t &draw, const point2d_t &p1, const point2d_t &p2);
 
-myerror_t draw_edges(const draw_t &draw, const points2d_t &points, const edges_t &edges);
-
-myerror_t draw_projection(const draw_t &draw, const projection_t &projection);
-
 myerror_t draw_figure(const draw_t &draw, const figure_t &fig);
-
-
-
 
 
 #endif // DRAW_H__

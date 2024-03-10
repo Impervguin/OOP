@@ -1,67 +1,133 @@
 #include <stdlib.h>
 #include "projection.h"
 
-myerror_t init_points2d(points2d_t *points, size_t psize)
+static void point2d_init(point2d_t *point)
 {
-    point2d_t *parr = malloc(psize * sizeof(point2d_t));
-    if (!parr)
-        return ERR_MEMORY;
-    
-    points->arr = parr;
-    points->size = psize;
-    return OK;
+    if (!point)
+        return;
+    point->x = 0;
+    point->y = 0;
 }
 
-
-myerror_t create_projection(projection_t **projection, const figure_t *fig)
+static void points2d_init(points2d_t *points)
 {
-    if (!fig || !projection)
-        return ERR_NULL_POINTER;
-    if (fig->points.size == 0 || fig->edges.size == 0)
-        return ERR_EMPTY;
-
-    projection_t *tmp = calloc(1, sizeof(projection_t));
-    if (!tmp)
-        return ERR_MEMORY;
+    if (!points)
+        return;
     
-    myerror_t err = init_points2d(&tmp->points, fig->points.size);
-
-    for (size_t i = 0; i < fig->points.size && !err; i++)
-        err = project_point(&tmp->points.arr[i], &fig->points.arr[i]);
-    
-    if (!err)
-        err = copy_edges(&tmp->edges, &fig->edges);
-    
-    if (!err)
-        err = project_point(&tmp->center, &fig->center);
-    
-    if (!err)
-        *projection = tmp;
-    else
-        destroy_projection(tmp);
-    
-    return OK;
+    points->arr = NULL;
+    points->size = 0;
 }
 
-
-
-void destroy_projection(projection_t *projection)
+void projection_init(projection_t *projection)
 {
     if (!projection)
         return;
-    if (projection->edges.size != 0)
-        clear_edges(&projection->edges);
-    if (projection->points.size != 0)
-        free(projection->points.arr);
-    free(projection);
+    point2d_init(&projection->center);
+    points2d_init(&projection->points);
+    edges_init(&projection->edges);
 }
 
-myerror_t project_point(point2d_t *p2d, const point_t *p3d)
+static myerror_t project_point(point2d_t *p2d, const point_t *p3d)
 {
     if (!p2d || !p3d)
         return ERR_NULL_POINTER;
-
+    
     p2d->x = p3d->x;
     p2d->y = p3d->y;
+
     return OK;
+}
+
+static myerror_t create_point2d_array(point2d_t **arr, size_t size) {
+    if (!arr)
+        return ERR_NULL_POINTER;
+    
+    point2d_t *new = malloc(sizeof(point2d_t) * size);
+    if (!new)
+        return ERR_MEMORY;
+    
+    *arr = new;
+    return OK;
+}
+
+static myerror_t project_points_arr(point2d_t **dst, const point_t *src, size_t size)
+{
+    if (!dst || !src)
+        return ERR_NULL_POINTER;
+    if (!size)
+        return ERR_EMPTY;
+    
+
+    point2d_t *new = NULL;
+    myerror_t err = create_point2d_array(&new, size);
+    if (!err)
+        for (size_t i = 0; !err && i < size; i++)
+            err = project_point(new + i, src + i);
+    
+    if (!err)
+        *dst = new;
+    return err;
+}
+
+static myerror_t project_points(points2d_t *points2d, const points_t *points)
+{
+    if (!points2d || !points)
+        return ERR_NULL_POINTER;
+    if (!points->arr || !points->size)
+        return ERR_EMPTY;
+    
+    myerror_t err = project_points_arr(&points2d->arr, points->arr, points->size);
+    if (!err)
+        points2d->size = points->size;
+    
+    return err;
+        
+}
+
+static myerror_t project_edges(edges_t *edges2d, const edges_t *edges3d)
+{
+    myerror_t err = alloc_edges(edges2d, edges3d->size);
+
+    if (!err)
+        err = copy_edges(edges2d, edges3d);
+    
+    return err;
+}
+
+static void clear_points2d(points2d_t *points)
+{
+    if (!points)
+        return;
+    
+    if (points->arr)
+        free(points->arr);
+    points->size = 0;
+}
+
+myerror_t project_figure(projection_t *proj, const figure_t *fig)
+{
+    if (!proj || !fig)
+        return ERR_NULL_POINTER;
+    
+    myerror_t err = project_point(&proj->center, &fig->center);
+    if (!err)
+        err = project_points(&proj->points, &fig->points);
+
+    if (!err)
+    {
+        err = project_edges(&proj->edges, &fig->edges);
+        if (err)
+            clear_points2d(&proj->points);
+    }
+
+    return err;
+}
+
+
+void clear_projection(projection_t *proj)
+{
+    if (!proj)
+        return;
+    clear_edges(&proj->edges);
+    clear_points2d(&proj->points);
 }

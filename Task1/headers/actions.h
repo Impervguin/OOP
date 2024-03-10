@@ -31,14 +31,6 @@ struct rotate {
     double ox, oy, oz;
 };
 
-struct load {
-    const char *fname;
-};
-
-struct save {
-    const char *fname;
-};
-
 
 /**
  * @brief Функция перевода угла в градусах в радианы.

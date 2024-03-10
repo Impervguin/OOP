@@ -17,14 +17,7 @@ struct points
     point_t *arr; // Массив точек
 };
 
-/**
- * @brief Функция инициализации множества точек, динамически выделяет память под size точек.
- * Не освобождает память из-под выделенного до этого объекта, если она была выделена.
- * @param points - Указатель на инициализируемый объект.
- * @param size - Количество рёбер, под которые выделится память.
- * @return myerror_t - points = NULL => ERR_NULL_POINTER, ошибка выделения памяти => ERR_MEMORY, else => OK
- */
-myerror_t points_init(points_t *points, size_t size);
+void points_init(points_t *points);
 
 /**
  * @brief Освобождает память из под массива точек в points и делает его NULL.
@@ -118,7 +111,7 @@ myerror_t rotate_points(points_t *points, const rotate_t *rotate, const point_t 
  * points.arr = NULL или points.size = 0 => ERR_EMPTY
  * else => OK
  */
-myerror_t points_rect(point_t *min_point, point_t *max_point, points_t *points);
+myerror_t points_rect(point_t *min_point, point_t *max_point, const points_t *points);
 
 /**
  * @brief Функция ищет центр массива точек, то есть
@@ -130,6 +123,8 @@ myerror_t points_rect(point_t *min_point, point_t *max_point, points_t *points);
  * points.arr = NULL или points.size = 0 => ERR_EMPTY
  * else => OK
  */
-myerror_t points_center(point_t *center, points_t *points);
+myerror_t points_center(point_t *center, const points_t *points);
+
+size_t get_points_size(points_t *points);
 
 #endif // POINTS_H__

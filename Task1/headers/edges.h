@@ -25,14 +25,8 @@ struct edge {
     size_t p1, p2;
 };
 
-/**
- * @brief Функция инициализации множества ребёр, динамически выделяет память под size рёбер.
- * Не освобождает память из-под выделенного до этого объекта, если она была выделена.
- * @param edges - Указатель на инициализируемый объект.
- * @param size - Количество рёбер, под которые выделится память.
- * @return myerror_t - size = 0 => ERR_ARGUMENT, edges = NULL => ERR_NULL_POINTER, ошибка выделения памяти => ERR_MEMORY, else => OK
- */
-myerror_t edges_init(edges_t *edges, size_t size);
+
+void edges_init(edges_t *edges);
 
 /**
  * @brief Освобождает память из под массива рёбер в edges и делает его NULL.
@@ -104,5 +98,8 @@ myerror_t read_edge(edge_t *edge, FILE *f);
  * else => OK 
  */
 myerror_t write_edge(FILE *f, edge_t *edge);
+
+myerror_t edges_verify(const edges_t *edges, size_t size);
+myerror_t alloc_edges(edges_t *edges, size_t size);
 
 #endif // EDGES_H__

@@ -153,10 +153,6 @@ Window::Window(QWidget *parent) :
     logText->setGeometry(25, 25, 550, 170);
     logText->setTextInteractionFlags(Qt::NoTextInteraction);
     logString = new QString("");
-
-    request_t init_req;
-    init_req.type = INIT;
-    process_request(init_req);
 }
 
 Window::~Window() {
@@ -171,7 +167,7 @@ void Window::draw_f() {
     request_t req;
 
     req.type = DRAW;
-    req.data.draw = {
+    req.draw = {
         draw->scene(),
         (double) rcontent.width(),
         (double) rcontent.height()
@@ -190,7 +186,7 @@ void Window::rotate_click()
     request_t req;
 
     req.type = ROTATE;
-    req.data.rotate = {
+    req.rotate = {
         .ox = ox,
         .oy = oy,
         .oz = oz
@@ -212,7 +208,7 @@ void Window::scale_click()
     request_t req;
 
     req.type = SCALE;
-    req.data.scale = {
+    req.scale = {
         .x = sx,
         .y = sy,
         .z = sz
@@ -234,7 +230,7 @@ void Window::move_click()
     request_t req;
 
     req.type = MOVE;
-    req.data.move = {
+    req.move = {
         .x = x,
         .y = y,
         .z = z
@@ -255,9 +251,7 @@ void Window::load_click()
     request_t req;
 
     req.type = LOAD;
-    req.data.load = {
-        .fname = fname
-    };
+    req.loadfname = fname;
 
     myerror_t err = process_request(req);
     if (err)
@@ -274,9 +268,7 @@ void Window::save_click()
     request_t req;
 
     req.type = SAVE;
-    req.data.save = {
-        .fname = fname
-    };
+    req.savefname = fname;
     
     myerror_t err = process_request(req);
     if (err)

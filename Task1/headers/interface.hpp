@@ -5,7 +5,6 @@
 #include "draw.hpp"
 
 typedef enum {
-    INIT,
     DRAW,
     SCALE,
     MOVE,
@@ -28,9 +27,9 @@ struct request
         move_t move;
         scale_t scale;
         rotate_t rotate;
-        save_t save;
-        load_t load;
-    } data;
+        const char *savefname;
+        const char *loadfname;
+    };
 };
 
 myerror_t process_request(const request_t &req);

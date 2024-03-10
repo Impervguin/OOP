@@ -10,6 +10,14 @@ extern "C" {
     #include "projection.h"
 }
 
+
+static myerror_t check_draw_scene(const draw_t &draw)
+{
+    if (!draw.scene)
+        return ERR_NO_SCENE;
+    return OK;
+}
+
 myerror_t clear_scene(const draw_t& draw)
 {
     if (!draw.scene)
@@ -19,11 +27,11 @@ myerror_t clear_scene(const draw_t& draw)
     return OK;
 }
 
-point2d_t on_screen_point(const draw_t &draw, const point2d_t &source)
+point2d_t on_screen_point(double width, double height, const point2d_t &source)
 {
     point2d_t on_screen;
-    on_screen.x = draw.width / 2 + source.x;
-    on_screen.y = draw.height / 2 - source.y;
+    on_screen.x = width / 2 + source.x;
+    on_screen.y = height / 2 - source.y;
     return on_screen;
 }
 
@@ -32,35 +40,41 @@ myerror_t draw_line(const draw_t &draw, const point2d_t &p1, const point2d_t &p2
     if (!draw.scene)
         return ERR_NO_SCENE;
     
-    point2d_t sc_p1 = on_screen_point(draw, p1);
-    point2d_t sc_p2 = on_screen_point(draw, p2);
+    point2d_t sc_p1 = on_screen_point(draw.width, draw.height, p1);
+    point2d_t sc_p2 = on_screen_point(draw.width, draw.height, p2);
     draw.scene->addLine(sc_p1.x, sc_p1.y, sc_p2.x, sc_p2.y);
     return OK;
 }
 
-myerror_t draw_edges(const draw_t &draw, const points2d_t &points, const edges_t &edges)
+static myerror_t draw_edge(const draw_t &draw, const points2d_t &points, const edge_t &edge)
 {
-    if (!draw.scene)
+    if (check_draw_scene(draw))
         return ERR_NO_SCENE;
-    if (!points.size  || !edges.size)
+    if (!points.size || !points.arr)
         return ERR_EMPTY;
-    if (!points.arr || !edges.arr)
-        return ERR_NULL_POINTER;
+    if (edge.p1 >= points.size || edge.p2 >= points.size)
+        return ERR_RANGE;
+
+    return draw_line(draw, points.arr[edge.p1], points.arr[edge.p2]);
+}
+
+static myerror_t draw_edges(const draw_t &draw, const points2d_t &points, const edges_t &edges)
+{
+    if (check_draw_scene(draw))
+        return ERR_NO_SCENE;
+    if (!points.size  || !edges.size || !points.arr || !edges.arr)
+        return ERR_EMPTY;
     
     myerror_t err = OK;
     for (size_t i = 0; i < edges.size && !err; ++i)
-    {
-        point2d_t p1 = points.arr[edges.arr[i].p1];
-        point2d_t p2 = points.arr[edges.arr[i].p2];
-        err = draw_line(draw, p1, p2);
-    }
+        err = draw_edge(draw, points, edges.arr[i]);
 
     return err;
 }
 
-myerror_t draw_projection(const draw_t &draw, const projection_t &projection)
+static myerror_t draw_projection(const draw_t &draw, const projection_t &projection)
 {
-    if (!draw.scene)
+    if (check_draw_scene(draw))
         return ERR_NO_SCENE;
     
     return draw_edges(draw, projection.points, projection.edges);
@@ -68,16 +82,23 @@ myerror_t draw_projection(const draw_t &draw, const projection_t &projection)
 
 myerror_t draw_figure(const draw_t &draw, const figure_t &fig)
 {
-    if (!draw.scene)
+    if (check_draw_scene(draw))
         return ERR_NO_SCENE;
     
-    projection_t *proj = NULL;
-    myerror_t err = create_projection(&proj, &fig);
-    if (!err)
-        err = clear_scene(draw);
-    if (!err)
-        err = draw_projection(draw, *proj);
+    projection_t proj;
+    projection_init(&proj);
+
+    myerror_t err = project_figure(&proj, &fig);
     
-    destroy_projection(proj);
+    if (!err)
+    {
+        err = clear_scene(draw);
+        if (!err)
+            err = draw_projection(draw, proj);
+    }
+        
+    clear_projection(&proj);
     return err;
 }
+
+
