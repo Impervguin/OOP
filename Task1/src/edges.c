@@ -13,6 +13,8 @@ void edges_init(edges_t *edges)
     edges->size = 0;
 }
 
+
+
 void clear_edges(edges_t *edges)
 {
     if (!edges)
@@ -24,6 +26,13 @@ void clear_edges(edges_t *edges)
         edges->arr = NULL;
     }
     edges->size = 0;
+}
+
+size_t get_edges_size(const edges_t *edges)
+{
+    if (!edges)
+        return 0;
+    return edges->size;
 }
 
 static myerror_t create_edges_array(edge_t **arr, size_t size)

@@ -5,16 +5,9 @@ extern "C" {
     #include "figure.h"
 }
 
-static int INIT = 0;
-
 myerror_t process_request(const request_t &req)
 {
-    static figure_t fig;
-    if (!INIT)
-    {
-        INIT = 1;
-        figure_init(&fig);
-    }
+    static figure_t fig = get_figure();
 
     myerror_t err = OK;
     switch (req.type)

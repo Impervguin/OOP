@@ -15,6 +15,15 @@ void figure_init(figure_t *fig)
     edges_init(&fig->edges);
 }
 
+figure_t get_figure(void)
+{
+    figure_t fig;
+    point_init(&fig.center);
+    points_init(&fig.points);
+    edges_init(&fig.edges);
+    return fig;
+}
+
 void clear_figure(figure_t *fig)
 {
     if (!fig)
@@ -118,10 +127,14 @@ myerror_t read_figure(figure_t *fig, const char *fname)
     if (!err)
     {
         err = figure_verify(&tmp);
-        if (!err)
-            err = copy_figure(fig, &tmp);
-        else
+        if (err)
             clear_figure(&tmp); 
+        else
+        {
+            clear_figure(fig);
+            err = copy_figure(fig, &tmp);
+        }
+            
     }
         
 

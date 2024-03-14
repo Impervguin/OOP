@@ -123,4 +123,5 @@ myerror_t rotate_figure(figure_t *fig, const rotate_t *rotate);
  */
 myerror_t figure_center(point_t *center, const figure_t *figure);
 
+figure_t get_figure(void);
 #endif // FIGURE_H__

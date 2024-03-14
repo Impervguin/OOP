@@ -86,7 +86,7 @@ static myerror_t project_points(points2d_t *points2d, const points_t *points)
 
 static myerror_t project_edges(edges_t *edges2d, const edges_t *edges3d)
 {
-    myerror_t err = alloc_edges(edges2d, edges3d->size);
+    myerror_t err = alloc_edges(edges2d, get_edges_size(edges3d));
 
     if (!err)
         err = copy_edges(edges2d, edges3d);

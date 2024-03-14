@@ -101,5 +101,5 @@ myerror_t write_edge(FILE *f, edge_t *edge);
 
 myerror_t edges_verify(const edges_t *edges, size_t size);
 myerror_t alloc_edges(edges_t *edges, size_t size);
-
+size_t get_edges_size(const edges_t *edges);
 #endif // EDGES_H__
