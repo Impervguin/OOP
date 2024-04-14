@@ -26,6 +26,9 @@ class ListIterator : public std::iterator<std::input_iterator_tag, T>
 
         ListIterator<T> &operator++();
         ListIterator<T> operator++(int);
+        ListIterator<T> &operator+=(int steps);
+        ListIterator<T> operator+(int steps);
+        ListIterator<T> operator=(const ListIterator<T>& other);
     private:
         std::weak_ptr<ListNode<T>> wptr;
 };

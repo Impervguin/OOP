@@ -21,12 +21,12 @@ ListIterator<T>::ListIterator(const std::shared_ptr<ListNode<T>>& node) {
 
 template <typename T>
 bool ListIterator<T>::operator==(const ListIterator<T>& other) const {
-    return wptr == other.wptr;
+    return wptr.lock() == other.wptr.lock();
 }
 
 template <typename T>
 bool ListIterator<T>::operator!=(const ListIterator<T>& other) const {
-    return wptr!= other.wptr;
+    return wptr.lock() != other.wptr.lock();
 }
 
 template <typename T>
@@ -63,16 +63,26 @@ ListIterator<T> ListIterator<T>::operator++(int) {
 }
 
 template <typename T>
-const ListIterator<T> &ListIterator<T>::operator++() const {
-    wptr = wptr.lock()->GetNext();
+ListIterator<T> &ListIterator<T>::operator+=(int steps) {
+    for (int i = 0; i < steps; i++) {
+        ++(*this);
+    }
     return *this;
 }
 
 template <typename T>
-const ListIterator<T> ListIterator<T>::operator++(int) const {
-    const ListIterator<T> ret(*this);
-    wptr = wptr.lock()->GetNext();
+ListIterator<T> ListIterator<T>::operator+(int steps) {
+    ListIterator<T> ret(*this);
+    for (int i = 0; i < steps; i++) {
+        ++ret;
+    }
     return ret;
+}
+
+template <typename T>
+ListIterator<T> ListIterator<T>::operator=(const ListIterator<T>& other) {
+    wptr = other.wptr.lock();
+    return *this;
 }
 
 #endif // LISTITERATOR_HPP__
