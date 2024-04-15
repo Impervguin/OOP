@@ -55,15 +55,17 @@ class List: public BaseContainer {
         const T &operator[](const ListIterator<T> &iterator) const;
         const T &operator[](const ConstListIterator<T> &iterator) const;
 
-        // TODO:
         void Set(size_t index, const T &data);
         void Set(const ListIterator<T> &iterator, const T &data);
+        
         void Remove(size_t index);
         void Remove(const ListIterator<T> &iterator);
-        void Pop(size_t index);
-        void Pop(const ListIterator<T> &iterator);
+        T &Pop(size_t index);
+        T &Pop(const ListIterator<T> &iterator);
+        // TODO:
         void Insert(size_t index, const T &data);
-        void Insert(const ListIterator<T>, const List<T> &list);
+        void InsertAfter(const ListIterator<T> &it, const T &data);
+        void InsertBefore(const ListIterator<T> &it, const T &data);
 
         void Clear();
         void Reverse();
@@ -79,7 +81,11 @@ class List: public BaseContainer {
         std::shared_ptr<ListNode<T>> get(size_t index) const;
         std::shared_ptr<ListNode<T>> get(const ListIterator<T> &iterator) const;
         std::shared_ptr<ListNode<T>> get(const ConstListIterator<T> &iterator) const;
-
+        std::shared_ptr<ListNode<T>> pop(size_t index);
+        std::shared_ptr<ListNode<T>> pop(const ListIterator<T> &iterator);
+        void insert(size_t index, std::shared_ptr<ListNode<T>> &node);
+        void insertAfter(const ListIterator<T> &iterator, std::shared_ptr<ListNode<T>> &node);
+        void insertBefore(const ListIterator<T> &iterator, std::shared_ptr<ListNode<T>> &node);
         void checkEmpty(size_t line) const;
 };
 

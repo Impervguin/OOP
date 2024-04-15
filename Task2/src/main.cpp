@@ -87,6 +87,32 @@ int main(void) {
 
     std::cout << std::endl;
 
+    // Set testing
+    List<int> listSets{5, 9, 6, 2, 3, 7, 1};
+    size_t setIndex = 2;
+    int setValue = 100;
+    std::cout << INFO_COLOR << "Sets1: " << RESET_COLOR << "Список: " << listSets << ". Список после изменения элемента [" << setIndex << "]: ";
+    listSets.Set(setIndex, setValue);
+    std::cout << listSets << "." << std::endl;
+    listSets = List<int>{5, 9, 6, 2, 3, 7, 1};
+    std::cout << INFO_COLOR << "Sets2: " << RESET_COLOR << "Список: " << listSets << ". Список после изменения элемента [begin() + " << setIndex << "]: ";
+    listSets.Set(listSets.begin() + setIndex, setValue);
+    std::cout << listSets << "." << std::endl;
 
+    std::cout << std::endl;
+    // Removes testing
+    List<int> listRemoves{5, 9, 6, 2, 3, 7, 1};
+    size_t removeIndex = 2;
+    std::cout << INFO_COLOR << "Removes1: " << RESET_COLOR << "Список: " << listRemoves << ". Список после удаления элемента [" << removeIndex << "]: ";
+    listRemoves.Remove(removeIndex);
+    std::cout << listRemoves << "." << std::endl;
+
+    listRemoves = List<int>{5, 9, 6, 2, 3, 7, 1};
+    removeIndex = 7;
+    std::cout << INFO_COLOR << "Removes2: " << RESET_COLOR << "Список: " << listRemoves << ". Список после удаления элемента [begin() + " << removeIndex << "]: ";
+    listRemoves.Remove(listRemoves.begin() + removeIndex);
+    std::cout << listRemoves << "." << std::endl;
+
+    std::cout << std::endl;
     return 0;
 }
