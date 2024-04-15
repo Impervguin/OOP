@@ -1,6 +1,7 @@
 #ifndef LISTITERATOR_H__
 #define LISTITERATOR_H__
 
+#include <cstdlib>
 #include <iterator>
 #include <memory.h>
 #include "listnode.h"
@@ -15,7 +16,7 @@ class ListIterator : public std::iterator<std::input_iterator_tag, T>
 
         ~ListIterator() = default;
 
-
+        bool IsValid() const;
         bool operator==(const ListIterator<T>& other) const;
         bool operator!=(const ListIterator<T>& other) const;
 
@@ -27,9 +28,10 @@ class ListIterator : public std::iterator<std::input_iterator_tag, T>
         ListIterator<T> &operator++();
         ListIterator<T> operator++(int);
         ListIterator<T> &operator+=(int steps);
-        ListIterator<T> operator+(int steps);
+        ListIterator<T> operator+(int steps) const;
         ListIterator<T> operator=(const ListIterator<T>& other);
     private:
+        void checkValid(size_t line) const;
         std::weak_ptr<ListNode<T>> wptr;
 };
 

@@ -1,6 +1,7 @@
 #ifndef CONSTLISTITERATOR_H__
 #define CONSTLISTITERATOR_H__
 
+#include <cstdlib>
 #include <iterator>
 #include <memory>
 #include "listnode.h"
@@ -15,7 +16,7 @@ class ConstListIterator : public std::iterator<std::output_iterator_tag, T>
 
         ~ConstListIterator() = default;
 
-
+        bool IsValid() const;
         bool operator==(const ConstListIterator<T>& other) const;
         bool operator!=(const ConstListIterator<T>& other) const;
 
@@ -29,6 +30,7 @@ class ConstListIterator : public std::iterator<std::output_iterator_tag, T>
         ConstListIterator<T> operator=(const ConstListIterator<T> &other);
     private:
         std::weak_ptr<ListNode<T>> wptr;
+        void checkValid(size_t line) const;
 
 };
 #endif // CONSTLISTITERATOR_H__

@@ -1,0 +1,70 @@
+#include "listnode.hpp"
+#include "listiterator.hpp"
+#include "constlistiterator.hpp"
+#include "list.hpp"
+#include <iostream>
+
+#define INFO_COLOR "\033[36m"
+#define RESET_COLOR "\033[0m"
+
+int main(void) {
+
+    // Initialization testing
+    // List<int> InitList();
+    std::cout << INFO_COLOR << "Init1:" << RESET_COLOR << "Пустая инициализация: " << List<int>() << std::endl;
+    std::cout << INFO_COLOR << "Init2:" << RESET_COLOR << "Инициализация через initializer_list: " << List<int>{7, 8, 9} << std::endl;
+    std::cout << INFO_COLOR << "Init3:" << RESET_COLOR << "Инициализация с указанием размера и константы: " << List<int>(5, 20) << std::endl;
+    List<int> initListFrom{1, 2, 3, 4, 5, 6, 7};
+    List<int> initListTo(initListFrom.begin() + 1, initListFrom.begin() + 5);
+    std::cout << INFO_COLOR << "Init4:" << RESET_COLOR << "Инициализация через итератор по " << initListFrom << ": " << initListTo << std::endl;
+    std::cout << INFO_COLOR << "Init5:" << RESET_COLOR << "Копирование " << initListTo << ": " << List<int>(initListTo) << ". Исходный список: " << initListTo << std::endl;
+    std::cout << INFO_COLOR << "Init5:" << RESET_COLOR << "Перенос " << initListTo << ": " << List<int>(std::move(initListTo)) << ". Исходный список: " << initListTo << std::endl;
+
+    std::cout << std::endl;
+
+    // PushBack testing
+    List<int> listPushBack1{1, 2, 3};
+    int data1 = 4;
+    auto listPushBack2 = listPushBack1;
+    listPushBack2.PushBack(data1);
+    std::cout << INFO_COLOR << "PushBack1: " << RESET_COLOR << "Список: " << listPushBack1 << " После вставки элемента " << data1 << ": " << listPushBack2 << std::endl;
+
+    listPushBack1 = List<int>{1, 2, 3, 4, 5};
+    listPushBack2 = List<int>{1, 2, 3};
+    auto listPushBack3 = listPushBack1;
+    listPushBack3.PushBack(listPushBack2);
+    std::cout << INFO_COLOR << "PushBack2: " << RESET_COLOR << "Список: " << listPushBack1 << " После вставки списка " << listPushBack2 << ": " << listPushBack3 << std::endl;
+
+    listPushBack1 = List<int>{1, 2, 3, 4, 5};
+    listPushBack2 = List<int>{1, 2, 3};
+    listPushBack3 = listPushBack1;
+    std::cout << INFO_COLOR << "PushBack3: " << RESET_COLOR << "Список: " << listPushBack1 << " После переноса списка " << listPushBack2 << ": ";
+    listPushBack3.PushBack(std::move(listPushBack2));
+    std::cout << listPushBack3 <<". Переносимый список: " << listPushBack2 << std::endl;
+
+    std::cout << std::endl;
+
+
+    // PushFront testing
+    List<int> listPushFront1{1, 2, 3};
+    data1 = 4;
+    auto listPushFront2 = listPushFront1;
+    listPushFront2.PushFront(data1);
+    std::cout << INFO_COLOR << "PushFront1: " << RESET_COLOR << "Список: " << listPushFront1 << " После вставки элемента " << data1 << ": " << listPushFront2 << std::endl;
+
+    listPushFront1 = List<int>{1, 2, 3, 4, 5};
+    listPushFront2 = List<int>{1, 2, 3};
+    auto listPushFront3 = listPushFront1;
+    listPushFront3.PushFront(listPushFront2);
+    std::cout << INFO_COLOR << "PushFront2: " << RESET_COLOR << "Список: " << listPushFront1 << " После вставки списка " << listPushFront2 << ": " << listPushFront3 << std::endl;
+
+    listPushFront1 = List<int>{1, 2, 3, 4, 5};
+    listPushFront2 = List<int>{1, 2, 3};
+    listPushFront3 = listPushFront1;
+    std::cout << INFO_COLOR << "PushFront3: " << RESET_COLOR << "Список: " << listPushFront1 << " После переноса списка " << listPushFront2 << ": ";
+    listPushFront3.PushFront(std::move(listPushFront2));
+    std::cout << listPushFront3 <<". Переносимый список: " << listPushFront2 << std::endl;
+
+
+    return 0;
+}

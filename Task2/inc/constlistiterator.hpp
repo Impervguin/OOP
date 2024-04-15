@@ -20,6 +20,25 @@ ConstListIterator<T>::ConstListIterator(const std::shared_ptr<ListNode<T>>& node
 }
 
 template <typename T>
+bool ConstListIterator<T>::IsValid() const {
+    if (wptr.lock() == nullptr)
+        return false;
+    if (wptr.expired())
+        return false;
+    return true;
+}
+
+template <typename T>
+void ConstListIterator<T>::checkValid(size_t line) const
+{
+    if (!IsValid())
+    {
+        time_t cur_time = time(NULL);
+        throw IteratorExpiredException(ctime(&cur_time), __FILE__, line, typeid(*this).name(), __FUNCTION__);
+    }
+}
+
+template <typename T>
 bool ConstListIterator<T>::operator==(const ConstListIterator<T>& other) const {
     return wptr.lock() == other.wptr.lock();
 }

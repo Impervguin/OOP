@@ -45,7 +45,7 @@ void ListNode<T>::SetData(const T &data) {
 
 template <typename  T>
 void ListNode<T>::SetNext(const std::shared_ptr<ListNode<T>> &node) {
-    this->next = next;
+    this->next = node;
 }
 
 template <typename  T>

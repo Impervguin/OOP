@@ -2,6 +2,8 @@
 #define LISTITERATOR_HPP__
 
 #include "listiterator.h"
+#include "exceptions.h"
+#include <time.h>
 
 
 template <typename T>
@@ -20,6 +22,25 @@ ListIterator<T>::ListIterator(const std::shared_ptr<ListNode<T>>& node) {
 }
 
 template <typename T>
+bool ListIterator<T>::IsValid() const {
+    if (wptr.lock() == nullptr)
+        return false;
+    if (wptr.expired())
+        return false;
+    return true;
+}
+
+template <typename T>
+void ListIterator<T>::checkValid(size_t line) const
+{
+    if (!IsValid())
+    {
+        time_t cur_time = time(NULL);
+        throw IteratorExpiredException(ctime(&cur_time), __FILE__, line, typeid(*this).name(), __FUNCTION__);
+    }
+}
+
+template <typename T>
 bool ListIterator<T>::operator==(const ListIterator<T>& other) const {
     return wptr.lock() == other.wptr.lock();
 }
@@ -31,32 +52,38 @@ bool ListIterator<T>::operator!=(const ListIterator<T>& other) const {
 
 template <typename T>
 T &ListIterator<T>::operator*() {
+    checkValid(__LINE__);
     return wptr.lock()->GetData();
 }
 
 template <typename T>
 const T &ListIterator<T>::operator*() const {
+    checkValid(__LINE__);
     return wptr.lock()->GetData();
 }
 
 template <typename T>
 T *ListIterator<T>::operator->() {
+    checkValid(__LINE__);
     return &wptr.lock()->GetData();
 }
 
 template <typename T>
 const T *ListIterator<T>::operator->() const {
+    checkValid(__LINE__);
     return &wptr.lock()->GetData();
 }
 
 template <typename T>
 ListIterator<T> &ListIterator<T>::operator++() {
+    checkValid(__LINE__);    
     wptr = wptr.lock()->GetNext();
     return *this;
 }
 
 template <typename T>
 ListIterator<T> ListIterator<T>::operator++(int) {
+    checkValid(__LINE__);
     ListIterator<T> ret(*this);
     wptr = wptr.lock()->GetNext();
     return ret;
@@ -64,6 +91,7 @@ ListIterator<T> ListIterator<T>::operator++(int) {
 
 template <typename T>
 ListIterator<T> &ListIterator<T>::operator+=(int steps) {
+    checkValid(__LINE__);
     for (int i = 0; i < steps; i++) {
         ++(*this);
     }
@@ -71,7 +99,8 @@ ListIterator<T> &ListIterator<T>::operator+=(int steps) {
 }
 
 template <typename T>
-ListIterator<T> ListIterator<T>::operator+(int steps) {
+ListIterator<T> ListIterator<T>::operator+(int steps) const {
+    checkValid(__LINE__);
     ListIterator<T> ret(*this);
     for (int i = 0; i < steps; i++) {
         ++ret;
