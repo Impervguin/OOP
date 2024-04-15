@@ -65,6 +65,28 @@ int main(void) {
     listPushFront3.PushFront(std::move(listPushFront2));
     std::cout << listPushFront3 <<". Переносимый список: " << listPushFront2 << std::endl;
 
+    std::cout << std::endl;
+    // Gets testing
+    List<int> listGets{1, 2, 3, 4, 5, 10, 9, 8, 7, 6, 5};
+    size_t index = 5;
+    std::cout << INFO_COLOR << "Gets1: " << RESET_COLOR << "Список: " << listGets << " Полученный элемент по индексу " << index << ": " << listGets.Get(index) << std::endl;
+    std::cout << INFO_COLOR << "Gets2: " << RESET_COLOR << "Список: " << listGets << " Полученный элемент по итератору + " << index << ": " << listGets.Get(listGets.begin() + index) << std::endl;
+    std::cout << INFO_COLOR << "Gets3: " << RESET_COLOR << "Список: " << listGets << " Полученный элемент по константному итератору + " << index << ": " << listGets.Get(listGets.cbegin() + index) << std::endl;
+    std::cout << INFO_COLOR << "Gets4: " << RESET_COLOR << "Список: " << listGets << " Полученный элемент по [" << index << "]: " << listGets[index] << std::endl;
+    std::cout << INFO_COLOR << "Gets5: " << RESET_COLOR << "Список: " << listGets << " Полученный элемент по [begin() + " << index << "]: " << listGets[listGets.begin() + index] << std::endl;
+    std::cout << INFO_COLOR << "Gets6: " << RESET_COLOR << "Список: " << listGets << " Полученный элемент по [cbegin() + " << index << "]: " << listGets[listGets.cbegin() + index] << std::endl;
+
+    std::cout << std::endl;
+
+    // Pops testing
+    List<int> listPops{5, 9, 6, 2, 3, 7, 1};
+    std::cout << INFO_COLOR << "Pops1: " << RESET_COLOR << "Список: " << listPops << ". Полученный элемент при GetFront: " << listPops.GetFront() << ". Список после: " << listPops << "." << std::endl;
+    std::cout << INFO_COLOR << "Pops2: " << RESET_COLOR << "Список: " << listPops << ". Полученный элемент при GetBack: " << listPops.GetBack() << ". Список после: " << listPops << "." << std::endl;
+    std::cout << INFO_COLOR << "Pops3: " << RESET_COLOR << "Список: " << listPops << ". Полученный элемент при PopFront: " << listPops.PopFront() << ". Список после: " << listPops << "." << std::endl;
+    std::cout << INFO_COLOR << "Pops4: " << RESET_COLOR << "Список: " << listPops << ". Полученный элемент при PopBack: " << listPops.PopBack() << ". Список после: " << listPops << "." << std::endl;
+
+    std::cout << std::endl;
+
 
     return 0;
 }

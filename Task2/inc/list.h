@@ -35,6 +35,39 @@ class List: public BaseContainer {
         void PushFront(const List<T> &list);
         void PushFront(List<T> &&list);
 
+        
+        T &PopBack();
+        T &PopFront();
+        T &GetFront();
+        T &GetBack();
+        const T &GetFront() const;
+        const T &GetBack() const;
+
+
+        T &Get(size_t index);
+        T &Get(const ListIterator<T> &iterator);
+        const T &Get(size_t index) const;
+        const T &Get(const ListIterator<T> &iterator) const;
+        const T &Get(const ConstListIterator<T> &iterator) const;
+        T &operator[](size_t index);
+        T &operator[](const ListIterator<T> &iterator);
+        const T &operator[](size_t index) const;
+        const T &operator[](const ListIterator<T> &iterator) const;
+        const T &operator[](const ConstListIterator<T> &iterator) const;
+
+        // TODO:
+        void Set(size_t index, const T &data);
+        void Set(const ListIterator<T> &iterator, const T &data);
+        void Remove(size_t index);
+        void Remove(const ListIterator<T> &iterator);
+        void Pop(size_t index);
+        void Pop(const ListIterator<T> &iterator);
+        void Insert(size_t index, const T &data);
+        void Insert(const ListIterator<T>, const List<T> &list);
+
+        void Clear();
+        void Reverse();
+
         List<T>& operator=(const List<T> &list);
         List<T>& operator=(List<T> &&list);
     
@@ -43,6 +76,10 @@ class List: public BaseContainer {
         void pushFront(std::shared_ptr<ListNode<T>> &node);
         std::shared_ptr<ListNode<T>> popBack();
         std::shared_ptr<ListNode<T>> popFront();
+        std::shared_ptr<ListNode<T>> get(size_t index) const;
+        std::shared_ptr<ListNode<T>> get(const ListIterator<T> &iterator) const;
+        std::shared_ptr<ListNode<T>> get(const ConstListIterator<T> &iterator) const;
+
         void checkEmpty(size_t line) const;
 };
 

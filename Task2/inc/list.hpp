@@ -126,6 +126,91 @@ void List<T>::PushFront(List<T>&& list) {
 }
 
 template <typename T>
+T &List<T>::PopFront() {
+    return popFront()->GetData();
+}
+
+template <typename T>
+T &List<T>::PopBack() {
+    return popBack()->GetData();
+}
+
+template <typename T>
+T &List<T>::GetFront() {
+    checkEmpty(__LINE__);
+    return head->GetData();
+}
+
+template <typename T>
+const T &List<T>::GetFront() const {
+    checkEmpty(__LINE__);
+    return head->GetData();
+}
+
+template <typename T>
+T &List<T>::GetBack() {
+    checkEmpty(__LINE__);
+    return tail->GetData();
+}
+
+template <typename T>
+const T &List<T>::GetBack() const {
+    checkEmpty(__LINE__);
+    return tail->GetData();
+}
+
+template <typename T>
+T &List<T>::Get(size_t index) {
+    return get(index)->GetData();
+}
+
+template <typename T>
+const T &List<T>::Get(size_t index) const {
+    return get(index)->GetData();
+}
+
+template <typename T>
+T &List<T>::Get(const ListIterator<T> &it) {
+    return get(it)->GetData();
+}
+
+template <typename T>
+const T &List<T>::Get(const ListIterator<T> &it) const {
+    return get(it)->GetData();
+}
+
+template <typename T>
+const T &List<T>::Get(const ConstListIterator<T> &it) const {
+    return get(it)->GetData();
+}
+
+template <typename T>
+T &List<T>::operator[](size_t index) {
+    return get(index)->GetData();
+}
+
+template <typename T>
+const T &List<T>::operator[](size_t index) const {
+    return get(index)->GetData();
+}
+
+template <typename T>
+T &List<T>::operator[](const ListIterator<T> &it) {
+    return get(it)->GetData();
+}
+
+template <typename T>
+const T &List<T>::operator[](const ListIterator<T> &it) const {
+    return get(it)->GetData();
+}
+
+template <typename T>
+const T &List<T>::operator[](const ConstListIterator<T> &it) const {
+    return get(it)->GetData();
+}
+
+
+template <typename T>
 void List<T>::pushBack(std::shared_ptr<ListNode<T>> &node) {
     node->SetNext(nullptr);
     size++;
@@ -177,6 +262,46 @@ std::shared_ptr<ListNode<T>> List<T>::popBack(void) {
     std::swap(node, tail);
     return node;
 }
+
+template <typename T>
+std::shared_ptr<ListNode<T>> List<T>::get(size_t index) const {
+    if (index >= size) {
+        time_t now = time(nullptr);
+        throw OutOfRangeException(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }
+    auto node = head;
+    for (size_t i = 0; i < index; i++) {
+        node = node->GetNext();
+    }
+    return node;
+}
+
+template <typename T>
+std::shared_ptr<ListNode<T>> List<T>::get(const ListIterator<T>& iterator) const {
+    auto node = head;
+    for (; node != nullptr; node = node->GetNext()) {
+        if (ListIterator<T>(node) == iterator) {
+            return node;
+        }
+    }
+    time_t now = time(nullptr);
+    throw InvalidIteratorException(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    return nullptr;
+}
+
+template <typename T>
+std::shared_ptr<ListNode<T>> List<T>::get(const ConstListIterator<T>& iterator) const {
+    auto node = head;
+    for (; node != nullptr; node = node->GetNext()) {
+        if (ConstListIterator<T>(node) == iterator) {
+            return node;
+        }
+    }
+    time_t now = time(nullptr);
+    throw InvalidIteratorException(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    return nullptr;
+}
+
 template <typename T>
 ListIterator<T> List<T>::begin() {
     return ListIterator<T>(head);
