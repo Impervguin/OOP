@@ -494,6 +494,26 @@ ConstListIterator<T> List<T>::cend() const {
     return ConstListIterator<T>(tail) + 1;
 }
 
+template <typename T>
+int List<T>::cmpList(const List<T> &other) const {
+    auto cit1 = cbegin();
+    auto cit2 = other.cbegin();
+    for (;cit1 != cend() && cit2!= other.cend(); ++cit1, ++cit2)
+    {
+        if (*cit1 < *cit2) {
+            return -1;
+        }
+        if (*cit1 > *cit2) {
+            return 1;
+        }
+    }
+    if (size > other.GetSize())
+        return 1;
+    if (size < other.GetSize())
+        return -1;
+    return 0;
+}
+
 
 template <typename T>
 List<T>& List<T>::operator=(const List<T>& list) {
@@ -517,6 +537,79 @@ List<T>& List<T>::operator=(List<T>&& list) {
     list.size = 0;
     return *this;
 }
+
+template <typename T>
+List<T> &List<T>::operator+=(const List<T>& list) {
+    PushBack(list);
+    return *this;
+}
+
+template <typename T>
+List<T> &List<T>::operator+=(List<T>&& list) {
+    PushBack(std::move(list));
+    return *this;
+}
+
+template <typename T>
+List<T> &List<T>::operator+=(const T &data) {
+    PushBack(data);
+    return *this;
+}
+
+template <typename T>
+List<T> List<T>::operator+(const List<T>& list) const {
+    List<T> result(*this);
+    result.PushBack(list);
+    return result;
+}
+
+template <typename T>
+List<T> List<T>::operator+(List<T>&& list) const {
+    List<T> result(*this);
+    result.PushBack(std::move(list));
+    // list.head = nullptr;
+    // list.size = 0;
+    return result;
+}
+
+template <typename T>
+List<T> List<T>::operator+(const T &data) const {
+    List<T> result(*this);
+    result.PushBack(data);
+    return result;
+}
+
+template <typename T>
+bool List<T>::operator==(const List<T> &list) const {
+    return cmpList(list) == 0;
+}
+
+
+template <typename T>
+bool List<T>::operator!=(const List<T> &list) const {
+    return cmpList(list)!= 0;
+}
+
+template <typename T>
+bool List<T>::operator<(const List<T> &list) const {
+    return cmpList(list) < 0;
+}
+
+template <typename T>
+bool List<T>::operator>(const List<T> &list) const {
+    return cmpList(list) > 0;
+}
+
+template <typename T>
+bool List<T>::operator<=(const List<T> &list) const {
+    return cmpList(list) <= 0;
+}
+
+template <typename T>
+bool List<T>::operator>=(const List<T> &list) const {
+    return cmpList(list) >= 0;
+}
+
 
 template <typename T>
 std::ostream& operator<<(std::ostream& os, const List<T>& list) {

@@ -157,7 +157,7 @@ int main(void) {
     listInserts.InsertBefore(listInserts.begin() + insertIndex, insertValue);
     std::cout << listInserts << "." << std::endl;
 
-
+    std::cout << std::endl;
     // Clear testing
     List<int> listClear{1, 2, 3};
     std::cout << INFO_COLOR << "Clear1: " << RESET_COLOR << "Список: " << listClear << ". Список после Clear: ";
@@ -172,5 +172,36 @@ int main(void) {
     std::cout << listReverse << "." << std::endl;
 
     std::cout << std::endl;
+
+    // Plus testing
+    List<int> listPlus1{1, 2, 3};
+    List<int> listPlus2{5, 9, 8};
+    std::cout << INFO_COLOR << "Список 1: " << RESET_COLOR << listPlus1 << INFO_COLOR << ". Список 2: " << RESET_COLOR << listPlus2 << ". " << std::endl;
+    std::cout << INFO_COLOR << "(1) + (2): " << RESET_COLOR << listPlus1 + listPlus2 << ". " << INFO_COLOR << "Список 1: " << RESET_COLOR << listPlus1 << INFO_COLOR << ". Список 2: " << RESET_COLOR << listPlus2 << ". " << std::endl;
+    std::cout << INFO_COLOR << "(1) + 10: " << RESET_COLOR << listPlus1 + 10 << "." << std::endl;
+    std::cout << INFO_COLOR << "(1) + move(2): " << RESET_COLOR << listPlus1 + std::move(listPlus2) << ". " << INFO_COLOR << "Список 1: " << RESET_COLOR << listPlus1 << INFO_COLOR << ". Список 2: " << RESET_COLOR << listPlus2 << ". " << std::endl;
+
+    listPlus2 = List<int>{5, 9, 8};
+    std::cout << INFO_COLOR << "(1) += (2): " << RESET_COLOR << (listPlus1 += listPlus2) << ". " << INFO_COLOR << "Список 1: " << RESET_COLOR << listPlus1 << INFO_COLOR << ". Список 2: " << RESET_COLOR << listPlus2 << ". " << std::endl;
+    listPlus1 = List<int>{1, 2, 3};
+    std::cout << INFO_COLOR << "(1) += 20: " << RESET_COLOR << (listPlus1 += 20) << ". " << INFO_COLOR << "Список 1: " << RESET_COLOR << listPlus1 << std::endl;
+    listPlus1 = List<int>{1, 2, 3};
+    std::cout << INFO_COLOR << "(1) += move(2): " << RESET_COLOR << (listPlus1 += std::move(listPlus2)) << ". " << INFO_COLOR << "Список 1: " << RESET_COLOR << listPlus1 << INFO_COLOR << ". Список 2: " << RESET_COLOR << listPlus2 << ". " << std::endl;
+    std::cout << std::endl;
+
+
+    // Cmp testing
+    List<int> listCmp1{1, 2, 3};
+    List<int> listCmp2{2, 2, 3};
+    List<int> listCmp3{1, 2, 3, 3};
+    std::cout << INFO_COLOR << listCmp1 << " < " << listCmp2 << RESET_COLOR <<  " = " << (listCmp1 < listCmp2) << std::endl;
+    std::cout << INFO_COLOR << listCmp1 << " > " << listCmp2 << RESET_COLOR <<  " = " << (listCmp1 > listCmp2) << std::endl;
+    std::cout << INFO_COLOR << listCmp1 << " == " << listCmp2 << RESET_COLOR <<  " = " << (listCmp1 == listCmp2) << std::endl;
+    std::cout << INFO_COLOR << listCmp1 << " < " << listCmp3 << RESET_COLOR <<  " = " << (listCmp1 < listCmp3) << std::endl;
+    std::cout << INFO_COLOR << listCmp1 << " > " << listCmp3 << RESET_COLOR <<  " = " << (listCmp1 > listCmp3) << std::endl;
+    std::cout << INFO_COLOR << listCmp1 << " == " << listCmp3 << RESET_COLOR <<  " = " << (listCmp1 == listCmp3) << std::endl;
+    std::cout << INFO_COLOR << listCmp2 << " < " << listCmp3 << RESET_COLOR <<  " = " << (listCmp2 < listCmp3) << std::endl;
+    std::cout << INFO_COLOR << listCmp2 << " > " << listCmp3 << RESET_COLOR <<  " = " << (listCmp2 > listCmp3) << std::endl;
+    std::cout << INFO_COLOR << listCmp2 << " == " << listCmp3 << RESET_COLOR <<  " = " << (listCmp2 == listCmp3) << std::endl;
     return 0;
 }
