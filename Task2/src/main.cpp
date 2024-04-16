@@ -10,7 +10,7 @@
 int main(void) {
 
     // Initialization testing
-    // List<int> InitList();
+    List<int> InitList();
     std::cout << INFO_COLOR << "Init1:" << RESET_COLOR << "Пустая инициализация: " << List<int>() << std::endl;
     std::cout << INFO_COLOR << "Init2:" << RESET_COLOR << "Инициализация через initializer_list: " << List<int>{7, 8, 9} << std::endl;
     std::cout << INFO_COLOR << "Init3:" << RESET_COLOR << "Инициализация с указанием размера и константы: " << List<int>(5, 20) << std::endl;
@@ -108,10 +108,68 @@ int main(void) {
     std::cout << listRemoves << "." << std::endl;
 
     listRemoves = List<int>{5, 9, 6, 2, 3, 7, 1};
-    removeIndex = 7;
+    removeIndex = 6;
     std::cout << INFO_COLOR << "Removes2: " << RESET_COLOR << "Список: " << listRemoves << ". Список после удаления элемента [begin() + " << removeIndex << "]: ";
     listRemoves.Remove(listRemoves.begin() + removeIndex);
     std::cout << listRemoves << "." << std::endl;
+    
+    listRemoves = List<int>{5, 9, 6, 2, 3, 7, 1};
+    removeIndex = 4;
+    std::cout << INFO_COLOR << "Removes3: " << RESET_COLOR << "Список: " << listRemoves << ". Список после pop элемента [" << removeIndex << "]: ";
+    auto popAns = listRemoves.Pop(removeIndex);
+    std::cout << listRemoves << "." << " Элемент: " << popAns << std::endl;
+
+    listRemoves = List<int>{5, 9, 6, 2, 3, 7, 1};
+    removeIndex = 0;
+    std::cout << INFO_COLOR << "Removes4: " << RESET_COLOR << "Список: " << listRemoves << ". Список после pop элемента [begin() + " << removeIndex << "]: ";
+    popAns = listRemoves.Pop(listRemoves.begin() + removeIndex);
+    std::cout << listRemoves << "." << " Элемент: " << popAns << std::endl;
+    std::cout << std::endl;
+    
+    // insert testing
+    List<int> listInserts = List<int>{1, 2, 3};
+    size_t insertIndex = 1;
+    int insertValue = 4;
+    std::cout << INFO_COLOR << "Inserts1: " << RESET_COLOR << "Список: " << listInserts << ". Список после вставки элемента [" << insertIndex << "]: ";
+    listInserts.Insert(insertIndex, insertValue);
+    std::cout << listInserts << "." << std::endl;
+
+    listInserts = List<int>{1, 2, 3};
+    insertIndex = 0;
+    std::cout << INFO_COLOR << "Inserts2: " << RESET_COLOR << "Список: " << listInserts << ". Список после вставки элемента [" << insertIndex << "]: ";
+    listInserts.Insert(insertIndex, insertValue);
+    std::cout << listInserts << "." << std::endl;
+
+    listInserts = List<int>{1, 2, 3};
+    insertIndex = 3;
+    std::cout << INFO_COLOR << "Inserts3: " << RESET_COLOR << "Список: " << listInserts << ". Список после вставки элемента [" << insertIndex << "]: ";
+    listInserts.Insert(insertIndex, insertValue);
+    std::cout << listInserts << "." << std::endl;
+
+    listInserts = List<int>{1, 2, 3};
+    insertIndex = 2;
+    std::cout << INFO_COLOR << "Inserts4: " << RESET_COLOR << "Список: " << listInserts << ". Список после вставки элемента после [begin() + " << insertIndex << "]: ";
+    listInserts.InsertAfter(listInserts.begin() + insertIndex, insertValue);
+    std::cout << listInserts << "." << std::endl;
+    listInserts = List<int>{1, 2, 3};
+    insertIndex = 2;
+    std::cout << INFO_COLOR << "Inserts5: " << RESET_COLOR << "Список: " << listInserts << ". Список после вставки элемента перед [begin() + " << insertIndex << "]: ";
+    listInserts.InsertBefore(listInserts.begin() + insertIndex, insertValue);
+    std::cout << listInserts << "." << std::endl;
+
+
+    // Clear testing
+    List<int> listClear{1, 2, 3};
+    std::cout << INFO_COLOR << "Clear1: " << RESET_COLOR << "Список: " << listClear << ". Список после Clear: ";
+    listClear.Clear();
+    std::cout << listClear << "." << std::endl;
+    std::cout << std::endl;
+
+    // Reverse testing
+    List<int> listReverse{1, 2, 3, 4, 5, 6, 7};
+    std::cout << INFO_COLOR << "Reverse1: " << RESET_COLOR << "Список: " << listReverse << ". Список после Reverse: ";
+    listReverse.Reverse();
+    std::cout << listReverse << "." << std::endl;
 
     std::cout << std::endl;
     return 0;

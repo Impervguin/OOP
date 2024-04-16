@@ -114,4 +114,10 @@ ListIterator<T> ListIterator<T>::operator=(const ListIterator<T>& other) {
     return *this;
 }
 
+template <typename T>
+std::shared_ptr<ListNode<T>> ListIterator<T>::getNode() const {
+    checkValid(__LINE__);
+    return wptr.lock();
+}
+
 #endif // LISTITERATOR_HPP__

@@ -126,12 +126,12 @@ void List<T>::PushFront(List<T>&& list) {
 }
 
 template <typename T>
-T &List<T>::PopFront() {
+T List<T>::PopFront() {
     return popFront()->GetData();
 }
 
 template <typename T>
-T &List<T>::PopBack() {
+T List<T>::PopBack() {
     return popBack()->GetData();
 }
 
@@ -175,11 +175,6 @@ T &List<T>::Get(const ListIterator<T> &it) {
 }
 
 template <typename T>
-const T &List<T>::Get(const ListIterator<T> &it) const {
-    return get(it)->GetData();
-}
-
-template <typename T>
 const T &List<T>::Get(const ConstListIterator<T> &it) const {
     return get(it)->GetData();
 }
@@ -196,11 +191,6 @@ const T &List<T>::operator[](size_t index) const {
 
 template <typename T>
 T &List<T>::operator[](const ListIterator<T> &it) {
-    return get(it)->GetData();
-}
-
-template <typename T>
-const T &List<T>::operator[](const ListIterator<T> &it) const {
     return get(it)->GetData();
 }
 
@@ -230,28 +220,48 @@ void List<T>::Remove(const ListIterator<T> &it) {
 }
 
 template <typename T>
-T &List<T>::Pop(size_t index) {
+T List<T>::Pop(size_t index) {
     return pop(index)->GetData();
 }
 
 template <typename T>
-T &List<T>::Pop(const ListIterator<T> &it) {
+T List<T>::Pop(const ListIterator<T> &it) {
     return pop(it)->GetData();
 }
 
 template <typename T>
 void List<T>::Insert(size_t index, const T& data) {
-    insert(index, data);
+    auto node = std::make_shared<ListNode<T>>(data);
+    insert(index, node);
 }
 
 template <typename T>
 void List<T>::InsertAfter(const ListIterator<T> &it, const T& data) {
-    insertAfter(it, data);
+    auto node = std::make_shared<ListNode<T>>(data);
+    insertAfter(it, node);
 }
 
 template <typename T>
 void List<T>::InsertBefore(const ListIterator<T> &it, const T& data) {
-    insertBefore(it, data);
+    auto node = std::make_shared<ListNode<T>>(data);
+    insertBefore(it, node);
+}
+
+template <typename T>
+void List<T>::Clear() {
+    head = nullptr;
+    tail = nullptr;
+    size = 0;
+}
+
+template <typename T>
+void List<T>::Reverse() {
+    List<T> newList;
+    while (size > 0) {
+        auto node = popFront();
+        newList.pushFront(node);
+    }
+    *this = std::move(newList);
 }
 
 template <typename T>
@@ -312,42 +322,57 @@ std::shared_ptr<ListNode<T>> List<T>::popBack(void) {
 }
 
 template <typename T>
-std::shared_ptr<ListNode<T>> List<T>::get(size_t index) const {
+const std::shared_ptr<ListNode<T>> List<T>::get(size_t index) const {
     if (index >= size) {
         time_t now = time(nullptr);
         throw OutOfRangeException(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
     }
-    auto node = head;
-    for (size_t i = 0; i < index; i++) {
-        node = node->GetNext();
+
+    auto it = cbegin();
+    for (size_t i = 0; i < index && it!= cend(); i++, it++);
+    if (it == cend()) {
+        time_t now = time(nullptr);
+        throw OutOfRangeException(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
     }
-    return node;
+    return it.getNode();
 }
 
 template <typename T>
-std::shared_ptr<ListNode<T>> List<T>::get(const ListIterator<T>& iterator) const {
-    auto node = head;
-    for (; node != nullptr; node = node->GetNext()) {
-        if (ListIterator<T>(node) == iterator) {
-            return node;
-        }
+std::shared_ptr<ListNode<T>> List<T>::get(size_t index) {
+    if (index >= size) {
+        time_t now = time(nullptr);
+        throw OutOfRangeException(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
     }
-    time_t now = time(nullptr);
-    throw InvalidIteratorException(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
-    return nullptr;
+    
+    auto it = begin();
+    for (size_t i = 0; i < index && it != end(); i++, it++);
+    if (it == end()) {
+        time_t now = time(nullptr);
+        throw OutOfRangeException(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }
+    return it.getNode();
 }
 
 template <typename T>
-std::shared_ptr<ListNode<T>> List<T>::get(const ConstListIterator<T>& iterator) const {
-    auto node = head;
-    for (; node != nullptr; node = node->GetNext()) {
-        if (ConstListIterator<T>(node) == iterator) {
-            return node;
-        }
+std::shared_ptr<ListNode<T>> List<T>::get(const ListIterator<T>& iterator) {
+    auto it = begin();
+    for (; it != end() & it != iterator; it++);
+    if (it == end()) {
+        time_t now = time(nullptr);
+        throw InvalidIteratorException(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
     }
-    time_t now = time(nullptr);
-    throw InvalidIteratorException(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
-    return nullptr;
+    return it.getNode();
+}
+
+template <typename T>
+const std::shared_ptr<ListNode<T>> List<T>::get(const ConstListIterator<T>& iterator) const {
+    auto it = cbegin();
+    for (; it != cend() & it != iterator; it++);
+    if (it == cend()) {
+        time_t now = time(nullptr);
+        throw InvalidIteratorException(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }
+    return it.getNode();
 }
 
 template <typename T>
@@ -363,33 +388,38 @@ std::shared_ptr<ListNode<T>> List<T>::pop(size_t index) {
         time_t now = time(nullptr);
         throw OutOfRangeException(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
     }
-    auto prev = get(index - 1);
-    auto node = prev->GetNext();
-    prev->SetNext(node->GetNext());
+    auto it = begin();
+    for (size_t i = 0; i < index - 1 && it!= end(); i++, ++it);
+    if (it == end()) {
+        time_t now = time(nullptr);
+        throw OutOfRangeException(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }
     size--;
+    auto node = it.getNode()->GetNext();
+    it.getNode()->SetNext(it.getNode()->GetNext()->GetNext());
     return node;
 }
 
 template <typename T>
 std::shared_ptr<ListNode<T>> List<T>::pop(const ListIterator<T>& iterator) {
     checkEmpty(__LINE__);
-    if (iterator == begin()) {
+    if (iterator == begin()) 
+    {
         return popFront();
     }
-    auto node = head;
-    for (; node != nullptr && ListIterator<T>(node->GetNext()) != iterator; node = node->GetNext());
-    if (node == nullptr) {
+    auto it = begin();
+    for (; it!= end() && it + 1 != iterator; ++it);
+    if (it == end()) {
         time_t now = time(nullptr);
         throw InvalidIteratorException(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
     }
-    auto prev = node;
-    node = node->GetNext();
-    if (node == nullptr) {
-        time_t now = time(nullptr);
-        throw InvalidIteratorException(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    if (it + 1 == end())
+    {
+        return popBack();
     }
-    prev->SetNext(node->GetNext());
     size--;
+    auto node = it.getNode()->GetNext();
+    it.getNode()->SetNext(it.getNode()->GetNext()->GetNext());
     return node;
 }
 
@@ -406,13 +436,19 @@ void List<T>::insert(size_t index, std::shared_ptr<ListNode<T>> &node) {
     auto prev = get(index - 1);
     node->SetNext(prev->GetNext());
     prev->SetNext(node);
+    size++;
  }
 
  template <typename T>
 void List<T>::insertAfter(const ListIterator<T>& iterator, std::shared_ptr<ListNode<T>> &node) {
+    if (iterator + 1 == end()) {
+        pushBack(node);
+        return;
+    }
     auto nodeIt = get(iterator);
     node->SetNext(nodeIt->GetNext());
     nodeIt->SetNext(node);
+    size++;
 }
 
 template <typename T>
@@ -421,21 +457,21 @@ void List<T>::insertBefore(const ListIterator<T>& iterator, std::shared_ptr<List
         pushFront(node);
         return;
     }
-    auto nodeIt = head;
-    for (; nodeIt != nullptr && ListIterator<T>(nodeIt->GetNext()) != iterator; nodeIt = nodeIt->GetNext());
-    if (nodeIt == nullptr) {
+    auto it = begin();
+    for (; it != end() && it + 1 != iterator; ++it);
+    if (it == end()) {
         time_t now = time(nullptr);
         throw InvalidIteratorException(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
     }
-    node->SetNext(nodeIt->GetNext());
-    nodeIt->SetNext(node);
+    size++;
+    node->SetNext(it.getNode()->GetNext());
+    it.getNode()->SetNext(node);
 }
 
 template <typename T>
 ListIterator<T> List<T>::begin() {
     return ListIterator<T>(head);
 }
-
 
 template <typename T>
 ListIterator<T> List<T>::end() {

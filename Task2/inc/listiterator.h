@@ -7,6 +7,9 @@
 #include "listnode.h"
 
 template <typename T>
+class List;
+
+template <typename T>
 class ListIterator : public std::iterator<std::input_iterator_tag, T>
 {
     public:
@@ -30,9 +33,12 @@ class ListIterator : public std::iterator<std::input_iterator_tag, T>
         ListIterator<T> &operator+=(int steps);
         ListIterator<T> operator+(int steps) const;
         ListIterator<T> operator=(const ListIterator<T>& other);
+
+        friend class List<T>;
     private:
         void checkValid(size_t line) const;
         std::weak_ptr<ListNode<T>> wptr;
+        std::shared_ptr<ListNode<T>> getNode() const;
 };
 
 #endif // LISTITERATOR_H__
