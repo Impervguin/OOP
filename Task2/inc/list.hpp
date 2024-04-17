@@ -68,6 +68,19 @@ List<T>::List(List<T>&& list) {
 }
 
 template <typename T>
+template <typename U> requires Convertible<U, T>
+// template <typename U>
+List<T>::List(List<U> &list) {
+    size = list.GetSize();
+    head = nullptr;
+    tail = nullptr;
+    for (auto it = list.cbegin(); it!= list.cend(); it++) {
+        auto node = std::make_shared<ListNode<T>>(T(*it));
+        pushBack(node);
+    }
+}
+
+template <typename T>
 List<T>::~List() = default;
 
 template <typename T>
@@ -468,8 +481,13 @@ void List<T>::insertBefore(const ListIterator<T>& iterator, std::shared_ptr<List
     it.getNode()->SetNext(node);
 }
 
+// template <typename T>
+// ListIterator<T> List<T>::begin() {
+//     return ListIterator<T>(head);
+// }
+
 template <typename T>
-ListIterator<T> List<T>::begin() {
+const ListIterator<T> List<T>::begin() const {
     return ListIterator<T>(head);
 }
 

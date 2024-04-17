@@ -10,9 +10,16 @@ template <typename T>
 class List;
 
 template <typename T>
-class ListIterator : public std::iterator<std::input_iterator_tag, T>
+class ListIterator
 {
     public:
+        using iterator_category = std::forward_iterator_tag;
+        using value_type = T;
+        using difference_type = std::ptrdiff_t;
+        using pointer = T*;
+        using reference = T&;
+
+
         ListIterator();
         ListIterator(const ListIterator<T>& other);
         ListIterator(const std::shared_ptr<ListNode<T>>& node);
@@ -20,13 +27,14 @@ class ListIterator : public std::iterator<std::input_iterator_tag, T>
         ~ListIterator() = default;
 
         bool IsValid() const;
+        bool operatorbool() const;
         bool operator==(const ListIterator<T>& other) const;
         bool operator!=(const ListIterator<T>& other) const;
 
-        T &operator*();
-        const T &operator*() const;
-        T *operator->();
-        const T *operator->() const;
+        reference operator*();
+        const reference operator*() const;
+        pointer operator->();
+        const pointer operator->() const;
 
         ListIterator<T> &operator++();
         ListIterator<T> operator++(int);
@@ -37,8 +45,10 @@ class ListIterator : public std::iterator<std::input_iterator_tag, T>
         friend class List<T>;
     private:
         void checkValid(size_t line) const;
-        std::weak_ptr<ListNode<T>> wptr;
         std::shared_ptr<ListNode<T>> getNode() const;
+        
+        std::weak_ptr<ListNode<T>> wptr;
+        
 };
 
 #endif // LISTITERATOR_H__

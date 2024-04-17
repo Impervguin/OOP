@@ -4,15 +4,24 @@
 #include <cstdlib>
 #include <iterator>
 #include <memory>
+#include <concepts>
+
 #include "listnode.h"
 
 template <typename T>
 class List;
 
 template <typename T>
-class ConstListIterator : public std::iterator<std::output_iterator_tag, T>
+class ConstListIterator
 {
     public:
+        using iterator_category = std::forward_iterator_tag;
+        using value_type = T;
+        using difference_type = std::ptrdiff_t;
+        using pointer = const T*;
+        using reference = const T&;
+
+
         ConstListIterator();
         ConstListIterator(const ConstListIterator<T>& other);
         ConstListIterator(const std::shared_ptr<ListNode<T>>& node);
@@ -23,8 +32,8 @@ class ConstListIterator : public std::iterator<std::output_iterator_tag, T>
         bool operator==(const ConstListIterator<T>& other) const;
         bool operator!=(const ConstListIterator<T>& other) const;
 
-        const T &operator*() const;
-        const T *operator->() const;
+        reference operator*() const;
+        pointer operator->() const;
 
         ConstListIterator<T> &operator++();
         ConstListIterator<T> operator++(int);
@@ -34,9 +43,10 @@ class ConstListIterator : public std::iterator<std::output_iterator_tag, T>
 
         friend class List<T>;
     private:
-        std::weak_ptr<ListNode<T>> wptr;
         void checkValid(size_t line) const;
         std::shared_ptr<ListNode<T>> getNode() const;
+
+        std::weak_ptr<ListNode<T>> wptr;
 
 };
 #endif // CONSTLISTITERATOR_H__

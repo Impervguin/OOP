@@ -5,24 +5,34 @@
 #include "listnode.h"
 #include "listiterator.h"
 #include "constlistiterator.h"
+#include "listconcepts.h"
 #include <iostream>
 
+
 template <typename T>
-class List: public BaseContainer {
-    protected:
-        std::shared_ptr<ListNode<T>> head;
-        std::shared_ptr<ListNode<T>> tail;    
+class List: public BaseContainer {  
     public:
+        using value_type = T;
+        using iterator_type = ListIterator<T>;
+        using const_iterator_type = ConstListIterator<T>;
+        using size_type = size_t;
+
         List();
         List(std::initializer_list<T> list);
-        List(const List<T>& list);
+        explicit List(const List<T>& list);
         List(const ListIterator<T> &begin, const ListIterator<T> &end);
         List(size_t size, const T& data);
-        List<T>(List<T>&& list);
+        List(List<T> &&list);
+        
+        template <typename U> requires Convertible<U, T>
+        // template <typename U>
+        List(List<U> &list);
+
         
         ~List() override;
 
-        ListIterator<T> begin();
+        // ListIterator<T> begin();
+        const ListIterator<T> begin() const;
         ListIterator<T> end();
         ConstListIterator<T> cbegin() const;
         ConstListIterator<T> cend() const;
@@ -99,6 +109,10 @@ class List: public BaseContainer {
         void insertBefore(const ListIterator<T> &iterator, std::shared_ptr<ListNode<T>> &node);
         int cmpList(const List<T> &list) const;
         void checkEmpty(size_t line) const;
+    
+    protected:
+        std::shared_ptr<ListNode<T>> head;
+        std::shared_ptr<ListNode<T>> tail;  
 };
 
 #endif // LIST_H__

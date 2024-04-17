@@ -31,6 +31,11 @@ bool ListIterator<T>::IsValid() const {
 }
 
 template <typename T>
+bool ListIterator<T>::operatorbool() const {
+    return IsValid();
+}
+
+template <typename T>
 void ListIterator<T>::checkValid(size_t line) const
 {
     if (!IsValid())
@@ -51,25 +56,25 @@ bool ListIterator<T>::operator!=(const ListIterator<T>& other) const {
 }
 
 template <typename T>
-T &ListIterator<T>::operator*() {
+ListIterator<T>::reference ListIterator<T>::operator*() {
     checkValid(__LINE__);
     return wptr.lock()->GetData();
 }
 
 template <typename T>
-const T &ListIterator<T>::operator*() const {
+const ListIterator<T>::reference ListIterator<T>::operator*() const {
     checkValid(__LINE__);
     return wptr.lock()->GetData();
 }
 
 template <typename T>
-T *ListIterator<T>::operator->() {
+ListIterator<T>::pointer ListIterator<T>::operator->() {
     checkValid(__LINE__);
     return &wptr.lock()->GetData();
 }
 
 template <typename T>
-const T *ListIterator<T>::operator->() const {
+const ListIterator<T>::pointer ListIterator<T>::operator->() const {
     checkValid(__LINE__);
     return &wptr.lock()->GetData();
 }

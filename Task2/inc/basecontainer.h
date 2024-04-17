@@ -7,7 +7,7 @@ class BaseContainer {
     public:
         BaseContainer();
         BaseContainer(size_t size);
-        bool IsEmpty() const ;
+        bool IsEmpty() const;
         size_t GetSize() const;
 
         virtual ~BaseContainer() {};

@@ -49,12 +49,12 @@ bool ConstListIterator<T>::operator!=(const ConstListIterator<T>& other) const {
 }
 
 template <typename T>
-const T &ConstListIterator<T>::operator*() const {
+ConstListIterator<T>::reference ConstListIterator<T>::operator*() const {
     return wptr.lock()->GetData();
 }
 
 template <typename T>
-const T *ConstListIterator<T>::operator->() const {
+ConstListIterator<T>::pointer ConstListIterator<T>::operator->() const {
     return &wptr.lock()->GetData();
 }
 
