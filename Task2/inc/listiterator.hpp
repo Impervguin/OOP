@@ -11,7 +11,7 @@ ListIterator<T>::ListIterator(const ListIterator<T>& other) {
 }
 
 template <typename T>
-ListIterator<T>::ListIterator(const std::shared_ptr<ListNode<T>>& node) {
+ListIterator<T>::ListIterator(const std::shared_ptr<typename List<T>::ListNode>& node) {
     wptr = node;
 }
 
@@ -114,7 +114,7 @@ ListIterator<T> ListIterator<T>::operator=(const ListIterator<T>& other) {
 }
 
 template <typename T>
-std::shared_ptr<ListNode<T>> ListIterator<T>::getNode() const {
+std::shared_ptr<typename List<T>::ListNode> ListIterator<T>::getNode() const {
     checkValid(__LINE__);
     return wptr.lock();
 }

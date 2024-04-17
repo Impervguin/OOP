@@ -1,7 +1,6 @@
 #ifndef LIST_H__
 #define LIST_H__
 
-#include "listnode.h"
 #include "listiterator.h"
 #include "constlistiterator.h"
 #include "listconcepts.h"
@@ -15,6 +14,9 @@ class List {
         using iterator = ListIterator<T>;
         using const_iterator = ConstListIterator<T>;
         using size_type = size_t;
+
+        friend class ListIterator<T>;
+        friend class ConstListIterator<T>;
 
         List() noexcept;
         explicit List(const List<T>& list) noexcept;
@@ -95,26 +97,52 @@ class List {
         bool operator>=(const List<T> &list) const;
 
     protected:
-        void pushBack(std::shared_ptr<ListNode<T>> &node);
-        void pushFront(std::shared_ptr<ListNode<T>> &node);
-        std::shared_ptr<ListNode<T>> popBack();
-        std::shared_ptr<ListNode<T>> popFront();
-        std::shared_ptr<ListNode<T>> get(size_t index);
-        const std::shared_ptr<ListNode<T>> get(size_t index) const;
-        std::shared_ptr<ListNode<T>> get(const ListIterator<T> &iterator);
-        const std::shared_ptr<ListNode<T>> get(const ConstListIterator<T> &iterator) const;
-        std::shared_ptr<ListNode<T>> pop(size_t index);
-        std::shared_ptr<ListNode<T>> pop(const ListIterator<T> &iterator);
-        void insert(size_t index, std::shared_ptr<ListNode<T>> &node);
-        void insertAfter(const ListIterator<T> &iterator, std::shared_ptr<ListNode<T>> &node);
-        void insertBefore(const ListIterator<T> &iterator, std::shared_ptr<ListNode<T>> &node);
+        class ListNode 
+        {
+            public:
+                ListNode(const T &data);
+                ListNode(const T &data, const std::shared_ptr<ListNode> &next);
+                ListNode(const ListNode &node);
+                ~ListNode() = default;
+
+                void SetNext(const std::shared_ptr<ListNode> &node);
+                void SetData(const T &data);
+                void SetNextNull();
+
+                T &GetData();
+                const T &GetData() const;
+                std::shared_ptr<ListNode> GetNext() const;
+
+                bool operator==(const ListNode &node) const;
+                bool operator!=(const ListNode &node) const;
+            
+            protected:
+                T data;
+                std::shared_ptr<ListNode> next;
+        };  
+
+    protected:
+        void pushBack(std::shared_ptr<ListNode> &node);
+        void pushFront(std::shared_ptr<ListNode> &node);
+        std::shared_ptr<ListNode> popBack();
+        std::shared_ptr<ListNode> popFront();
+        std::shared_ptr<ListNode> get(size_t index);
+        const std::shared_ptr<ListNode> get(size_t index) const;
+        std::shared_ptr<ListNode> get(const ListIterator<T> &iterator);
+        const std::shared_ptr<ListNode> get(const ConstListIterator<T> &iterator) const;
+        std::shared_ptr<ListNode> pop(size_t index);
+        std::shared_ptr<ListNode> pop(const ListIterator<T> &iterator);
+        void insert(size_t index, std::shared_ptr<ListNode> &node);
+        void insertAfter(const ListIterator<T> &iterator, std::shared_ptr<ListNode> &node);
+        void insertBefore(const ListIterator<T> &iterator, std::shared_ptr<ListNode> &node);
         int cmpList(const List<T> &list) const;
         void checkEmpty(size_t line) const;
     
     protected:
-        std::shared_ptr<ListNode<T>> head;
-        std::shared_ptr<ListNode<T>> tail;
-        size_t csize;  
+        std::shared_ptr<ListNode> head;
+        std::shared_ptr<ListNode> tail;
+        size_t csize;
+        
 };
 
 #endif // LIST_H__

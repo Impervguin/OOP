@@ -5,6 +5,7 @@
 #include <iostream>
 #include "list.h"
 
+
 template <typename T>
 List<T>::List() noexcept {
     head = nullptr;
@@ -18,7 +19,7 @@ List<T>::List(std::initializer_list<T> list) noexcept {
     tail = nullptr;
     csize = 0;
     for (auto it = list.begin(); it!= list.end(); it++) {
-        auto node = std::make_shared<ListNode<T>>(*it);
+        auto node = std::make_shared<List<T>::ListNode>(*it);
         pushBack(node);
     }
 }
@@ -30,7 +31,7 @@ List<T>::List(size_t size, const T& data) noexcept {
     head = nullptr;
     tail = nullptr;
     for (int i = 0; i < size; i++) {
-        auto node = std::make_shared<ListNode<T>>(data);
+        auto node = std::make_shared<List<T>::ListNode>(data);
         pushBack(node);
     }
 }
@@ -41,7 +42,7 @@ List<T>::List(const List<T>& list) noexcept {
     head = nullptr;
     tail = nullptr;
     for (auto it = list.cbegin(); it!= list.cend(); it++) {
-        auto node = std::make_shared<ListNode<T>>(*it);
+        auto node = std::make_shared<List<T>::ListNode>(*it);
         pushBack(node);
     }
 }
@@ -53,7 +54,7 @@ List<T>::List(const List<T>& list) noexcept {
 //     tail = nullptr;
 //     csize = 0;
 //     for (auto it = begin + 1; it != end; it++) {
-//         auto node = std::make_shared<ListNode<T>>(*it);
+//         auto node = std::make_shared<List<T>::ListNode>(*it);
 //         pushBack(node);
 //     }
 // }
@@ -75,7 +76,7 @@ List<T>::List(List<T>&& list) noexcept {
 //     head = nullptr;
 //     tail = nullptr;
 //     for (auto it = list.cbegin(); it!= list.cend(); it++) {
-//         auto node = std::make_shared<ListNode<T>>(T(*it));
+//         auto node = std::make_shared<List<T>::ListNode>(T(*it));
 //         pushBack(node);
 //     }
 // }
@@ -87,7 +88,7 @@ List<T>::List(const C &container) noexcept {
     head = nullptr;
     tail = nullptr;
     for (auto it = container.cbegin(); it!= container.cend(); it++) {
-        auto node = std::make_shared<ListNode<T>>(T(*it));
+        auto node = std::make_shared<List<T>::ListNode>(T(*it));
         pushBack(node);
     }
 }
@@ -99,7 +100,7 @@ List<T>::List(const Iter &begin, const Iter &end) noexcept {
     head = nullptr;
     tail = nullptr;
     for (auto it = begin; it!= end; it++) {
-        auto node = std::make_shared<ListNode<T>>(T(*it));
+        auto node = std::make_shared<List<T>::ListNode>(T(*it));
         pushBack(node);
     }
 }
@@ -117,14 +118,14 @@ void List<T>::checkEmpty(size_t line) const {
 
 template <typename T>
 void List<T>::PushBack(const T& data) {
-    auto node = std::make_shared<ListNode<T>>(data);
+    auto node = std::make_shared<List<T>::ListNode>(data);
     pushBack(node);
 }
 
 template <typename T>
 void List<T>::PushBack(const List<T>& list) {
     for (auto it = list.cbegin(); it!= list.cend(); it++) {
-        auto node = std::make_shared<ListNode<T>>(*it);
+        auto node = std::make_shared<List<T>::ListNode>(*it);
         pushBack(node);
     }
 }
@@ -141,7 +142,7 @@ void List<T>::PushBack(List<T>&& list) {
 
 template <typename T>
 void List<T>::PushFront(const T& data) {
-    auto node = std::make_shared<ListNode<T>>(data);
+    auto node = std::make_shared<List<T>::ListNode>(data);
     pushFront(node);
 }
 
@@ -268,19 +269,19 @@ T List<T>::Pop(const ListIterator<T> &it) {
 
 template <typename T>
 void List<T>::Insert(size_t index, const T& data) {
-    auto node = std::make_shared<ListNode<T>>(data);
+    auto node = std::make_shared<List<T>::ListNode>(data);
     insert(index, node);
 }
 
 template <typename T>
 void List<T>::InsertAfter(const ListIterator<T> &it, const T& data) {
-    auto node = std::make_shared<ListNode<T>>(data);
+    auto node = std::make_shared<List<T>::ListNode>(data);
     insertAfter(it, node);
 }
 
 template <typename T>
 void List<T>::InsertBefore(const ListIterator<T> &it, const T& data) {
-    auto node = std::make_shared<ListNode<T>>(data);
+    auto node = std::make_shared<List<T>::ListNode>(data);
     insertBefore(it, node);
 }
 
@@ -318,7 +319,7 @@ size_t List<T>::size() const noexcept {
 
 
 template <typename T>
-void List<T>::pushBack(std::shared_ptr<ListNode<T>> &node) {
+void List<T>::pushBack(std::shared_ptr<List<T>::ListNode> &node) {
     node->SetNext(nullptr);
     csize++;
     if (head == nullptr) {
@@ -331,7 +332,7 @@ void List<T>::pushBack(std::shared_ptr<ListNode<T>> &node) {
 }
 
 template <typename T>
-void List<T>::pushFront(std::shared_ptr<ListNode<T>> &node) {
+void List<T>::pushFront(std::shared_ptr<List<T>::ListNode> &node) {
     node->SetNext(head);
     csize++;
     if (head == nullptr) {
@@ -343,7 +344,7 @@ void List<T>::pushFront(std::shared_ptr<ListNode<T>> &node) {
 }
 
 template <typename T>
-std::shared_ptr<ListNode<T>> List<T>::popFront(void) {
+std::shared_ptr<typename List<T>::ListNode> List<T>::popFront(void) {
     checkEmpty(__LINE__);
     csize--;
     auto node = head;
@@ -355,7 +356,7 @@ std::shared_ptr<ListNode<T>> List<T>::popFront(void) {
 }
 
 template <typename T>
-std::shared_ptr<ListNode<T>> List<T>::popBack(void) {
+std::shared_ptr<typename List<T>::ListNode> List<T>::popBack(void) {
     checkEmpty(__LINE__);
     if (head == tail) {
         auto node = head;
@@ -375,7 +376,7 @@ std::shared_ptr<ListNode<T>> List<T>::popBack(void) {
 }
 
 template <typename T>
-const std::shared_ptr<ListNode<T>> List<T>::get(size_t index) const {
+const std::shared_ptr<typename List<T>::ListNode> List<T>::get(size_t index) const {
     if (index >= csize) {
         time_t now = time(nullptr);
         throw OutOfRangeException(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
@@ -391,7 +392,7 @@ const std::shared_ptr<ListNode<T>> List<T>::get(size_t index) const {
 }
 
 template <typename T>
-std::shared_ptr<ListNode<T>> List<T>::get(size_t index) {
+std::shared_ptr<typename List<T>::ListNode> List<T>::get(size_t index) {
     if (index >= csize) {
         time_t now = time(nullptr);
         throw OutOfRangeException(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
@@ -407,7 +408,7 @@ std::shared_ptr<ListNode<T>> List<T>::get(size_t index) {
 }
 
 template <typename T>
-std::shared_ptr<ListNode<T>> List<T>::get(const ListIterator<T>& iterator) {
+std::shared_ptr<typename List<T>::ListNode> List<T>::get(const ListIterator<T>& iterator) {
     auto it = begin();
     for (; it != end() & it != iterator; it++);
     if (it == end()) {
@@ -418,7 +419,7 @@ std::shared_ptr<ListNode<T>> List<T>::get(const ListIterator<T>& iterator) {
 }
 
 template <typename T>
-const std::shared_ptr<ListNode<T>> List<T>::get(const ConstListIterator<T>& iterator) const {
+const std::shared_ptr<typename List<T>::ListNode> List<T>::get(const ConstListIterator<T>& iterator) const {
     auto it = cbegin();
     for (; it != cend() & it != iterator; it++);
     if (it == cend()) {
@@ -429,7 +430,7 @@ const std::shared_ptr<ListNode<T>> List<T>::get(const ConstListIterator<T>& iter
 }
 
 template <typename T>
-std::shared_ptr<ListNode<T>> List<T>::pop(size_t index) {
+std::shared_ptr<typename List<T>::ListNode> List<T>::pop(size_t index) {
     checkEmpty(__LINE__);
     if (index == 0) {
         return popFront();
@@ -454,7 +455,7 @@ std::shared_ptr<ListNode<T>> List<T>::pop(size_t index) {
 }
 
 template <typename T>
-std::shared_ptr<ListNode<T>> List<T>::pop(const ListIterator<T>& iterator) {
+std::shared_ptr<typename List<T>::ListNode> List<T>::pop(const ListIterator<T>& iterator) {
     checkEmpty(__LINE__);
     if (iterator == begin()) 
     {
@@ -477,7 +478,7 @@ std::shared_ptr<ListNode<T>> List<T>::pop(const ListIterator<T>& iterator) {
 }
 
 template <typename T>
-void List<T>::insert(size_t index, std::shared_ptr<ListNode<T>> &node) {
+void List<T>::insert(size_t index, std::shared_ptr<List<T>::ListNode> &node) {
     if (index == 0) {
         pushFront(node);
         return;
@@ -493,7 +494,7 @@ void List<T>::insert(size_t index, std::shared_ptr<ListNode<T>> &node) {
  }
 
  template <typename T>
-void List<T>::insertAfter(const ListIterator<T>& iterator, std::shared_ptr<ListNode<T>> &node) {
+void List<T>::insertAfter(const ListIterator<T>& iterator, std::shared_ptr<List<T>::ListNode> &node) {
     if (iterator + 1 == end()) {
         pushBack(node);
         return;
@@ -505,7 +506,7 @@ void List<T>::insertAfter(const ListIterator<T>& iterator, std::shared_ptr<ListN
 }
 
 template <typename T>
-void List<T>::insertBefore(const ListIterator<T>& iterator, std::shared_ptr<ListNode<T>> &node) {
+void List<T>::insertBefore(const ListIterator<T>& iterator, std::shared_ptr<List<T>::ListNode> &node) {
     if (iterator == begin()) {
         pushFront(node);
         return;

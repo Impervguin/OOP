@@ -3,8 +3,7 @@
 
 #include <cstdlib>
 #include <iterator>
-#include <memory.h>
-#include "listnode.h"
+#include <memory>
 
 template <typename T>
 class List;
@@ -42,10 +41,10 @@ class ListIterator
         friend class List<T>;
     private:
         void checkValid(size_t line) const;
-        std::shared_ptr<ListNode<T>> getNode() const;
-        ListIterator(const std::shared_ptr<ListNode<T>>& node);
+        std::shared_ptr<typename List<T>::ListNode> getNode() const;
+        ListIterator(const std::shared_ptr<typename List<T>::ListNode>& node);
         
-        std::weak_ptr<ListNode<T>> wptr;
+        std::weak_ptr<typename List<T>::ListNode> wptr;
         
 };
 

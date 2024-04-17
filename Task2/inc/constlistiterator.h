@@ -6,8 +6,6 @@
 #include <memory>
 #include <concepts>
 
-#include "listnode.h"
-
 template <typename T>
 class List;
 
@@ -41,10 +39,10 @@ class ConstListIterator
         friend class List<T>;
     private:
         void checkValid(size_t line) const;
-        const std::shared_ptr<ListNode<T>> getNode() const;
-        ConstListIterator(const std::shared_ptr<ListNode<T>>& node) noexcept;
+        const std::shared_ptr<typename List<T>::ListNode> getNode() const;
+        ConstListIterator(const std::shared_ptr<typename List<T>::ListNode>& node) noexcept;
 
-        std::weak_ptr<ListNode<T>> wptr;
+        std::weak_ptr<typename List<T>::ListNode> wptr;
 
 };
 #endif // CONSTLISTITERATOR_H__

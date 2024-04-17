@@ -9,7 +9,7 @@ ConstListIterator<T>::ConstListIterator(const ConstListIterator<T>& other) noexc
 }
 
 template <typename T>
-ConstListIterator<T>::ConstListIterator(const std::shared_ptr<ListNode<T>>& node) noexcept {
+ConstListIterator<T>::ConstListIterator(const std::shared_ptr<typename List<T>::ListNode>& node) noexcept {
     wptr = node;
 }
 
@@ -90,7 +90,7 @@ ConstListIterator<T> ConstListIterator<T>::operator=(const ConstListIterator<T>&
 }
 
 template <typename T>
-const std::shared_ptr<ListNode<T>> ConstListIterator<T>::getNode() const {
+const std::shared_ptr<typename List<T>::ListNode> ConstListIterator<T>::getNode() const {
     checkValid(__LINE__);
     return wptr.lock();
 }

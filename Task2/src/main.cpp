@@ -4,6 +4,7 @@
 #include "list.hpp"
 #include <iostream>
 #include <vector>
+#include <string>
 
 #define INFO_COLOR "\033[36m"
 #define RESET_COLOR "\033[0m"
@@ -22,6 +23,7 @@ std::ostream& operator<<(std::ostream& os, const std::vector<T>& vector) {
     os << "}";
     return os;
 }
+
 
 int main(void) 
 {
@@ -226,25 +228,6 @@ int main(void)
     std::cout << INFO_COLOR << listCmp2 << " < " << listCmp3 << RESET_COLOR <<  " = " << (listCmp2 < listCmp3) << std::endl;
     std::cout << INFO_COLOR << listCmp2 << " > " << listCmp3 << RESET_COLOR <<  " = " << (listCmp2 > listCmp3) << std::endl;
     std::cout << INFO_COLOR << listCmp2 << " == " << listCmp3 << RESET_COLOR <<  " = " << (listCmp2 == listCmp3) << std::endl;
-
-    // int tint = 10;
-    // auto d = double(tint);
-    // List<int> tintList{1, 2, 3, 4, 5};
-    // List<int> doubleList(tintList);
-    // std::cout << doubleList << std::endl;
-
-    // std::vector<int> veca{1, 2, 3, 4, 5};
-    // List<int> vecaList(veca);
-    // std::cout << vecaList << std::endl;
-
-    // std::vector<int> vecb{1, 2, 3, 4, 5, -1, -2};
-    // List<int> vecbList(vecb.begin(), vecb.end());
-    // std::cout << vecbList << std::endl;
-    // List<int> vecbList2(vecbList.begin(), vecbList.end());
-    // std::cout << vecbList2 << std::endl;
-
-    // auto count = distance(vecbList.begin(), vecbList.end());
-    // std::cout << count << std::endl;
 
     return 0;
 }
