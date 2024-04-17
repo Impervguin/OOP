@@ -3,9 +3,25 @@
 #include "constlistiterator.hpp"
 #include "list.hpp"
 #include <iostream>
+#include <vector>
 
 #define INFO_COLOR "\033[36m"
 #define RESET_COLOR "\033[0m"
+
+template <typename T>
+std::ostream& operator<<(std::ostream& os, const std::vector<T>& vector) {
+    os << "{";
+    auto a = vector.cbegin();
+    if (a != vector.cend()) {
+        os << *a;
+        a++;
+    }
+    for (; a != vector.cend(); a++) {
+        os << ", " << *a;
+    }
+    os << "}";
+    return os;
+}
 
 int main(void) 
 {
@@ -19,6 +35,13 @@ int main(void)
     std::cout << INFO_COLOR << "Init4:" << RESET_COLOR << "Инициализация через итератор по " << initListFrom << ": " << initListTo << std::endl;
     std::cout << INFO_COLOR << "Init5:" << RESET_COLOR << "Копирование " << initListTo << ": " << List<int>(initListTo) << ". Исходный список: " << initListTo << std::endl;
     std::cout << INFO_COLOR << "Init5:" << RESET_COLOR << "Перенос " << initListTo << ": " << List<int>(std::move(initListTo)) << ". Исходный список: " << initListTo << std::endl;
+
+    List<int> List1{0, 2, 42, -2, 0, -2};
+    std::vector<double> Vector1{0, 2.5, 4.2, -2.7, 0, 2};
+    std::cout << INFO_COLOR << "Init6:" << RESET_COLOR << "Инициализация через вектор double " << Vector1 << ": " << List<int>(Vector1) << std::endl;
+    std::cout << INFO_COLOR << "Init7:" << RESET_COLOR << "Инициализация списка bool через список int " << List1 << ": " << List<bool>(List1) << std::endl;
+    std::cout << INFO_COLOR << "Init8:" << RESET_COLOR << "Инициализация списка bool через итератор по вектору double" << Vector1 << ": " << List<bool>(Vector1.begin(), Vector1.end()) << std::endl;
+    std::cout << INFO_COLOR << "Init8:" << RESET_COLOR << "Инициализация списка bool через константный итератор по вектору double" << Vector1 << ": " << List<bool>(Vector1.cbegin(), Vector1.cend()) << std::endl;
 
     std::cout << std::endl;
 
@@ -206,7 +229,22 @@ int main(void)
 
     // int tint = 10;
     // auto d = double(tint);
-    List<int> tintList{1, 2, 3, 4, 5};
-    List<bool> doubleList(tintList);
-    std::cout << doubleList << std::endl;
+    // List<int> tintList{1, 2, 3, 4, 5};
+    // List<int> doubleList(tintList);
+    // std::cout << doubleList << std::endl;
+
+    // std::vector<int> veca{1, 2, 3, 4, 5};
+    // List<int> vecaList(veca);
+    // std::cout << vecaList << std::endl;
+
+    // std::vector<int> vecb{1, 2, 3, 4, 5, -1, -2};
+    // List<int> vecbList(vecb.begin(), vecb.end());
+    // std::cout << vecbList << std::endl;
+    // List<int> vecbList2(vecbList.begin(), vecbList.end());
+    // std::cout << vecbList2 << std::endl;
+
+    // auto count = distance(vecbList.begin(), vecbList.end());
+    // std::cout << count << std::endl;
+
+    return 0;
 }

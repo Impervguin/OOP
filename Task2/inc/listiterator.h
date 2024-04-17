@@ -19,10 +19,7 @@ class ListIterator
         using pointer = T*;
         using reference = T&;
 
-
-        ListIterator();
         ListIterator(const ListIterator<T>& other);
-        ListIterator(const std::shared_ptr<ListNode<T>>& node);
 
         ~ListIterator() = default;
 
@@ -46,6 +43,7 @@ class ListIterator
     private:
         void checkValid(size_t line) const;
         std::shared_ptr<ListNode<T>> getNode() const;
+        ListIterator(const std::shared_ptr<ListNode<T>>& node);
         
         std::weak_ptr<ListNode<T>> wptr;
         

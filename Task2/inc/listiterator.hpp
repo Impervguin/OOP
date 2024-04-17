@@ -5,12 +5,6 @@
 #include "exceptions.h"
 #include <time.h>
 
-
-template <typename T>
-ListIterator<T>::ListIterator() {
-    wptr = nullptr;
-}
-
 template <typename T>
 ListIterator<T>::ListIterator(const ListIterator<T>& other) {
     wptr = other.wptr.lock();

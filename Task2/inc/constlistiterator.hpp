@@ -3,19 +3,13 @@
 
 #include "constlistiterator.h"
 
-
 template <typename T>
-ConstListIterator<T>::ConstListIterator() {
-    wptr = nullptr;
-}
-
-template <typename T>
-ConstListIterator<T>::ConstListIterator(const ConstListIterator<T>& other) {
+ConstListIterator<T>::ConstListIterator(const ConstListIterator<T>& other) noexcept {
     wptr = other.wptr.lock();
 }
 
 template <typename T>
-ConstListIterator<T>::ConstListIterator(const std::shared_ptr<ListNode<T>>& node) {
+ConstListIterator<T>::ConstListIterator(const std::shared_ptr<ListNode<T>>& node) noexcept {
     wptr = node;
 }
 
@@ -96,7 +90,7 @@ ConstListIterator<T> ConstListIterator<T>::operator=(const ConstListIterator<T>&
 }
 
 template <typename T>
-std::shared_ptr<ListNode<T>> ConstListIterator<T>::getNode() const {
+const std::shared_ptr<ListNode<T>> ConstListIterator<T>::getNode() const {
     checkValid(__LINE__);
     return wptr.lock();
 }

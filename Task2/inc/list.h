@@ -1,7 +1,6 @@
 #ifndef LIST_H__
 #define LIST_H__
 
-#include "basecontainer.h"
 #include "listnode.h"
 #include "listiterator.h"
 #include "constlistiterator.h"
@@ -10,32 +9,31 @@
 
 
 template <typename T>
-class List: public BaseContainer {  
+class List {  
     public:
         using value_type = T;
-        using iterator_type = ListIterator<T>;
-        using const_iterator_type = ConstListIterator<T>;
+        using iterator = ListIterator<T>;
+        using const_iterator = ConstListIterator<T>;
         using size_type = size_t;
 
-        List();
-        List(std::initializer_list<T> list);
-        explicit List(const List<T>& list);
-        List(const ListIterator<T> &begin, const ListIterator<T> &end);
-        List(size_t size, const T& data);
-        List(List<T> &&list);
-        
-        template <typename U> requires Convertible<U, T>
-        // template <typename U>
-        List(List<U> &list);
+        List() noexcept;
+        explicit List(const List<T>& list) noexcept;
+        List(List<T> &&list) noexcept;
+        List(size_t size, const T& data) noexcept;
+        List(std::initializer_list<T> list) noexcept;
 
-        
-        ~List() override;
+        template <ForwardIterator Iter> requires Convertible<typename Iter::value_type, typename List<T>::value_type>
+        List(const Iter &begin, const Iter &end) noexcept;
 
-        // ListIterator<T> begin();
-        const ListIterator<T> begin() const;
-        ListIterator<T> end();
-        ConstListIterator<T> cbegin() const;
-        ConstListIterator<T> cend() const;
+        template <Container C> requires Convertible<typename C::value_type, typename List<T>::value_type>
+        explicit List(const C &container) noexcept;
+        
+        ~List() noexcept;
+
+        iterator begin() noexcept;
+        iterator end() noexcept;
+        const_iterator cbegin() const noexcept;
+        const_iterator cend() const noexcept;
 
         void PushBack(const T &data);
         void PushBack(const List<T> &list);
@@ -76,9 +74,12 @@ class List: public BaseContainer {
         void Clear();
         void Reverse();
 
+        bool IsEmpty() const;
+        size_t GetSize() const;
+        size_t size() const noexcept;
+
         List<T>& operator=(const List<T> &list);
         List<T>& operator=(List<T> &&list);
-        // TODO:
         List<T>& operator+=(const List<T> &list);
         List<T>& operator+=(List<T> &&list);
         List<T>& operator+=(const T &data);
@@ -112,7 +113,8 @@ class List: public BaseContainer {
     
     protected:
         std::shared_ptr<ListNode<T>> head;
-        std::shared_ptr<ListNode<T>> tail;  
+        std::shared_ptr<ListNode<T>> tail;
+        size_t csize;  
 };
 
 #endif // LIST_H__

@@ -21,11 +21,8 @@ class ConstListIterator
         using pointer = const T*;
         using reference = const T&;
 
-
-        ConstListIterator();
-        ConstListIterator(const ConstListIterator<T>& other);
-        ConstListIterator(const std::shared_ptr<ListNode<T>>& node);
-
+        ConstListIterator(const ConstListIterator<T>& other) noexcept;
+        
         ~ConstListIterator() = default;
 
         bool IsValid() const;
@@ -44,7 +41,8 @@ class ConstListIterator
         friend class List<T>;
     private:
         void checkValid(size_t line) const;
-        std::shared_ptr<ListNode<T>> getNode() const;
+        const std::shared_ptr<ListNode<T>> getNode() const;
+        ConstListIterator(const std::shared_ptr<ListNode<T>>& node) noexcept;
 
         std::weak_ptr<ListNode<T>> wptr;
 

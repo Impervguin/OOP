@@ -69,9 +69,4 @@ std::shared_ptr<ListNode<T>> ListNode<T>::GetNext() const {
     return this->next;
 }
 
-// template <typename  T>
-// const std::shared_ptr<ListNode<T>> ListNode<T>::GetNext() const {
-//     return this->next;
-// }
-
 #endif // LISTNODE_HPP__

@@ -6,17 +6,17 @@
 #include "list.h"
 
 template <typename T>
-List<T>::List() {
+List<T>::List() noexcept {
     head = nullptr;
     tail = nullptr;
-    size = 0;
+    csize = 0;
 }
 
 template <typename T>
-List<T>::List(std::initializer_list<T> list) {
+List<T>::List(std::initializer_list<T> list) noexcept {
     head = nullptr;
     tail = nullptr;
-    size = 0;
+    csize = 0;
     for (auto it = list.begin(); it!= list.end(); it++) {
         auto node = std::make_shared<ListNode<T>>(*it);
         pushBack(node);
@@ -24,19 +24,20 @@ List<T>::List(std::initializer_list<T> list) {
 }
 
 template <typename T>
-List<T>::List(size_t size, const T& data) {
-    size = size;
-    head = std::make_shared<ListNode<T>>(data);
-    tail = head;
-    for (int i = 1; i < size; i++) {
+List<T>::List(size_t size, const T& data) noexcept {
+    // csize = size;
+    csize = 0;
+    head = nullptr;
+    tail = nullptr;
+    for (int i = 0; i < size; i++) {
         auto node = std::make_shared<ListNode<T>>(data);
         pushBack(node);
     }
 }
 
 template <typename T>
-List<T>::List(const List<T>& list) {
-    size = list.GetSize();
+List<T>::List(const List<T>& list) noexcept {
+    csize = 0;
     head = nullptr;
     tail = nullptr;
     for (auto it = list.cbegin(); it!= list.cend(); it++) {
@@ -45,43 +46,66 @@ List<T>::List(const List<T>& list) {
     }
 }
 
-template <typename T>
-List<T>::List(const ListIterator<T> &begin, const ListIterator<T> &end) {
-    auto tmp = head;
-    head = nullptr;
-    tail = nullptr;
-    size = 0;
-    for (auto it = begin + 1; it != end; it++) {
-        auto node = std::make_shared<ListNode<T>>(*it);
-        pushBack(node);
-    }
-}
+// template <typename T>
+// List<T>::List(const ListIterator<T> &begin, const ListIterator<T> &end) {
+//     auto tmp = head;
+//     head = nullptr;
+//     tail = nullptr;
+//     csize = 0;
+//     for (auto it = begin + 1; it != end; it++) {
+//         auto node = std::make_shared<ListNode<T>>(*it);
+//         pushBack(node);
+//     }
+// }
 
 template <typename T>
-List<T>::List(List<T>&& list) {
+List<T>::List(List<T>&& list) noexcept {
     head = list.head;
     tail = list.tail;
-    size = list.size;
+    csize = list.csize;
     list.head = nullptr;
     list.tail = nullptr;
-    list.size = 0;
+    list.csize = 0;
 }
 
+// template <typename T>
+// template <typename U> requires Convertible<U, T>
+// List<T>::List(List<U> &list) {
+//     csize = list.GetSize();
+//     head = nullptr;
+//     tail = nullptr;
+//     for (auto it = list.cbegin(); it!= list.cend(); it++) {
+//         auto node = std::make_shared<ListNode<T>>(T(*it));
+//         pushBack(node);
+//     }
+// }
+
 template <typename T>
-template <typename U> requires Convertible<U, T>
-// template <typename U>
-List<T>::List(List<U> &list) {
-    size = list.GetSize();
+template <Container C> requires Convertible<typename C::value_type, typename List<T>::value_type>
+List<T>::List(const C &container) noexcept {
+    csize = 0;
     head = nullptr;
     tail = nullptr;
-    for (auto it = list.cbegin(); it!= list.cend(); it++) {
+    for (auto it = container.cbegin(); it!= container.cend(); it++) {
         auto node = std::make_shared<ListNode<T>>(T(*it));
         pushBack(node);
     }
 }
 
 template <typename T>
-List<T>::~List() = default;
+template <ForwardIterator Iter> requires Convertible<typename Iter::value_type, typename List<T>::value_type>
+List<T>::List(const Iter &begin, const Iter &end) noexcept {
+    csize = 0;
+    head = nullptr;
+    tail = nullptr;
+    for (auto it = begin; it!= end; it++) {
+        auto node = std::make_shared<ListNode<T>>(T(*it));
+        pushBack(node);
+    }
+}
+
+template <typename T>
+List<T>::~List() noexcept = default;
 
 template <typename T>
 void List<T>::checkEmpty(size_t line) const {
@@ -109,10 +133,10 @@ template <typename T>
 void List<T>::PushBack(List<T>&& list) {
     tail->SetNext(list.head);
     tail = list.tail;
-    size += list.size;
+    csize += list.csize;
     list.head = nullptr;
     list.tail = nullptr;
-    list.size = 0;
+    list.csize = 0;
 }
 
 template <typename T>
@@ -132,10 +156,10 @@ template <typename T>
 void List<T>::PushFront(List<T>&& list) {
     list.tail->SetNext(head);
     head = list.head;
-    size += list.size;
+    csize += list.csize;
     list.head = nullptr;
     list.tail = nullptr;
-    list.size = 0;
+    list.csize = 0;
 }
 
 template <typename T>
@@ -264,13 +288,13 @@ template <typename T>
 void List<T>::Clear() {
     head = nullptr;
     tail = nullptr;
-    size = 0;
+    csize = 0;
 }
 
 template <typename T>
 void List<T>::Reverse() {
     List<T> newList;
-    while (size > 0) {
+    while (csize > 0) {
         auto node = popFront();
         newList.pushFront(node);
     }
@@ -278,9 +302,25 @@ void List<T>::Reverse() {
 }
 
 template <typename T>
+bool List<T>::IsEmpty() const {
+    return csize == 0;
+}
+
+template <typename T>
+size_t List<T>::GetSize() const {
+    return csize;
+}
+
+template <typename T>
+size_t List<T>::size() const noexcept {
+    return csize;
+}
+
+
+template <typename T>
 void List<T>::pushBack(std::shared_ptr<ListNode<T>> &node) {
     node->SetNext(nullptr);
-    size++;
+    csize++;
     if (head == nullptr) {
         head = node;
         tail = node;
@@ -293,7 +333,7 @@ void List<T>::pushBack(std::shared_ptr<ListNode<T>> &node) {
 template <typename T>
 void List<T>::pushFront(std::shared_ptr<ListNode<T>> &node) {
     node->SetNext(head);
-    size++;
+    csize++;
     if (head == nullptr) {
         head = node;
         tail = node;
@@ -305,7 +345,7 @@ void List<T>::pushFront(std::shared_ptr<ListNode<T>> &node) {
 template <typename T>
 std::shared_ptr<ListNode<T>> List<T>::popFront(void) {
     checkEmpty(__LINE__);
-    size--;
+    csize--;
     auto node = head;
     head = head->GetNext();
     if (head == nullptr) {
@@ -321,7 +361,7 @@ std::shared_ptr<ListNode<T>> List<T>::popBack(void) {
         auto node = head;
         head = nullptr;
         tail = nullptr;
-        size = 0;
+        csize = 0;
         return node;
     }
     auto node = head;
@@ -330,13 +370,13 @@ std::shared_ptr<ListNode<T>> List<T>::popBack(void) {
     }
     node->SetNext(nullptr);
     std::swap(node, tail);
-    size--;
+    csize--;
     return node;
 }
 
 template <typename T>
 const std::shared_ptr<ListNode<T>> List<T>::get(size_t index) const {
-    if (index >= size) {
+    if (index >= csize) {
         time_t now = time(nullptr);
         throw OutOfRangeException(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
     }
@@ -352,7 +392,7 @@ const std::shared_ptr<ListNode<T>> List<T>::get(size_t index) const {
 
 template <typename T>
 std::shared_ptr<ListNode<T>> List<T>::get(size_t index) {
-    if (index >= size) {
+    if (index >= csize) {
         time_t now = time(nullptr);
         throw OutOfRangeException(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
     }
@@ -394,10 +434,10 @@ std::shared_ptr<ListNode<T>> List<T>::pop(size_t index) {
     if (index == 0) {
         return popFront();
     }
-    if (index == size - 1) {
+    if (index == csize - 1) {
         return popBack();
     }
-    if (index >= size) {
+    if (index >= csize) {
         time_t now = time(nullptr);
         throw OutOfRangeException(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
     }
@@ -407,7 +447,7 @@ std::shared_ptr<ListNode<T>> List<T>::pop(size_t index) {
         time_t now = time(nullptr);
         throw OutOfRangeException(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
     }
-    size--;
+    csize--;
     auto node = it.getNode()->GetNext();
     it.getNode()->SetNext(it.getNode()->GetNext()->GetNext());
     return node;
@@ -430,7 +470,7 @@ std::shared_ptr<ListNode<T>> List<T>::pop(const ListIterator<T>& iterator) {
     {
         return popBack();
     }
-    size--;
+    csize--;
     auto node = it.getNode()->GetNext();
     it.getNode()->SetNext(it.getNode()->GetNext()->GetNext());
     return node;
@@ -442,14 +482,14 @@ void List<T>::insert(size_t index, std::shared_ptr<ListNode<T>> &node) {
         pushFront(node);
         return;
     }
-    if (index == size) {
+    if (index == csize) {
         pushBack(node);
         return;
     }
     auto prev = get(index - 1);
     node->SetNext(prev->GetNext());
     prev->SetNext(node);
-    size++;
+    csize++;
  }
 
  template <typename T>
@@ -461,7 +501,7 @@ void List<T>::insertAfter(const ListIterator<T>& iterator, std::shared_ptr<ListN
     auto nodeIt = get(iterator);
     node->SetNext(nodeIt->GetNext());
     nodeIt->SetNext(node);
-    size++;
+    csize++;
 }
 
 template <typename T>
@@ -476,23 +516,19 @@ void List<T>::insertBefore(const ListIterator<T>& iterator, std::shared_ptr<List
         time_t now = time(nullptr);
         throw InvalidIteratorException(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
     }
-    size++;
+    csize++;
     node->SetNext(it.getNode()->GetNext());
     it.getNode()->SetNext(node);
 }
 
-// template <typename T>
-// ListIterator<T> List<T>::begin() {
-//     return ListIterator<T>(head);
-// }
-
 template <typename T>
-const ListIterator<T> List<T>::begin() const {
+ListIterator<T> List<T>::begin() noexcept {
     return ListIterator<T>(head);
 }
 
+
 template <typename T>
-ListIterator<T> List<T>::end() {
+ListIterator<T> List<T>::end() noexcept {
     if (head == nullptr) {
         return ListIterator<T>(nullptr);
     }
@@ -500,12 +536,12 @@ ListIterator<T> List<T>::end() {
 }
 
 template <typename T>
-ConstListIterator<T> List<T>::cbegin() const {
+ConstListIterator<T> List<T>::cbegin() const noexcept {
     return ConstListIterator<T>(head);
 }
 
 template <typename T>
-ConstListIterator<T> List<T>::cend() const {
+ConstListIterator<T> List<T>::cend() const noexcept {
     if (head == nullptr) {
         return ConstListIterator<T>(nullptr);
     }
@@ -525,9 +561,9 @@ int List<T>::cmpList(const List<T> &other) const {
             return 1;
         }
     }
-    if (size > other.GetSize())
+    if (csize > other.GetSize())
         return 1;
-    if (size < other.GetSize())
+    if (csize < other.GetSize())
         return -1;
     return 0;
 }
@@ -540,7 +576,7 @@ List<T>& List<T>::operator=(const List<T>& list) {
     }
     head = nullptr;
     tail = nullptr;
-    size = 0;
+    csize = 0;
     PushBack(list);
     return *this;
 }
@@ -549,10 +585,10 @@ template <typename T>
 List<T>& List<T>::operator=(List<T>&& list) {
     head = list.head;
     tail = list.tail;
-    size = list.size;
+    csize = list.csize;
     list.head = nullptr;
     list.tail = nullptr;
-    list.size = 0;
+    list.csize = 0;
     return *this;
 }
 
@@ -585,8 +621,8 @@ template <typename T>
 List<T> List<T>::operator+(List<T>&& list) const {
     List<T> result(*this);
     result.PushBack(std::move(list));
-    // list.head = nullptr;
-    // list.size = 0;
+    list.head = nullptr;
+    list.csize = 0;
     return result;
 }
 
