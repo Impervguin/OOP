@@ -18,80 +18,56 @@ class List {
         friend class ConstListIterator<T>;
 
         List() noexcept;
-        explicit List(const List<T>& list) noexcept;
+        explicit List(const List<T>& list);
         List(List<T> &&list) noexcept;
         
         template <typename U> requires Convertible<U, typename List<T>::value_type>
-        List(size_t size, const U& data) noexcept;
+        List(size_t size, const U& data);
 
         template <typename U> requires Convertible<U, typename List<T>::value_type>
-        List(std::initializer_list<U> list) noexcept;
+        List(std::initializer_list<U> list);
 
         template <ForwardIterator Iter> requires Convertible<typename Iter::value_type, typename List<T>::value_type>
-        List(const Iter &begin, const Iter &end) noexcept;
+        List(const Iter &begin, const Iter &end);
 
         template <Container C> requires Convertible<typename C::value_type, typename List<T>::value_type>
-        explicit List(const C &container) noexcept;
+        explicit List(const C &container);
         
         template <Container C> requires Convertible<typename C::value_type, typename List<T>::value_type>
-        List(C &&container) noexcept;
+        List(C &&container);
         
-        ~List() noexcept;
+        ~List();
 
         iterator begin() noexcept;
         iterator end() noexcept;
+        const_iterator begin() const noexcept;
+        const_iterator end() const noexcept;
         const_iterator cbegin() const noexcept;
         const_iterator cend() const noexcept;
 
         template <typename U> requires Convertible<U, typename List<T>::value_type>
-        void PushBack(const U &data) noexcept;
+        void PushBack(const U &data);
         template <typename U> requires Convertible<U, typename List<T>::value_type>
-        void PushBack(U &&data) noexcept;
+        void PushBack(U &&data);
         template <Container C> requires Convertible<typename C::value_type, typename List<T>::value_type>
-        void PushBack(const C &container) noexcept;
+        void PushBack(const C &container);
         template <Container C> requires Convertible<typename C::value_type, typename List<T>::value_type>
-        void PushBack(C &&container) noexcept;
+        void PushBack(C &&container);
         void PushBack(List<T> &&list) noexcept;
 
         template <typename U> requires Convertible<U, typename List<T>::value_type>
-        void PushFront(const U &data) noexcept;
+        void PushFront(const U &data);
         template <typename U> requires Convertible<U, typename List<T>::value_type>
-        void PushFront(U &&data) noexcept;
+        void PushFront(U &&data);
         template <Container C> requires Convertible<typename C::value_type, typename List<T>::value_type>
-        void PushFront(const C &container) noexcept;
+        void PushFront(const C &container);
         template <Container C> requires Convertible<typename C::value_type, typename List<T>::value_type>
-        void PushFront(C &&container) noexcept;
+        void PushFront(C &&container);
         void PushFront(List<T> &&list) noexcept;
 
         T PopBack();
         T PopFront();
-        T &GetFront();
-        T &GetBack();
-        const T &GetFront() const;
-        const T &GetBack() const;
 
-
-        T &Get(size_t index);
-        T &Get(const ListIterator<T> &iterator);
-        const T &Get(size_t index) const;
-        const T &Get(const ConstListIterator<T> &iterator) const;
-        T &operator[](size_t index);
-        T &operator[](const ListIterator<T> &iterator);
-        const T &operator[](size_t index) const;
-        const T &operator[](const ConstListIterator<T> &iterator) const;
-
-        template <typename U> requires Convertible<U, typename List<T>::value_type>
-        void Set(size_t index, const U &data);
-
-        template <typename U> requires Convertible<U, typename List<T>::value_type>
-        void Set(const ListIterator<T> &iterator, const U &data);
-
-        template <typename U> requires Convertible<U, typename List<T>::value_type>
-        void Set(size_t index, U &&data);
-
-        template <typename U> requires Convertible<U, typename List<T>::value_type>
-        void Set(const ListIterator<T> &iterator, U &&data);
-        
         void Remove(size_t index);
         void Remove(const ListIterator<T> &iterator);
         T Pop(size_t index);
@@ -101,24 +77,18 @@ class List {
         void Insert(size_t index, const U &data);
         template <typename U> requires Convertible<U, typename List<T>::value_type>
         void InsertAfter(const ListIterator<T> &it, const U &data);
-        template <typename U> requires Convertible<U, typename List<T>::value_type>
-        void InsertBefore(const ListIterator<T> &it, const U &data);
 
         template <typename U> requires Convertible<U, typename List<T>::value_type>
         void Insert(size_t index, U &&data);
         template <typename U> requires Convertible<U, typename List<T>::value_type>
         void InsertAfter(const ListIterator<T> &it, U &&data);
-        template <typename U> requires Convertible<U, typename List<T>::value_type>
-        void InsertBefore(const ListIterator<T> &it, U &&data);
 
-        void Clear();
-        void Reverse();
+        void Clear() noexcept;
+        void Reverse() noexcept;
 
-        bool IsEmpty() const;
-        size_t GetSize() const;
+        bool IsEmpty() const noexcept;
+        size_t GetSize() const noexcept;
         size_type size() const noexcept;
-
-
         
         List<T>& operator=(const List<T> &list);
         List<T>& operator=(List<T> &&list);
@@ -152,8 +122,6 @@ class List {
         template <typename U> requires Convertible<U, typename List<T>::value_type>
         List<T> operator+(U &&data) const;
 
-        
-
 
         bool operator==(const List<T> &list) const;
         bool operator!=(const List<T> &list) const;
@@ -163,29 +131,28 @@ class List {
         bool operator>=(const List<T> &list) const;
 
     protected:
-        class ListNode 
+        class ListNode : public std::enable_shared_from_this<ListNode>
         {
             public:
-                ListNode(const T &data);
-                ListNode(T &&data);
-                ListNode(const T &data, const std::shared_ptr<ListNode> &next);
-                ListNode(const ListNode &node);
+                ListNode() = delete;
+                ListNode(const T &data) = delete;
+                ListNode(T &&data) = delete;
                 ~ListNode() = default;
+
+                template <typename... Args>
+                static std::shared_ptr<ListNode> CreateNode(Args&&... params);
 
                 void SetNext(const std::shared_ptr<ListNode> &node);
                 void SetData(const T &data);
                 void SetNextNull();
 
-                T &GetData();
-                const T &GetData() const;
-                std::shared_ptr<ListNode> GetNext() const;
-
-                bool operator==(const ListNode &node) const;
-                bool operator!=(const ListNode &node) const;
+                std::shared_ptr<ListNode> GetNext();
+                std::shared_ptr<T> GetData();
             
             protected:
                 T data;
                 std::shared_ptr<ListNode> next;
+                ListNode(const T &data, const std::shared_ptr<ListNode> &next);
         };  
 
     protected:

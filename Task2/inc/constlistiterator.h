@@ -17,14 +17,23 @@ class ConstListIterator
         using iterator_category = std::forward_iterator_tag;
         using value_type = T;
         using difference_type = std::ptrdiff_t;
-        using pointer = const T*;
+        using pointer = const std::shared_ptr<T>;
         using reference = const T&;
 
+        // Конструкторы
         ConstListIterator(const ConstListIterator<T>& other) noexcept;
-        
+        ConstListIterator(ConstListIterator<T>&& other) noexcept;
+        ConstListIterator<T> &operator=(const ConstListIterator<T>& other) noexcept;
+        ConstListIterator<T> &operator=(ConstListIterator<T>&& other) noexcept;
+    protected:
+        ConstListIterator(const std::shared_ptr<typename List<T>::ListNode>& node) noexcept;
+    public:
         ~ConstListIterator() = default;
 
+
         bool IsValid() const;
+        operator bool() const;
+
         bool operator==(const ConstListIterator<T>& other) const;
         bool operator!=(const ConstListIterator<T>& other) const;
 
@@ -33,15 +42,15 @@ class ConstListIterator
 
         ConstListIterator<T> &operator++();
         ConstListIterator<T> operator++(int);
-        ConstListIterator<T> &operator+=(int steps);
-        ConstListIterator<T> operator+(int steps);
-        ConstListIterator<T> operator=(const ConstListIterator<T> &other);
+        template <IncrementableandComparable U>
+        ConstListIterator<T> &operator+=(U steps);
+        template <IncrementableandComparable U>
+        ConstListIterator<T> operator+(U steps);
 
         friend class List<T>;
     private:
         void checkValid(size_t line) const;
         const std::shared_ptr<typename List<T>::ListNode> getNode() const;
-        ConstListIterator(const std::shared_ptr<typename List<T>::ListNode>& node) noexcept;
 
         std::weak_ptr<typename List<T>::ListNode> wptr;
 

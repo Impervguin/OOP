@@ -100,59 +100,14 @@ int main(void)
     std::cout << listPushFront3 <<". Переносимый список: " << listPushFront2 << std::endl;
 
     std::cout << std::endl;
-    // Gets testing
-    List<int> listGets{1, 2, 3, 4, 5, 10, 9, 8, 7, 6, 5};
-    size_t index = 5;
-    std::cout << INFO_COLOR << "Gets1: " << RESET_COLOR << "Список: " << listGets << " Полученный элемент по индексу " << index << ": " << listGets.Get(index) << std::endl;
-    std::cout << INFO_COLOR << "Gets2: " << RESET_COLOR << "Список: " << listGets << " Полученный элемент по итератору + " << index << ": " << listGets.Get(listGets.begin() + index) << std::endl;
-    std::cout << INFO_COLOR << "Gets3: " << RESET_COLOR << "Список: " << listGets << " Полученный элемент по константному итератору + " << index << ": " << listGets.Get(listGets.cbegin() + index) << std::endl;
-    std::cout << INFO_COLOR << "Gets4: " << RESET_COLOR << "Список: " << listGets << " Полученный элемент по [" << index << "]: " << listGets[index] << std::endl;
-    std::cout << INFO_COLOR << "Gets5: " << RESET_COLOR << "Список: " << listGets << " Полученный элемент по [begin() + " << index << "]: " << listGets[listGets.begin() + index] << std::endl;
-    std::cout << INFO_COLOR << "Gets6: " << RESET_COLOR << "Список: " << listGets << " Полученный элемент по [cbegin() + " << index << "]: " << listGets[listGets.cbegin() + index] << std::endl;
-
-    std::cout << std::endl;
 
     // Pops testing
     List<int> listPops{5, 9, 6, 2, 3, 7, 1};
-    std::cout << INFO_COLOR << "Pops1: " << RESET_COLOR << "Список: " << listPops << ". Полученный элемент при GetFront: " << listPops.GetFront() << ". Список после: " << listPops << "." << std::endl;
-    std::cout << INFO_COLOR << "Pops2: " << RESET_COLOR << "Список: " << listPops << ". Полученный элемент при GetBack: " << listPops.GetBack() << ". Список после: " << listPops << "." << std::endl;
-    std::cout << INFO_COLOR << "Pops3: " << RESET_COLOR << "Список: " << listPops << ". Полученный элемент при PopFront: " << listPops.PopFront() << ". Список после: " << listPops << "." << std::endl;
-    std::cout << INFO_COLOR << "Pops4: " << RESET_COLOR << "Список: " << listPops << ". Полученный элемент при PopBack: " << listPops.PopBack() << ". Список после: " << listPops << "." << std::endl;
+    std::cout << INFO_COLOR << "Pops1: " << RESET_COLOR << "Список: " << listPops << ". Полученный элемент при PopFront: " << listPops.PopFront() << ". Список после: " << listPops << "." << std::endl;
+    std::cout << INFO_COLOR << "Pops2: " << RESET_COLOR << "Список: " << listPops << ". Полученный элемент при PopBack: " << listPops.PopBack() << ". Список после: " << listPops << "." << std::endl;
 
     std::cout << std::endl;
 
-    // Set testing
-    List<int> listSets{5, 9, 6, 2, 3, 7, 1};
-    size_t setIndex = 2;
-    int setValue = 100;
-    std::cout << INFO_COLOR << "Sets1: " << RESET_COLOR << "Список: " << listSets << ". Список после изменения элемента [" << setIndex << "]: ";
-    listSets.Set(setIndex, setValue);
-    std::cout << listSets << "." << std::endl;
-    listSets = List<int>{5, 9, 6, 2, 3, 7, 1};
-    std::cout << INFO_COLOR << "Sets2: " << RESET_COLOR << "Список: " << listSets << ". Список после изменения элемента [begin() + " << setIndex << "]: ";
-    listSets.Set(listSets.begin() + setIndex, setValue);
-    std::cout << listSets << "." << std::endl;
-
-    listSets = List<int>{5, 9, 6, 2, 3, 7, 1};
-    double setValued = 23.5;
-    std::cout << INFO_COLOR << "Sets3: " << RESET_COLOR << "Список: " << listSets << ". Список после изменения элемента [" << setIndex << "] Элементом типа double " << setValued << ": ";
-    listSets.Set(setIndex, setValued);
-    std::cout << listSets << "." << std::endl;
-
-    listSets = List<int>{5, 9, 6, 2, 3, 7, 1};
-    std::cout << INFO_COLOR << "Sets4: " << RESET_COLOR << "Список: " << listSets << ". Список после изменения элемента [begin() + " << setIndex << "] Элементом типа double " << setValued << ": ";
-    listSets.Set(listSets.begin() + setIndex, setValued);
-    std::cout << listSets << "." << std::endl;
-
-    listSets = List<int>{5, 9, 6, 2, 3, 7, 1};
-    setIndex = 4;
-    std::cout << INFO_COLOR << "Sets5: " << RESET_COLOR << "Список: " << listSets << ". Список после изменения элемента [" << setIndex << "] переносом элемента типа double " << setValued << ": ";
-    listSets.Set(listSets.begin() + setIndex, std::move(setValued));
-    // listSets.Set(listSets.begin() + setIndex, std::string("asdaw"));
-
-    std::cout << listSets << "." << std::endl;
-
-    std::cout << std::endl;
     // Removes testing
     List<int> listRemoves{5, 9, 6, 2, 3, 7, 1};
     size_t removeIndex = 2;
@@ -188,12 +143,6 @@ int main(void)
     std::cout << listInserts << "." << std::endl;
 
     listInserts = List<int>{1, 2, 3};
-    insertIndex = 0;
-    std::cout << INFO_COLOR << "Inserts2: " << RESET_COLOR << "Список: " << listInserts << ". Список после вставки элемента [" << insertIndex << "]: ";
-    listInserts.Insert(insertIndex, insertValue);
-    std::cout << listInserts << "." << std::endl;
-
-    listInserts = List<int>{1, 2, 3};
     insertIndex = 3;
     std::cout << INFO_COLOR << "Inserts3: " << RESET_COLOR << "Список: " << listInserts << ". Список после вставки элемента [" << insertIndex << "]: ";
     listInserts.Insert(insertIndex, insertValue);
@@ -203,11 +152,6 @@ int main(void)
     insertIndex = 2;
     std::cout << INFO_COLOR << "Inserts4: " << RESET_COLOR << "Список: " << listInserts << ". Список после вставки элемента после [begin() + " << insertIndex << "]: ";
     listInserts.InsertAfter(listInserts.begin() + insertIndex, insertValue);
-    std::cout << listInserts << "." << std::endl;
-    listInserts = List<int>{1, 2, 3};
-    insertIndex = 2;
-    std::cout << INFO_COLOR << "Inserts5: " << RESET_COLOR << "Список: " << listInserts << ". Список после вставки элемента перед [begin() + " << insertIndex << "]: ";
-    listInserts.InsertBefore(listInserts.begin() + insertIndex, insertValue);
     std::cout << listInserts << "." << std::endl;
 
     double insertValued = 23.5;
@@ -222,10 +166,6 @@ int main(void)
     listInserts.InsertAfter(listInserts.begin() + insertIndex, insertValued);
     std::cout << listInserts << "." << std::endl;
 
-    listInserts = List<int>{1, 2, 3};
-    std::cout << INFO_COLOR << "Inserts8: " << RESET_COLOR << "Список: " << listInserts << ". Список после вставки элемента double " << insertValued << " перед [begin() + " << insertIndex << "]: ";
-    listInserts.InsertBefore(listInserts.begin() + insertIndex, insertValued);
-    std::cout << listInserts << "." << std::endl;
 
     std::cout << std::endl;
     // Clear testing

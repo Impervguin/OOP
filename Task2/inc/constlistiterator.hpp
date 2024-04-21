@@ -9,6 +9,25 @@ ConstListIterator<T>::ConstListIterator(const ConstListIterator<T>& other) noexc
 }
 
 template <typename T>
+ConstListIterator<T>::ConstListIterator(ConstListIterator<T>&& other) noexcept {
+    wptr = other.wptr.lock();
+    other.wptr.reset();
+}
+
+template <typename T>
+ConstListIterator<T>& ConstListIterator<T>::operator=(ConstListIterator<T>&& other) noexcept {
+    wptr = other.wptr.lock();
+    other.wptr.reset();
+    return *this;
+}
+
+template <typename T>
+ConstListIterator<T>& ConstListIterator<T>::operator=(const ConstListIterator<T>& other) noexcept {
+    wptr = other.wptr.lock();
+    return *this;
+}
+
+template <typename T>
 ConstListIterator<T>::ConstListIterator(const std::shared_ptr<typename List<T>::ListNode>& node) noexcept {
     wptr = node;
 }
@@ -20,6 +39,11 @@ bool ConstListIterator<T>::IsValid() const {
     if (wptr.expired())
         return false;
     return true;
+}
+
+template <typename T>
+ConstListIterator<T>::operator bool() const {
+    return IsValid();
 }
 
 template <typename T>
@@ -44,12 +68,12 @@ bool ConstListIterator<T>::operator!=(const ConstListIterator<T>& other) const {
 
 template <typename T>
 ConstListIterator<T>::reference ConstListIterator<T>::operator*() const {
-    return wptr.lock()->GetData();
+    return *wptr.lock()->GetData();
 }
 
 template <typename T>
 ConstListIterator<T>::pointer ConstListIterator<T>::operator->() const {
-    return &wptr.lock()->GetData();
+    return wptr.lock()->GetData();
 }
 
 template <typename T>
@@ -67,26 +91,22 @@ ConstListIterator<T> ConstListIterator<T>::operator++(int) {
 }
 
 template <typename T>
-ConstListIterator<T> &ConstListIterator<T>::operator+=(int steps) {
-    for (int i = 0; i < steps; i++) {
+template <IncrementableandComparable U>
+ConstListIterator<T> &ConstListIterator<T>::operator+=(U steps) {
+    for (U i = 0; i < steps; i++) {
         ++(*this);
     }
     return *this;
 }
 
 template <typename T>
-ConstListIterator<T> ConstListIterator<T>::operator+(int steps) {
+template <IncrementableandComparable U>
+ConstListIterator<T> ConstListIterator<T>::operator+(U steps) {
     ConstListIterator<T> ret(*this);
-    for (int i = 0; i < steps; i++) {
+    for (U i = 0; i < steps; i++) {
         ++ret;
     }
     return ret;
-}
-
-template <typename T>
-ConstListIterator<T> ConstListIterator<T>::operator=(const ConstListIterator<T>& other) {
-    wptr = other.wptr.lock();
-    return *this;
 }
 
 template <typename T>

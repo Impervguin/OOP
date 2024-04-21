@@ -85,4 +85,8 @@ typename Iter::difference_type distance(const Iter &first, const Iter &last)
 
     return count;
 }
+
+
+template <typename T>
+concept IncrementableandComparable = Incrementable<T> && Comparable<T>;
 #endif // LISTCONCEPTS_H__

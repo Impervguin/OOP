@@ -17,35 +17,50 @@ class ListIterator
         using iterator_category = std::forward_iterator_tag;
         using value_type = T;
         using difference_type = std::ptrdiff_t;
-        using pointer = T*;
+        using pointer = std::shared_ptr<T>;
         using reference = T&;
 
-        ListIterator(const ListIterator<T>& other);
-
+        // Конструкторы
+        ListIterator(const ListIterator<T>& other) noexcept;
+        ListIterator(ListIterator<T>&& other) noexcept;
+        ListIterator<T> &operator=(const ListIterator<T>& other) noexcept;
+        ListIterator<T> &operator=(ListIterator<T>&& other) noexcept;
+        
+    protected:
+        ListIterator(const std::shared_ptr<typename List<T>::ListNode>& node) noexcept;
+    
+    public:
         ~ListIterator() = default;
 
+        // bool'ы
         bool IsValid() const;
-        bool operatorbool() const;
+        operator bool() const;
+
         bool operator==(const ListIterator<T>& other) const;
         bool operator!=(const ListIterator<T>& other) const;
 
+        // Разыменование
         reference operator*();
         const reference operator*() const;
         pointer operator->();
         const pointer operator->() const;
 
+
+        // Перемещение
         ListIterator<T> &operator++();
         ListIterator<T> operator++(int);
-        ListIterator<T> &operator+=(int steps);
-        ListIterator<T> operator+(int steps) const;
-        ListIterator<T> operator=(const ListIterator<T>& other);
+
+        template <IncrementableandComparable U>
+        ListIterator<T> &operator+=(U steps);
+        template <IncrementableandComparable U>
+        ListIterator<T> operator+(U steps);
+        
 
         friend class List<T>;
-    private:
+    protected:
         void checkValid(size_t line) const;
         std::shared_ptr<typename List<T>::ListNode> getNode() const;
-        ListIterator(const std::shared_ptr<typename List<T>::ListNode>& node);
-        
+
         std::weak_ptr<typename List<T>::ListNode> wptr;
         
 };

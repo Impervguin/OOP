@@ -6,12 +6,31 @@
 #include <time.h>
 
 template <typename T>
-ListIterator<T>::ListIterator(const ListIterator<T>& other) {
+ListIterator<T>::ListIterator(const ListIterator<T>& other) noexcept {
     wptr = other.wptr.lock();
 }
 
 template <typename T>
-ListIterator<T>::ListIterator(const std::shared_ptr<typename List<T>::ListNode>& node) {
+ListIterator<T>::ListIterator(ListIterator<T>&& other) noexcept {
+    wptr = other.wptr.lock();
+    other.wptr.reset();
+}
+
+template <typename T>
+ListIterator<T>& ListIterator<T>::operator=(ListIterator<T>&& other) noexcept {
+    wptr = other.wptr.lock();
+    other.wptr.reset();
+    return *this;
+}
+
+template <typename T>
+ListIterator<T> &ListIterator<T>::operator=(const ListIterator<T>& other) noexcept {
+    wptr = other.wptr.lock();
+    return *this;
+}
+
+template <typename T>
+ListIterator<T>::ListIterator(const std::shared_ptr<typename List<T>::ListNode>& node) noexcept {
     wptr = node;
 }
 
@@ -25,7 +44,7 @@ bool ListIterator<T>::IsValid() const {
 }
 
 template <typename T>
-bool ListIterator<T>::operatorbool() const {
+ListIterator<T>::operator bool() const {
     return IsValid();
 }
 
@@ -38,6 +57,9 @@ void ListIterator<T>::checkValid(size_t line) const
         throw IteratorExpiredException(ctime(&cur_time), __FILE__, line, typeid(*this).name(), __FUNCTION__);
     }
 }
+
+
+
 
 template <typename T>
 bool ListIterator<T>::operator==(const ListIterator<T>& other) const {
@@ -52,25 +74,25 @@ bool ListIterator<T>::operator!=(const ListIterator<T>& other) const {
 template <typename T>
 ListIterator<T>::reference ListIterator<T>::operator*() {
     checkValid(__LINE__);
-    return wptr.lock()->GetData();
+    return *wptr.lock()->GetData();
 }
 
 template <typename T>
 const ListIterator<T>::reference ListIterator<T>::operator*() const {
     checkValid(__LINE__);
-    return wptr.lock()->GetData();
+    return *wptr.lock()->GetData();
 }
 
 template <typename T>
 ListIterator<T>::pointer ListIterator<T>::operator->() {
     checkValid(__LINE__);
-    return &wptr.lock()->GetData();
+    return wptr.lock()->GetData();
 }
 
 template <typename T>
 const ListIterator<T>::pointer ListIterator<T>::operator->() const {
     checkValid(__LINE__);
-    return &wptr.lock()->GetData();
+    return wptr.lock()->GetData();
 }
 
 template <typename T>
@@ -89,29 +111,27 @@ ListIterator<T> ListIterator<T>::operator++(int) {
 }
 
 template <typename T>
-ListIterator<T> &ListIterator<T>::operator+=(int steps) {
+template <IncrementableandComparable U>
+ListIterator<T> &ListIterator<T>::operator+=(U steps) {
     checkValid(__LINE__);
-    for (int i = 0; i < steps; i++) {
+    for (U i = 0; i < steps; i++) {
         ++(*this);
     }
     return *this;
 }
 
 template <typename T>
-ListIterator<T> ListIterator<T>::operator+(int steps) const {
+template <IncrementableandComparable U>
+ListIterator<T> ListIterator<T>::operator+(U steps) {
     checkValid(__LINE__);
     ListIterator<T> ret(*this);
-    for (int i = 0; i < steps; i++) {
+    for (U i = 0; i < steps; i++) {
         ++ret;
     }
     return ret;
 }
 
-template <typename T>
-ListIterator<T> ListIterator<T>::operator=(const ListIterator<T>& other) {
-    wptr = other.wptr.lock();
-    return *this;
-}
+
 
 template <typename T>
 std::shared_ptr<typename List<T>::ListNode> ListIterator<T>::getNode() const {
