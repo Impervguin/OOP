@@ -6,7 +6,6 @@
 #include "listconcepts.h"
 #include <iostream>
 
-
 template <typename T>
 class List {  
     public:
@@ -21,14 +20,21 @@ class List {
         List() noexcept;
         explicit List(const List<T>& list) noexcept;
         List(List<T> &&list) noexcept;
-        List(size_t size, const T& data) noexcept;
-        List(std::initializer_list<T> list) noexcept;
+        
+        template <typename U> requires Convertible<U, typename List<T>::value_type>
+        List(size_t size, const U& data) noexcept;
+
+        template <typename U> requires Convertible<U, typename List<T>::value_type>
+        List(std::initializer_list<U> list) noexcept;
 
         template <ForwardIterator Iter> requires Convertible<typename Iter::value_type, typename List<T>::value_type>
         List(const Iter &begin, const Iter &end) noexcept;
 
         template <Container C> requires Convertible<typename C::value_type, typename List<T>::value_type>
         explicit List(const C &container) noexcept;
+        
+        template <Container C> requires Convertible<typename C::value_type, typename List<T>::value_type>
+        List(C &&container) noexcept;
         
         ~List() noexcept;
 
@@ -37,13 +43,25 @@ class List {
         const_iterator cbegin() const noexcept;
         const_iterator cend() const noexcept;
 
-        void PushBack(const T &data);
-        void PushBack(const List<T> &list);
-        void PushBack(List<T> &&list);
+        template <typename U> requires Convertible<U, typename List<T>::value_type>
+        void PushBack(const U &data) noexcept;
+        template <typename U> requires Convertible<U, typename List<T>::value_type>
+        void PushBack(U &&data) noexcept;
+        template <Container C> requires Convertible<typename C::value_type, typename List<T>::value_type>
+        void PushBack(const C &container) noexcept;
+        template <Container C> requires Convertible<typename C::value_type, typename List<T>::value_type>
+        void PushBack(C &&container) noexcept;
+        void PushBack(List<T> &&list) noexcept;
 
-        void PushFront(const T &data);
-        void PushFront(const List<T> &list);
-        void PushFront(List<T> &&list);
+        template <typename U> requires Convertible<U, typename List<T>::value_type>
+        void PushFront(const U &data) noexcept;
+        template <typename U> requires Convertible<U, typename List<T>::value_type>
+        void PushFront(U &&data) noexcept;
+        template <Container C> requires Convertible<typename C::value_type, typename List<T>::value_type>
+        void PushFront(const C &container) noexcept;
+        template <Container C> requires Convertible<typename C::value_type, typename List<T>::value_type>
+        void PushFront(C &&container) noexcept;
+        void PushFront(List<T> &&list) noexcept;
 
         T PopBack();
         T PopFront();
@@ -62,32 +80,80 @@ class List {
         const T &operator[](size_t index) const;
         const T &operator[](const ConstListIterator<T> &iterator) const;
 
-        void Set(size_t index, const T &data);
-        void Set(const ListIterator<T> &iterator, const T &data);
+        template <typename U> requires Convertible<U, typename List<T>::value_type>
+        void Set(size_t index, const U &data);
+
+        template <typename U> requires Convertible<U, typename List<T>::value_type>
+        void Set(const ListIterator<T> &iterator, const U &data);
+
+        template <typename U> requires Convertible<U, typename List<T>::value_type>
+        void Set(size_t index, U &&data);
+
+        template <typename U> requires Convertible<U, typename List<T>::value_type>
+        void Set(const ListIterator<T> &iterator, U &&data);
         
         void Remove(size_t index);
         void Remove(const ListIterator<T> &iterator);
         T Pop(size_t index);
         T Pop(const ListIterator<T> &iterator);
-        void Insert(size_t index, const T &data);
-        void InsertAfter(const ListIterator<T> &it, const T &data);
-        void InsertBefore(const ListIterator<T> &it, const T &data);
+
+        template <typename U> requires Convertible<U, typename List<T>::value_type>
+        void Insert(size_t index, const U &data);
+        template <typename U> requires Convertible<U, typename List<T>::value_type>
+        void InsertAfter(const ListIterator<T> &it, const U &data);
+        template <typename U> requires Convertible<U, typename List<T>::value_type>
+        void InsertBefore(const ListIterator<T> &it, const U &data);
+
+        template <typename U> requires Convertible<U, typename List<T>::value_type>
+        void Insert(size_t index, U &&data);
+        template <typename U> requires Convertible<U, typename List<T>::value_type>
+        void InsertAfter(const ListIterator<T> &it, U &&data);
+        template <typename U> requires Convertible<U, typename List<T>::value_type>
+        void InsertBefore(const ListIterator<T> &it, U &&data);
 
         void Clear();
         void Reverse();
 
         bool IsEmpty() const;
         size_t GetSize() const;
-        size_t size() const noexcept;
+        size_type size() const noexcept;
 
+
+        
         List<T>& operator=(const List<T> &list);
         List<T>& operator=(List<T> &&list);
-        List<T>& operator+=(const List<T> &list);
+
+        template <Container C> requires Convertible<typename C::value_type, typename List<T>::value_type>
+        List<T> &operator=(const C &container);
+
+        template <Container C> requires Convertible<typename C::value_type, typename List<T>::value_type>
+        List<T> &operator=(C &&container);
+
+        template <typename U> requires Convertible<U, typename List<T>::value_type>
+        List<T> &operator=(std::initializer_list<U> list);
+
         List<T>& operator+=(List<T> &&list);
-        List<T>& operator+=(const T &data);
-        List<T> operator+(const List<T> &list) const;
+        template <Container C> requires Convertible<typename C::value_type, typename List<T>::value_type>
+        List<T>& operator+=(const C &container);
+        template <Container C> requires Convertible<typename C::value_type, typename List<T>::value_type>
+        List<T>& operator+=(C &&container);
+        template <typename U> requires Convertible<U, typename List<T>::value_type>
+        List<T>& operator+=(const U &data);
+        template <typename U> requires Convertible<U, typename List<T>::value_type>
+        List<T>& operator+=(U &&data);
+
         List<T> operator+(List<T> &&list) const;
-        List<T> operator+(const T &data) const;
+        template <Container C> requires Convertible<typename C::value_type, typename List<T>::value_type>
+        List<T> operator+(const C &container) const;
+        template <Container C> requires Convertible<typename C::value_type, typename List<T>::value_type>
+        List<T> operator+(C &&container) const;
+        template <typename U> requires Convertible<U, typename List<T>::value_type>
+        List<T> operator+(const U &data) const;
+        template <typename U> requires Convertible<U, typename List<T>::value_type>
+        List<T> operator+(U &&data) const;
+
+        
+
 
         bool operator==(const List<T> &list) const;
         bool operator!=(const List<T> &list) const;
@@ -101,6 +167,7 @@ class List {
         {
             public:
                 ListNode(const T &data);
+                ListNode(T &&data);
                 ListNode(const T &data, const std::shared_ptr<ListNode> &next);
                 ListNode(const ListNode &node);
                 ~ListNode() = default;
@@ -122,8 +189,8 @@ class List {
         };  
 
     protected:
-        void pushBack(std::shared_ptr<ListNode> &node);
-        void pushFront(std::shared_ptr<ListNode> &node);
+        void pushBack(std::shared_ptr<ListNode> &node) noexcept;
+        void pushFront(std::shared_ptr<ListNode> &node) noexcept;
         std::shared_ptr<ListNode> popBack();
         std::shared_ptr<ListNode> popFront();
         std::shared_ptr<ListNode> get(size_t index);
@@ -144,5 +211,15 @@ class List {
         size_t csize;
         
 };
+
+template <typename T>
+std::ostream& operator<<(std::ostream& os, const List<T>& list);
+
+template <typename T, typename U>
+requires Convertible<U, typename List<T>::value_type>
+List<T> operator+(const U& data, const List<T> &list);
+template <typename T, typename U>
+requires Convertible<U, typename List<T>::value_type>
+List<T> operator+(U&& data, const List<T> &list);
 
 #endif // LIST_H__

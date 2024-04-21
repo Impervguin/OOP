@@ -44,6 +44,9 @@ int main(void)
     std::cout << INFO_COLOR << "Init7:" << RESET_COLOR << "Инициализация списка bool через список int " << List1 << ": " << List<bool>(List1) << std::endl;
     std::cout << INFO_COLOR << "Init8:" << RESET_COLOR << "Инициализация списка bool через итератор по вектору double" << Vector1 << ": " << List<bool>(Vector1.begin(), Vector1.end()) << std::endl;
     std::cout << INFO_COLOR << "Init8:" << RESET_COLOR << "Инициализация списка bool через константный итератор по вектору double" << Vector1 << ": " << List<bool>(Vector1.cbegin(), Vector1.cend()) << std::endl;
+    std::cout << INFO_COLOR << "Init9:" << RESET_COLOR << "Инициализация через initializer_list double: " << List<int>{2.5, 1.2, 5.6} << std::endl;
+    std::cout << INFO_COLOR << "Init10:" << RESET_COLOR << "Инициализация с указанием размера и константы double: " << List<int>(5, 2.6) << std::endl; 
+    std::cout << INFO_COLOR << "Init11:" << RESET_COLOR << "Инициализация через вектор double " << Vector1 << "переносом: " << List<int>(std::move(Vector1)) << std::endl;
 
     std::cout << std::endl;
 
@@ -66,6 +69,12 @@ int main(void)
     std::cout << INFO_COLOR << "PushBack3: " << RESET_COLOR << "Список: " << listPushBack1 << " После переноса списка " << listPushBack2 << ": ";
     listPushBack3.PushBack(std::move(listPushBack2));
     std::cout << listPushBack3 <<". Переносимый список: " << listPushBack2 << std::endl;
+
+    listPushBack1 = List<int>{1, 2, 3, 4, 5};
+    std::vector<double> vectorPush{2.3, 6.2};
+    std::cout << INFO_COLOR << "PushBack4: " << RESET_COLOR << "Список: " << listPushBack1 << " После вставки вектора double: " << vectorPush << ": ";
+    listPushBack1.PushBack(vectorPush);
+    std::cout << listPushBack1 << std::endl;
 
     std::cout << std::endl;
 
@@ -122,6 +131,25 @@ int main(void)
     listSets = List<int>{5, 9, 6, 2, 3, 7, 1};
     std::cout << INFO_COLOR << "Sets2: " << RESET_COLOR << "Список: " << listSets << ". Список после изменения элемента [begin() + " << setIndex << "]: ";
     listSets.Set(listSets.begin() + setIndex, setValue);
+    std::cout << listSets << "." << std::endl;
+
+    listSets = List<int>{5, 9, 6, 2, 3, 7, 1};
+    double setValued = 23.5;
+    std::cout << INFO_COLOR << "Sets3: " << RESET_COLOR << "Список: " << listSets << ". Список после изменения элемента [" << setIndex << "] Элементом типа double " << setValued << ": ";
+    listSets.Set(setIndex, setValued);
+    std::cout << listSets << "." << std::endl;
+
+    listSets = List<int>{5, 9, 6, 2, 3, 7, 1};
+    std::cout << INFO_COLOR << "Sets4: " << RESET_COLOR << "Список: " << listSets << ". Список после изменения элемента [begin() + " << setIndex << "] Элементом типа double " << setValued << ": ";
+    listSets.Set(listSets.begin() + setIndex, setValued);
+    std::cout << listSets << "." << std::endl;
+
+    listSets = List<int>{5, 9, 6, 2, 3, 7, 1};
+    setIndex = 4;
+    std::cout << INFO_COLOR << "Sets5: " << RESET_COLOR << "Список: " << listSets << ". Список после изменения элемента [" << setIndex << "] переносом элемента типа double " << setValued << ": ";
+    listSets.Set(listSets.begin() + setIndex, std::move(setValued));
+    // listSets.Set(listSets.begin() + setIndex, std::string("asdaw"));
+
     std::cout << listSets << "." << std::endl;
 
     std::cout << std::endl;
@@ -182,6 +210,23 @@ int main(void)
     listInserts.InsertBefore(listInserts.begin() + insertIndex, insertValue);
     std::cout << listInserts << "." << std::endl;
 
+    double insertValued = 23.5;
+    insertIndex = 1;
+    listInserts = List<int>{1, 2, 3};
+    std::cout << INFO_COLOR << "Inserts6: " << RESET_COLOR << "Список: " << listInserts << ". Список после вставки элемента double " << insertValued << " [ " << insertIndex << "]: ";
+    listInserts.Insert(insertIndex, insertValued);
+    std::cout << listInserts << "." << std::endl;
+
+    listInserts = List<int>{1, 2, 3};
+    std::cout << INFO_COLOR << "Inserts7: " << RESET_COLOR << "Список: " << listInserts << ". Список после вставки элемента double " << insertValued << " после [begin() + " << insertIndex << "]: ";
+    listInserts.InsertAfter(listInserts.begin() + insertIndex, insertValued);
+    std::cout << listInserts << "." << std::endl;
+
+    listInserts = List<int>{1, 2, 3};
+    std::cout << INFO_COLOR << "Inserts8: " << RESET_COLOR << "Список: " << listInserts << ". Список после вставки элемента double " << insertValued << " перед [begin() + " << insertIndex << "]: ";
+    listInserts.InsertBefore(listInserts.begin() + insertIndex, insertValued);
+    std::cout << listInserts << "." << std::endl;
+
     std::cout << std::endl;
     // Clear testing
     List<int> listClear{1, 2, 3};
@@ -201,10 +246,23 @@ int main(void)
     // Plus testing
     List<int> listPlus1{1, 2, 3};
     List<int> listPlus2{5, 9, 8};
-    std::cout << INFO_COLOR << "Список 1: " << RESET_COLOR << listPlus1 << INFO_COLOR << ". Список 2: " << RESET_COLOR << listPlus2 << ". " << std::endl;
+    List<double> listPlus3{4.23, 5.32};
+    std::vector<double> vecPlus{23.5, 21.3};
+    std::cout << INFO_COLOR << "Список 1: " << RESET_COLOR << listPlus1 << INFO_COLOR << ". Список 2: " << RESET_COLOR << listPlus2 << INFO_COLOR << ". Список 3: " << RESET_COLOR << listPlus3 << ". " << std::endl;
+    std::cout << INFO_COLOR << "Vector: " << RESET_COLOR << vecPlus << "." << std::endl;
     std::cout << INFO_COLOR << "(1) + (2): " << RESET_COLOR << listPlus1 + listPlus2 << ". " << INFO_COLOR << "Список 1: " << RESET_COLOR << listPlus1 << INFO_COLOR << ". Список 2: " << RESET_COLOR << listPlus2 << ". " << std::endl;
     std::cout << INFO_COLOR << "(1) + 10: " << RESET_COLOR << listPlus1 + 10 << "." << std::endl;
     std::cout << INFO_COLOR << "(1) + move(2): " << RESET_COLOR << listPlus1 + std::move(listPlus2) << ". " << INFO_COLOR << "Список 1: " << RESET_COLOR << listPlus1 << INFO_COLOR << ". Список 2: " << RESET_COLOR << listPlus2 << ". " << std::endl;
+    std::cout << INFO_COLOR << "(1) + 10.23: " << RESET_COLOR << listPlus1 + 10.23 << "." << std::endl;
+    std::cout << INFO_COLOR << "10.23 + (1): " << RESET_COLOR << 10.23 + listPlus1 << "." << std::endl;
+    std::cout << INFO_COLOR << "(3) + (1): " << RESET_COLOR << listPlus3 + listPlus1 << "." << std::endl;
+    std::cout << INFO_COLOR << "(1) + (3): " << RESET_COLOR << listPlus1 + listPlus3 << "." << std::endl;
+    std::cout << INFO_COLOR << "(1) + (vector): " << RESET_COLOR << listPlus1 + vecPlus << "." << std::endl;
+
+
+
+    std::cout << std::endl;
+    
 
     listPlus2 = List<int>{5, 9, 8};
     std::cout << INFO_COLOR << "(1) += (2): " << RESET_COLOR << (listPlus1 += listPlus2) << ". " << INFO_COLOR << "Список 1: " << RESET_COLOR << listPlus1 << INFO_COLOR << ". Список 2: " << RESET_COLOR << listPlus2 << ". " << std::endl;

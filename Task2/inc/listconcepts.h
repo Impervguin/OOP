@@ -7,6 +7,22 @@
 template <typename From, typename To>
 concept Convertible = requires(From from){ To(from);};
 
+template <typename T>
+concept Comparable = requires(T t, T u){
+    {t > u} -> std::same_as<bool>;
+    {t < u} -> std::same_as<bool>;
+    {t <= u} -> std::same_as<bool>;
+    {t >= u} -> std::same_as<bool>;
+    {t == u} -> std::same_as<bool>;
+    {t != u}-> std::same_as<bool>;
+    {u > t} -> std::same_as<bool>;
+    {u < t} -> std::same_as<bool>;
+    {u <= t} -> std::same_as<bool>;
+    {u >= t} -> std::same_as<bool>;
+    {u == t} -> std::same_as<bool>;
+    {u != t}-> std::same_as<bool>;
+};
+
 template <typename container>
 concept Container = requires(container c)
 { 

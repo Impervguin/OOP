@@ -10,6 +10,11 @@ List<T>::ListNode::ListNode(const T &data) {
 }
 
 template <typename  T>
+List<T>::ListNode::ListNode(T &&data) {
+    this->data = data;
+}
+
+template <typename  T>
 List<T>::ListNode::ListNode(const T &data, const std::shared_ptr<List<T>::ListNode> &next) {
     this->data = data;
     this->next = next;
