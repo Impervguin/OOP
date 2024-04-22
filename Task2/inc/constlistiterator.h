@@ -7,10 +7,10 @@
 #include <memory>
 #include "listconcepts.h"
 
-template <typename T>
+template <Comparable T>
 class List;
 
-template <typename T> 
+template <Comparable T> 
 class ConstListIterator
 {
     public:

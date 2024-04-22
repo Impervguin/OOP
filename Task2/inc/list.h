@@ -6,7 +6,7 @@
 #include "listconcepts.h"
 #include <iostream>
 
-template <typename T>
+template <Comparable T>
 class List {  
     public:
         using value_type = T;

@@ -3,36 +3,36 @@
 
 #include "constlistiterator.h"
 
-template <typename T>
+template <Comparable T>
 ConstListIterator<T>::ConstListIterator(const ConstListIterator<T>& other) noexcept {
     wptr = other.wptr.lock();
 }
 
-template <typename T>
+template <Comparable T>
 ConstListIterator<T>::ConstListIterator(ConstListIterator<T>&& other) noexcept {
     wptr = other.wptr.lock();
     other.wptr.reset();
 }
 
-template <typename T>
+template <Comparable T>
 ConstListIterator<T>& ConstListIterator<T>::operator=(ConstListIterator<T>&& other) noexcept {
     wptr = other.wptr.lock();
     other.wptr.reset();
     return *this;
 }
 
-template <typename T>
+template <Comparable T>
 ConstListIterator<T>& ConstListIterator<T>::operator=(const ConstListIterator<T>& other) noexcept {
     wptr = other.wptr.lock();
     return *this;
 }
 
-template <typename T>
+template <Comparable T>
 ConstListIterator<T>::ConstListIterator(const std::shared_ptr<typename List<T>::ListNode>& node) noexcept {
     wptr = node;
 }
 
-template <typename T>
+template <Comparable T>
 bool ConstListIterator<T>::IsValid() const {
     if (wptr.lock() == nullptr)
         return false;
@@ -41,12 +41,12 @@ bool ConstListIterator<T>::IsValid() const {
     return true;
 }
 
-template <typename T>
+template <Comparable T>
 ConstListIterator<T>::operator bool() const {
     return IsValid();
 }
 
-template <typename T>
+template <Comparable T>
 void ConstListIterator<T>::checkValid(size_t line) const
 {
     if (!IsValid())
@@ -56,41 +56,41 @@ void ConstListIterator<T>::checkValid(size_t line) const
     }
 }
 
-template <typename T>
+template <Comparable T>
 bool ConstListIterator<T>::operator==(const ConstListIterator<T>& other) const {
     return wptr.lock() == other.wptr.lock();
 }
 
-template <typename T>
+template <Comparable T>
 bool ConstListIterator<T>::operator!=(const ConstListIterator<T>& other) const {
     return wptr.lock() != other.wptr.lock();
 }
 
-template <typename T>
+template <Comparable T>
 ConstListIterator<T>::reference ConstListIterator<T>::operator*() const {
     return *wptr.lock()->GetData();
 }
 
-template <typename T>
+template <Comparable T>
 ConstListIterator<T>::pointer ConstListIterator<T>::operator->() const {
     return wptr.lock()->GetData();
 }
 
-template <typename T>
+template <Comparable T>
 ConstListIterator<T> &ConstListIterator<T>::operator++() {
     if (!wptr.expired())
         wptr = wptr.lock()->GetNext();
     return *this;
 }
 
-template <typename T>
+template <Comparable T>
 ConstListIterator<T> ConstListIterator<T>::operator++(int) {
     ConstListIterator<T> ret(*this);
     wptr = wptr.lock()->GetNext();
     return ret;
 }
 
-template <typename T>
+template <Comparable T>
 template <IncrementableandComparable U>
 ConstListIterator<T> &ConstListIterator<T>::operator+=(U steps) {
     for (U i = 0; i < steps; i++) {
@@ -99,7 +99,7 @@ ConstListIterator<T> &ConstListIterator<T>::operator+=(U steps) {
     return *this;
 }
 
-template <typename T>
+template <Comparable T>
 template <IncrementableandComparable U>
 ConstListIterator<T> ConstListIterator<T>::operator+(U steps) {
     ConstListIterator<T> ret(*this);
@@ -109,7 +109,7 @@ ConstListIterator<T> ConstListIterator<T>::operator+(U steps) {
     return ret;
 }
 
-template <typename T>
+template <Comparable T>
 const std::shared_ptr<typename List<T>::ListNode> ConstListIterator<T>::getNode() const {
     checkValid(__LINE__);
     return wptr.lock();
