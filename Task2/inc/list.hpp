@@ -1021,6 +1021,7 @@ std::ostream& operator<<(std::ostream& os, const List<T>& list) {
         os << ", " << *a;
     }
     os << "}";
+    os << "(" << list.size() << ")";
     return os;
 }
 

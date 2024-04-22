@@ -4,10 +4,11 @@
 #include "listiterator.h"
 #include "constlistiterator.h"
 #include "listconcepts.h"
+#include "basecontainer.h"
 #include <iostream>
 
 template <Comparable T>
-class List {  
+class List : public BaseContainer {  
     public:
         using value_type = T;
         using iterator = ListIterator<T>;
@@ -207,7 +208,7 @@ class List {
     protected:
         std::shared_ptr<ListNode> head;
         std::shared_ptr<ListNode> tail;
-        size_t csize;
+        // size_t csize;
         
 };
 
