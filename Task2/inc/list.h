@@ -16,6 +16,7 @@ class List {
 
         friend class ListIterator<T>;
         friend class ConstListIterator<T>;
+        friend class BaseListIterator<T>;
 
         // Конструкторы
         List() noexcept;

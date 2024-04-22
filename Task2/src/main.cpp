@@ -1,6 +1,7 @@
 #include "listnode.hpp"
 #include "listiterator.hpp"
 #include "constlistiterator.hpp"
+#include "baselistiterator.hpp"
 #include "list.hpp"
 #include <iostream>
 #include <vector>

@@ -6,12 +6,13 @@
 #include <iterator>
 #include <memory>
 #include "listconcepts.h"
+#include "baselistiterator.h"
 
 template <Comparable T>
 class List;
 
 template <Comparable T>
-class ListIterator
+class ListIterator : public BaseListIterator<T>
 {
     public:
         using iterator_category = std::forward_iterator_tag;
@@ -32,13 +33,6 @@ class ListIterator
     public:
         ~ListIterator() = default;
 
-        // bool'ы
-        bool IsValid() const;
-        operator bool() const;
-
-        bool operator==(const ListIterator<T>& other) const;
-        bool operator!=(const ListIterator<T>& other) const;
-
         // Разыменование
         reference operator*();
         const reference operator*() const;
@@ -57,13 +51,7 @@ class ListIterator
         template <IncrementableandComparable U>
         const ListIterator<T> operator+(U steps) const;
         
-
         friend class List<T>;
-    protected:
-        void checkValid(size_t line) const;
-        std::shared_ptr<typename List<T>::ListNode> getNode() const;
-
-        std::weak_ptr<typename List<T>::ListNode> wptr;
         
 };
 
