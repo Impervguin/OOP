@@ -51,6 +51,26 @@ int main(void)
 
     std::cout << std::endl;
 
+    // Iterator testing
+
+    List<int> ItList{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+    std::cout << INFO_COLOR << "Iter1:" << RESET_COLOR << "Итератор по " << ItList << ": ";
+    for (auto it = ItList.begin(); it != ItList.end(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+    std::cout << INFO_COLOR << "Iter2:" << RESET_COLOR << "Константный итератор по " << ItList << ": ";
+    for (auto it = ItList.cbegin(); it != ItList.cend(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+    std::cout << INFO_COLOR << "Iter3:" << RESET_COLOR << "Изменение значений на +1 по " << ItList << ": ";
+    for (auto it = ItList.begin(); it != ItList.end(); ++it) {
+        (*it)++;
+    }
+    std::cout << ItList << std::endl;
+    std::cout << std::endl;
+
     // PushBack testing
     List<int> listPushBack1{1, 2, 3};
     int data1 = 4;

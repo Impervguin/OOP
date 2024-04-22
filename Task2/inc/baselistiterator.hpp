@@ -10,7 +10,7 @@ std::shared_ptr<typename List<T>::ListNode> BaseListIterator<T>::getNode() const
 }
 
 template <Comparable T>
-bool BaseListIterator<T>::IsValid() const {
+bool BaseListIterator<T>::IsValid() const noexcept {
     if (wptr.lock() == nullptr)
         return false;
     if (wptr.expired())
@@ -19,17 +19,17 @@ bool BaseListIterator<T>::IsValid() const {
 }
 
 template <Comparable T>
-BaseListIterator<T>::operator bool() const {
+BaseListIterator<T>::operator bool() const noexcept {
     return IsValid();
 }
 
 template <Comparable T>
-bool BaseListIterator<T>::operator==(const BaseListIterator<T>& other) const {
+bool BaseListIterator<T>::operator==(const BaseListIterator<T>& other) const noexcept {
     return wptr.lock() == other.wptr.lock();
 }
 
 template <Comparable T>
-bool BaseListIterator<T>::operator!=(const BaseListIterator<T>& other) const {
+bool BaseListIterator<T>::operator!=(const BaseListIterator<T>& other) const noexcept {
     return wptr.lock() != other.wptr.lock();
 }
 

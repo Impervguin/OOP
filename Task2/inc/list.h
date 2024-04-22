@@ -154,12 +154,12 @@ class List : public BaseContainer {
         void Reverse() noexcept;
 
         // Методы сравнения
-        bool operator==(const List<T> &list) const;
-        bool operator!=(const List<T> &list) const;
-        bool operator<(const List<T> &list) const;
-        bool operator>(const List<T> &list) const;
-        bool operator<=(const List<T> &list) const;
-        bool operator>=(const List<T> &list) const;
+        bool operator==(const List<T> &list) const noexcept;
+        bool operator!=(const List<T> &list) const noexcept;
+        bool operator<(const List<T> &list) const noexcept;
+        bool operator>(const List<T> &list) const noexcept;
+        bool operator<=(const List<T> &list) const noexcept;
+        bool operator>=(const List<T> &list) const noexcept;
 
     protected:
         class ListNode : public std::enable_shared_from_this<ListNode>
@@ -187,23 +187,40 @@ class List : public BaseContainer {
         };  
 
     protected:
+        // Внутренние методы(Без проверок)
+
+        // Методы вставок
         void pushBack(std::shared_ptr<ListNode> &node) noexcept;
         void pushFront(std::shared_ptr<ListNode> &node) noexcept;
-        std::shared_ptr<ListNode> popBack();
-        std::shared_ptr<ListNode> popFront();
-        std::shared_ptr<ListNode> get(size_t index);
-        const std::shared_ptr<ListNode> get(size_t index) const;
-        std::shared_ptr<ListNode> get(const ListIterator<T> &iterator);
-        const std::shared_ptr<ListNode> get(const ConstListIterator<T> &iterator) const;
-        std::shared_ptr<ListNode> pop(size_t index);
-        std::shared_ptr<ListNode> pop(const ListIterator<T> &iterator);
-        List<T> pop(const ListIterator<T> &begin, const ListIterator<T> &end);
+        void insert(const ListIterator<T> &iterator, std::shared_ptr<ListNode> &node) noexcept;
+        void insert(size_t index, std::shared_ptr<ListNode> &node) noexcept;
+
+        // Методы получения узлов по индексу
+        std::shared_ptr<ListNode> get(size_t index) noexcept;
+        const std::shared_ptr<ListNode> get(size_t index) const noexcept;
+        
+        // Методы удаления
+        std::shared_ptr<ListNode> popBack() noexcept;
+        std::shared_ptr<ListNode> popFront() noexcept;
+        std::shared_ptr<ListNode> pop(size_t index) noexcept;
+        std::shared_ptr<ListNode> pop(const ListIterator<T> &iterator) noexcept;
+        List<T> pop(const ListIterator<T> &begin, const ListIterator<T> &end) noexcept;
+
+        // Метод взятия подсписка
         List<T> subList(const ListIterator<T> &begin, const ListIterator<T> &end);
-        void insert(size_t index, std::shared_ptr<ListNode> &node);
-        void insertAfter(const ListIterator<T> &iterator, std::shared_ptr<ListNode> &node);
-        void insertBefore(const ListIterator<T> &iterator, std::shared_ptr<ListNode> &node);
-        int cmpList(const List<T> &list) const;
+
+
+        // Внутренний метод сравнения
+        int cmpList(const List<T> &list) const noexcept;
+
+
+        // Проверки с exceptions
         void checkEmpty(size_t line) const;
+        void checkForeignIterator(const ListIterator<T> &iterator, size_t line);
+        void checkForeignIterator(const ConstListIterator<T> &iterator, size_t line) const;
+        void checkListRange(const ListIterator<T> &begin, const ListIterator<T> &end, size_t line);
+        void checkListRange(const ConstListIterator<T> &begin, const ConstListIterator<T> &end, size_t line) const;
+        void checkIndex(size_t index, size_t line) const;
     
     protected:
         std::shared_ptr<ListNode> head;

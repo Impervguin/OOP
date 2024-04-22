@@ -14,11 +14,11 @@ class BaseListIterator {
     public:
         virtual ~BaseListIterator() = default;
 
-        bool IsValid() const;
-        operator bool() const;
+        bool IsValid() const noexcept;
+        operator bool() const noexcept;
 
-        bool operator==(const BaseListIterator<T>& other) const;
-        bool operator!=(const BaseListIterator<T>& other) const;
+        bool operator==(const BaseListIterator<T>& other) const noexcept;
+        bool operator!=(const BaseListIterator<T>& other) const noexcept;
 
         friend class List<T>;
     protected:
