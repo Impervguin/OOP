@@ -54,6 +54,8 @@ class ListIterator
         ListIterator<T> &operator+=(U steps);
         template <IncrementableandComparable U>
         ListIterator<T> operator+(U steps);
+        template <IncrementableandComparable U>
+        const ListIterator<T> operator+(U steps) const;
         
 
         friend class List<T>;

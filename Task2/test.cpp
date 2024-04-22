@@ -9,7 +9,7 @@
 
 int main(void) {
     {
-        List<int> *lst = new List<int>(3, 5);
+        List<int> *lst = {1};
         std::cout << *lst << std::endl;
         std::vector<int> vec{1, 2, 3, 4};
         lst->PushFront(vec);

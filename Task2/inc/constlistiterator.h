@@ -30,16 +30,18 @@ class ConstListIterator
     public:
         ~ConstListIterator() = default;
 
-
+        // bool'ы
         bool IsValid() const;
         operator bool() const;
 
         bool operator==(const ConstListIterator<T>& other) const;
         bool operator!=(const ConstListIterator<T>& other) const;
 
+        // Разыменование
         reference operator*() const;
         pointer operator->() const;
 
+        // Перемещение
         ConstListIterator<T> &operator++();
         ConstListIterator<T> operator++(int);
         template <IncrementableandComparable U>

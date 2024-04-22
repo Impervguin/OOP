@@ -38,6 +38,9 @@ concept Container = requires(container c)
     { c.size() } noexcept -> std::same_as<typename container::size_type>;
 };
 
+template <typename container, typename T>
+concept ConvertibleContainer = Container<container> && Convertible<typename container::value_type, T>;
+
 
 template <typename T>
 concept Iterator = requires() 
@@ -89,4 +92,7 @@ typename Iter::difference_type distance(const Iter &first, const Iter &last)
 
 template <typename T>
 concept IncrementableandComparable = Incrementable<T> && Comparable<T>;
+
+template <typename Iter, typename T>
+concept ConvertibleForwardIterator = ForwardIterator<Iter> && Convertible<typename Iter::value_type, T>;
 #endif // LISTCONCEPTS_H__

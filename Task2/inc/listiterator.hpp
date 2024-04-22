@@ -131,6 +131,17 @@ ListIterator<T> ListIterator<T>::operator+(U steps) {
     return ret;
 }
 
+template <typename T>
+template <IncrementableandComparable U>
+const ListIterator<T> ListIterator<T>::operator+(U steps) const {
+    checkValid(__LINE__);
+    ListIterator<T> ret(*this);
+    for (U i = 0; i < steps; i++) {
+        ++ret;
+    }
+    return ret;
+}
+
 
 
 template <typename T>

@@ -99,12 +99,106 @@ int main(void)
     listPushFront3.PushFront(std::move(listPushFront2));
     std::cout << listPushFront3 <<". Переносимый список: " << listPushFront2 << std::endl;
 
+    listPushFront1 = List<int>{1, 2, 3, 4, 5};
+    std::cout << INFO_COLOR << "PushFront4: " << RESET_COLOR << "Список: " << listPushFront1 << " После вставки вектора double: " << vectorPush << ": ";
+    listPushFront1.PushFront(vectorPush);
+    std::cout << listPushFront1 << std::endl;
+
     std::cout << std::endl;
 
     // Pops testing
     List<int> listPops{5, 9, 6, 2, 3, 7, 1};
     std::cout << INFO_COLOR << "Pops1: " << RESET_COLOR << "Список: " << listPops << ". Полученный элемент при PopFront: " << listPops.PopFront() << ". Список после: " << listPops << "." << std::endl;
     std::cout << INFO_COLOR << "Pops2: " << RESET_COLOR << "Список: " << listPops << ". Полученный элемент при PopBack: " << listPops.PopBack() << ". Список после: " << listPops << "." << std::endl;
+    
+    listPops = List<int>{5, 9, 6, 2, 3, 7, 1};
+    size_t popIndex = 4;
+    std::cout << INFO_COLOR << "Pops3: " << RESET_COLOR << "Список: " << listPops << ". Полученный элемент при Pop [" << popIndex << "]: " << listPops.Pop(popIndex) << ". Список после: " << listPops << "." << std::endl;
+
+    listPops = List<int>{5, 9, 6, 2, 3, 7, 1};
+    popIndex = 0;
+    std::cout << INFO_COLOR << "Pops4: " << RESET_COLOR << "Список: " << listPops << ". Полученный элемент при Pop [begin() + " << popIndex << "]: " << listPops.Pop(listPops.begin() + popIndex) << ". Список после: " << listPops << "." << std::endl;
+    
+    listPops = List<int>{5, 9, 6, 2, 3, 7, 1};
+    size_t popStart = 1, popEnd = 4;
+    std::cout << INFO_COLOR << "Pops5: " << RESET_COLOR << "Список: " << listPops << ". Полученный список при Pop [begin() + " << popStart << "; begin() + " << popEnd << "]: ";
+    auto listResPops = listPops.Pop(listPops.begin() + popStart, listPops.begin() + popEnd);
+    std::cout << listResPops << ". Список после: " << listPops << "." << std::endl;
+
+    listPops = List<int>{5, 9, 6, 2, 3, 7, 1};
+    popStart = 0, popEnd = 4;
+    std::cout << INFO_COLOR << "Pops6: " << RESET_COLOR << "Список: " << listPops << ". Полученный список при Pop [begin() + " << popStart << "; begin() + " << popEnd << "]: ";
+    listResPops = listPops.Pop(listPops.begin() + popStart, listPops.begin() + popEnd);
+    std::cout << listResPops << ". Список после: " << listPops << "." << std::endl;
+
+    listPops = List<int>{5, 9, 6, 2, 3, 7, 1};
+    popStart = 1, popEnd = 6;
+    std::cout << INFO_COLOR << "Pops7: " << RESET_COLOR << "Список: " << listPops << ". Полученный список при Pop [begin() + " << popStart << "; begin() + " << popEnd << "]: ";
+    listResPops = listPops.Pop(listPops.begin() + popStart, listPops.begin() + popEnd);
+    std::cout << listResPops << ". Список после: " << listPops << "." << std::endl;
+
+    listPops = List<int>{5, 9, 6, 2, 3, 7, 1};
+    popStart = 0, popEnd = 6;
+    std::cout << INFO_COLOR << "Pops8: " << RESET_COLOR << "Список: " << listPops << ". Полученный список при Pop [begin() + " << popStart << "; begin() + " << popEnd << "]: ";
+    listResPops = listPops.Pop(listPops.begin() + popStart, listPops.begin() + popEnd);
+    std::cout << listResPops << ". Список после: " << listPops << "." << std::endl;
+    
+
+    listPops = List<int>{5, 9, 6, 2, 3, 7, 1};
+    popStart = 1;
+    size_t popCount = 3;
+    std::cout << INFO_COLOR << "Pops9: " << RESET_COLOR << "Список: " << listPops << ". Полученный список при Pop начиная с begin() + " << popStart << " размером " << popCount << ": ";
+    listResPops = listPops.Pop(listPops.begin() + popStart, popCount);
+    std::cout << listResPops << ". Список после: " << listPops << "." << std::endl;
+
+    listPops = List<int>{5, 9, 6, 2, 3, 7, 1};
+    popStart = 0;
+    popCount = 4;
+    std::cout << INFO_COLOR << "Pops10: " << RESET_COLOR << "Список: " << listPops << ". Полученный список при Pop начиная с begin() + " << popStart << " размером " << popCount << ": ";
+    listResPops = listPops.Pop(listPops.begin() + popStart, popCount);
+    std::cout << listResPops << ". Список после: " << listPops << "." << std::endl;
+
+    listPops = List<int>{5, 9, 6, 2, 3, 7, 1};
+    popStart = 1;
+    popCount = 6;
+    std::cout << INFO_COLOR << "Pops11: " << RESET_COLOR << "Список: " << listPops << ". Полученный список при Pop начиная с begin() + " << popStart << " размером " << popCount << ": ";
+    listResPops = listPops.Pop(listPops.begin() + popStart, popCount);
+    std::cout << listResPops << ". Список после: " << listPops << "." << std::endl;
+
+    listPops = List<int>{5, 9, 6, 2, 3, 7, 1};
+    popStart = 0;
+    popCount = 7;
+    std::cout << INFO_COLOR << "Pops12: " << RESET_COLOR << "Список: " << listPops << ". Полученный список при Pop начиная с begin() + " << popStart << " размером " << popCount << ": ";
+    listResPops = listPops.Pop(listPops.begin() + popStart, popCount);
+    std::cout << listResPops << ". Список после: " << listPops << "." << std::endl;
+
+    listPops = List<int>{5, 9, 6, 2, 3, 7, 1};
+    popStart = 1;
+    popCount = 3;
+    std::cout << INFO_COLOR << "Pops13: " << RESET_COLOR << "Список: " << listPops << ". Полученный список при Pop начиная с " << popStart << " размером " << popCount << ": ";
+    listResPops = listPops.Pop(popStart, popCount);
+    std::cout << listResPops << ". Список после: " << listPops << "." << std::endl;
+
+    listPops = List<int>{5, 9, 6, 2, 3, 7, 1};
+    popStart = 0;
+    popCount = 4;
+    std::cout << INFO_COLOR << "Pops14: " << RESET_COLOR << "Список: " << listPops << ". Полученный список при Pop начиная с " << popStart << " размером " << popCount << ": ";
+    listResPops = listPops.Pop(popStart, popCount);
+    std::cout << listResPops << ". Список после: " << listPops << "." << std::endl;
+
+    listPops = List<int>{5, 9, 6, 2, 3, 7, 1};
+    popStart = 1;
+    popCount = 6;
+    std::cout << INFO_COLOR << "Pops15: " << RESET_COLOR << "Список: " << listPops << ". Полученный список при Pop начиная с  " << popStart << " размером " << popCount << ": ";
+    listResPops = listPops.Pop(popStart, popCount);
+    std::cout << listResPops << ". Список после: " << listPops << "." << std::endl;
+
+    listPops = List<int>{5, 9, 6, 2, 3, 7, 1};
+    popStart = 0;
+    popCount = 7;
+    std::cout << INFO_COLOR << "Pops16: " << RESET_COLOR << "Список: " << listPops << ". Полученный список при Pop начиная с " << popStart << " размером " << popCount << ": ";
+    listResPops = listPops.Pop(popStart, popCount);
+    std::cout << listResPops << ". Список после: " << listPops << "." << std::endl;
 
     std::cout << std::endl;
 
@@ -120,19 +214,173 @@ int main(void)
     std::cout << INFO_COLOR << "Removes2: " << RESET_COLOR << "Список: " << listRemoves << ". Список после удаления элемента [begin() + " << removeIndex << "]: ";
     listRemoves.Remove(listRemoves.begin() + removeIndex);
     std::cout << listRemoves << "." << std::endl;
-    
-    listRemoves = List<int>{5, 9, 6, 2, 3, 7, 1};
-    removeIndex = 4;
-    std::cout << INFO_COLOR << "Removes3: " << RESET_COLOR << "Список: " << listRemoves << ". Список после pop элемента [" << removeIndex << "]: ";
-    auto popAns = listRemoves.Pop(removeIndex);
-    std::cout << listRemoves << "." << " Элемент: " << popAns << std::endl;
 
     listRemoves = List<int>{5, 9, 6, 2, 3, 7, 1};
-    removeIndex = 0;
-    std::cout << INFO_COLOR << "Removes4: " << RESET_COLOR << "Список: " << listRemoves << ". Список после pop элемента [begin() + " << removeIndex << "]: ";
-    popAns = listRemoves.Pop(listRemoves.begin() + removeIndex);
-    std::cout << listRemoves << "." << " Элемент: " << popAns << std::endl;
+    size_t removeStart = 1, removeEnd = 4;
+    std::cout << INFO_COLOR << "Removes3: " << RESET_COLOR << "Список: " << listRemoves << ". Полученный список при Remove [begin() + " << removeStart << "; begin() + " << removeEnd << "]: ";
+    listRemoves.Remove(listRemoves.begin() + removeStart, listRemoves.begin() + removeEnd);
+    std::cout << listRemoves << "." << std::endl;
+
+    listRemoves = List<int>{5, 9, 6, 2, 3, 7, 1};
+    removeStart = 0, removeEnd = 4;
+    std::cout << INFO_COLOR << "Removes4: " << RESET_COLOR << "Список: " << listRemoves << ". Полученный список при Remove [begin() + " << removeStart << "; begin() + " << removeEnd << "]: ";
+    listRemoves.Remove(listRemoves.begin() + removeStart, listRemoves.begin() + removeEnd);
+    std::cout << listRemoves << "." << std::endl;
+
+    listRemoves = List<int>{5, 9, 6, 2, 3, 7, 1};
+    removeStart = 1, removeEnd = 6;
+    std::cout << INFO_COLOR << "Removes5: " << RESET_COLOR << "Список: " << listRemoves << ". Полученный список при Remove [begin() + " << removeStart << "; begin() + " << removeEnd << "]: ";
+    listRemoves.Remove(listRemoves.begin() + removeStart, listRemoves.begin() + removeEnd);
+    std::cout << listRemoves << "." << std::endl;
+
+    listRemoves = List<int>{5, 9, 6, 2, 3, 7, 1};
+    removeStart = 0, removeEnd = 6;
+    std::cout << INFO_COLOR << "Removes6: " << RESET_COLOR << "Список: " << listRemoves << ". Полученный список при Remove [begin() + " << removeStart << "; begin() + " << removeEnd << "]: ";
+    listRemoves.Remove(listRemoves.begin() + removeStart, listRemoves.begin() + removeEnd);
+    std::cout << listRemoves << "." << std::endl;
+    
+    listRemoves = List<int>{5, 9, 6, 2, 3, 7, 1};
+    removeStart = 1;
+    size_t removeCount = 3;
+    std::cout << INFO_COLOR << "Removes7: " << RESET_COLOR << "Список: " << listRemoves << ". Полученный список при Remove начиная с begin() + " << removeStart << " размером " << removeCount << ": ";
+    listRemoves.Remove(listRemoves.begin() + removeStart, removeCount);
+    std::cout << listRemoves << "." << std::endl;
+
+    listRemoves = List<int>{5, 9, 6, 2, 3, 7, 1};
+    removeStart = 0;
+    removeCount = 4;
+    std::cout << INFO_COLOR << "Removes8: " << RESET_COLOR << "Список: " << listRemoves << ". Полученный список при Remove начиная с begin() + " << removeStart << " размером " << removeCount << ": ";
+    listRemoves.Remove(listRemoves.begin() + removeStart, removeCount);
+    std::cout << listRemoves << "." << std::endl;
+
+    listRemoves = List<int>{5, 9, 6, 2, 3, 7, 1};
+    removeStart = 1;
+    removeCount = 6;
+    std::cout << INFO_COLOR << "Removes9: " << RESET_COLOR << "Список: " << listRemoves << ". Полученный список при Remove начиная с begin() + " << removeStart << " размером " << removeCount << ": ";
+    listRemoves.Remove(listRemoves.begin() + removeStart, removeCount);
+    std::cout << listRemoves << "." << std::endl;
+
+    listRemoves = List<int>{5, 9, 6, 2, 3, 7, 1};
+    removeStart = 0;
+    removeCount = 7;
+    std::cout << INFO_COLOR << "Removes10: " << RESET_COLOR << "Список: " << listRemoves << ". Полученный список при Remove начиная с begin() + " << removeStart << " размером " << removeCount << ": ";
+    listRemoves.Remove(listRemoves.begin() + removeStart, removeCount);
+    std::cout << listRemoves << "." << std::endl;
+
+    listRemoves = List<int>{5, 9, 6, 2, 3, 7, 1};
+    removeStart = 1;
+    removeCount = 3;
+    std::cout << INFO_COLOR << "Removes11: " << RESET_COLOR << "Список: " << listRemoves << ". Полученный список при Remove начиная с " << removeStart << " размером " << removeCount << ": ";
+    listRemoves.Remove(removeStart, removeCount);
+    std::cout << listRemoves << "." << std::endl;
+
+    listRemoves = List<int>{5, 9, 6, 2, 3, 7, 1};
+    removeStart = 0;
+    removeCount = 4;
+    std::cout << INFO_COLOR << "Removes12: " << RESET_COLOR << "Список: " << listRemoves << ". Полученный список при Remove начиная с " << removeStart << " размером " << removeCount << ": ";
+    listRemoves.Remove(removeStart, removeCount);
+    std::cout << listRemoves << "." << std::endl;
+
+    listRemoves = List<int>{5, 9, 6, 2, 3, 7, 1};
+    removeStart = 1;
+    removeCount = 6;
+    std::cout << INFO_COLOR << "Removes13: " << RESET_COLOR << "Список: " << listRemoves << ". Полученный список при Remove начиная с  " << removeStart << " размером " << removeCount << ": ";
+    listRemoves.Remove(removeStart, removeCount);
+    std::cout << listRemoves << "." << std::endl;
+
+    listRemoves = List<int>{5, 9, 6, 2, 3, 7, 1};
+    removeStart = 0;
+    removeCount = 7;
+    std::cout << INFO_COLOR << "Removes14: " << RESET_COLOR << "Список: " << listRemoves << ". Полученный список при Remove начиная с " << removeStart << " размером " << removeCount << ": ";
+    listRemoves.Remove(removeStart, removeCount);
+    std::cout << listRemoves << "." << std::endl;
+
     std::cout << std::endl;
+
+
+    // sublist testing
+    List<int> listSubLists{5, 9, 6, 2, 3, 7, 1};
+    size_t subListStart = 1, subListEnd = 4;
+    std::cout << INFO_COLOR << "SubLists1: " << RESET_COLOR << "Список: " << listSubLists << ". Полученный список при SubList [begin() + " << subListStart << "; begin() + " << subListEnd << "]: ";
+    auto subList = listSubLists.SubList(listSubLists.begin() + subListStart, listSubLists.begin() + subListEnd);
+    std::cout << subList << ". Исходный список: " << listSubLists << "." << std::endl;
+
+    listSubLists = List<int>{5, 9, 6, 2, 3, 7, 1};
+    subListStart = 0, subListEnd = 4;
+    std::cout << INFO_COLOR << "SubLists2: " << RESET_COLOR << "Список: " << listSubLists << ". Полученный список при SubList [begin() + " << subListStart << "; begin() + " << subListEnd << "]: ";
+    subList = listSubLists.SubList(listSubLists.begin() + subListStart, listSubLists.begin() + subListEnd);
+    std::cout << subList << ". Исходный список: " << listSubLists << "." << std::endl;
+
+    listSubLists = List<int>{5, 9, 6, 2, 3, 7, 1};
+    subListStart = 1, subListEnd = 6;
+    std::cout << INFO_COLOR << "SubLists3: " << RESET_COLOR << "Список: " << listSubLists << ". Полученный список при SubList [begin() + " << subListStart << "; begin() + " << subListEnd << "]: ";
+    subList = listSubLists.SubList(listSubLists.begin() + subListStart, listSubLists.begin() + subListEnd);
+    std::cout << subList << ". Исходный список: " << listSubLists << "." << std::endl;
+
+    listSubLists = List<int>{5, 9, 6, 2, 3, 7, 1};
+    subListStart = 0, subListEnd = 6;
+    std::cout << INFO_COLOR << "SubLists4: " << RESET_COLOR << "Список: " << listSubLists << ". Полученный список при SubList [begin() + " << subListStart << "; begin() + " << subListEnd << "]: ";
+    subList = listSubLists.SubList(listSubLists.begin() + subListStart, listSubLists.begin() + subListEnd);
+    std::cout << subList << ". Исходный список: " << listSubLists << "." << std::endl;
+    
+    listSubLists = List<int>{5, 9, 6, 2, 3, 7, 1};
+    subListStart = 1;
+    size_t subListCount = 3;
+    std::cout << INFO_COLOR << "SubLists5: " << RESET_COLOR << "Список: " << listSubLists << ". Полученный список при SubList начиная с begin() + " << subListStart << " размером " << subListCount << ": ";
+    subList = listSubLists.SubList(listSubLists.begin() + subListStart, subListCount);
+    std::cout << subList << ". Исходный список: " << listSubLists << "." << std::endl;
+
+    listSubLists = List<int>{5, 9, 6, 2, 3, 7, 1};
+    subListStart = 0;
+    subListCount = 4;
+    std::cout << INFO_COLOR << "SubLists6: " << RESET_COLOR << "Список: " << listSubLists << ". Полученный список при SubList начиная с begin() + " << subListStart << " размером " << subListCount << ": ";
+    subList = listSubLists.SubList(listSubLists.begin() + subListStart, subListCount);
+    std::cout << subList << ". Исходный список: " << listSubLists << "." << std::endl;
+
+    listSubLists = List<int>{5, 9, 6, 2, 3, 7, 1};
+    subListStart = 1;
+    subListCount = 6;
+    std::cout << INFO_COLOR << "SubLists7: " << RESET_COLOR << "Список: " << listSubLists << ". Полученный список при SubList начиная с begin() + " << subListStart << " размером " << subListCount << ": ";
+    subList = listSubLists.SubList(listSubLists.begin() + subListStart, subListCount);
+    std::cout << subList << ". Исходный список: " << listSubLists << "." << std::endl;
+
+    listSubLists = List<int>{5, 9, 6, 2, 3, 7, 1};
+    subListStart = 0;
+    subListCount = 7;
+    std::cout << INFO_COLOR << "SubLists8: " << RESET_COLOR << "Список: " << listSubLists << ". Полученный список при SubList начиная с begin() + " << subListStart << " размером " << subListCount << ": ";
+    subList = listSubLists.SubList(listSubLists.begin() + subListStart, subListCount);
+    std::cout << subList << ". Исходный список: " << listSubLists << "." << std::endl;
+
+    listSubLists = List<int>{5, 9, 6, 2, 3, 7, 1};
+    subListStart = 1;
+    subListCount = 3;
+    std::cout << INFO_COLOR << "SubLists9: " << RESET_COLOR << "Список: " << listSubLists << ". Полученный список при SubList начиная с " << subListStart << " размером " << subListCount << ": ";
+    subList = listSubLists.SubList(subListStart, subListCount);
+    std::cout << subList << ". Исходный список: " << listSubLists << "." << std::endl;
+
+    listSubLists = List<int>{5, 9, 6, 2, 3, 7, 1};
+    subListStart = 0;
+    subListCount = 4;
+    std::cout << INFO_COLOR << "SubLists10: " << RESET_COLOR << "Список: " << listSubLists << ". Полученный список при SubList начиная с " << subListStart << " размером " << subListCount << ": ";
+    subList = listSubLists.SubList(subListStart, subListCount);
+    std::cout << subList << ". Исходный список: " << listSubLists << "." << std::endl;
+
+    listSubLists = List<int>{5, 9, 6, 2, 3, 7, 1};
+    subListStart = 1;
+    subListCount = 6;
+    std::cout << INFO_COLOR << "SubLists11: " << RESET_COLOR << "Список: " << listSubLists << ". Полученный список при SubList начиная с  " << subListStart << " размером " << subListCount << ": ";
+    subList = listSubLists.SubList(subListStart, subListCount);
+    std::cout << subList << ". Исходный список: " << listSubLists << "." << std::endl;
+
+    listSubLists = List<int>{5, 9, 6, 2, 3, 7, 1};
+    subListStart = 0;
+    subListCount = 7;
+    std::cout << INFO_COLOR << "SubLists12: " << RESET_COLOR << "Список: " << listSubLists << ". Полученный список при SubList начиная с " << subListStart << " размером " << subListCount << ": ";
+    subList = listSubLists.SubList(subListStart, subListCount);
+    std::cout << subList << ". Исходный список: " << listSubLists << "." << std::endl;
+
+    std::cout << std::endl;
+
     
     // insert testing
     List<int> listInserts = List<int>{1, 2, 3};
@@ -144,30 +392,92 @@ int main(void)
 
     listInserts = List<int>{1, 2, 3};
     insertIndex = 3;
-    std::cout << INFO_COLOR << "Inserts3: " << RESET_COLOR << "Список: " << listInserts << ". Список после вставки элемента [" << insertIndex << "]: ";
+    std::cout << INFO_COLOR << "Inserts2: " << RESET_COLOR << "Список: " << listInserts << ". Список после вставки элемента [" << insertIndex << "]: ";
     listInserts.Insert(insertIndex, insertValue);
     std::cout << listInserts << "." << std::endl;
 
     listInserts = List<int>{1, 2, 3};
     insertIndex = 2;
-    std::cout << INFO_COLOR << "Inserts4: " << RESET_COLOR << "Список: " << listInserts << ". Список после вставки элемента после [begin() + " << insertIndex << "]: ";
-    listInserts.InsertAfter(listInserts.begin() + insertIndex, insertValue);
+    std::cout << INFO_COLOR << "Inserts3: " << RESET_COLOR << "Список: " << listInserts << ". Список после вставки элемента после [begin() + " << insertIndex << "]: ";
+    listInserts.Insert(listInserts.begin() + insertIndex, insertValue);
     std::cout << listInserts << "." << std::endl;
 
     double insertValued = 23.5;
     insertIndex = 1;
     listInserts = List<int>{1, 2, 3};
-    std::cout << INFO_COLOR << "Inserts6: " << RESET_COLOR << "Список: " << listInserts << ". Список после вставки элемента double " << insertValued << " [ " << insertIndex << "]: ";
+    std::cout << INFO_COLOR << "Inserts4: " << RESET_COLOR << "Список: " << listInserts << ". Список после вставки элемента double " << insertValued << " [ " << insertIndex << "]: ";
     listInserts.Insert(insertIndex, insertValued);
     std::cout << listInserts << "." << std::endl;
 
     listInserts = List<int>{1, 2, 3};
-    std::cout << INFO_COLOR << "Inserts7: " << RESET_COLOR << "Список: " << listInserts << ". Список после вставки элемента double " << insertValued << " после [begin() + " << insertIndex << "]: ";
-    listInserts.InsertAfter(listInserts.begin() + insertIndex, insertValued);
+    std::cout << INFO_COLOR << "Inserts5: " << RESET_COLOR << "Список: " << listInserts << ". Список после вставки элемента double " << insertValued << " после [begin() + " << insertIndex << "]: ";
+    listInserts.Insert(listInserts.begin() + insertIndex, insertValued);
     std::cout << listInserts << "." << std::endl;
 
+    listInserts = List<int>{1, 2, 3};
+    List<int> insertList{5, 7, 2};
+    std::cout << INFO_COLOR << "Inserts6: " << RESET_COLOR << "Список: " << listInserts << ". Список после переноса списка " << insertList << " после [begin() + " << insertIndex << "]: ";
+    listInserts.Insert(listInserts.begin() + insertIndex, std::move(insertList));
+    std::cout << listInserts << "." << "Переносимый список: " << insertList << std::endl;
+
+    listInserts = List<int>{1, 2, 3};
+    insertList = List<int>{5, 7, 2};
+    insertIndex = 2;
+    std::cout << INFO_COLOR << "Inserts7: " << RESET_COLOR << "Список: " << listInserts << ". Список после переноса списка " << insertList << " после [begin() + " << insertIndex << "]: ";
+    listInserts.Insert(listInserts.begin() + insertIndex, std::move(insertList));
+    std::cout << listInserts << "." << "Переносимый список: " << insertList << std::endl;
+
+    listInserts = List<int>{1, 2, 3};
+    insertList = List<int>{5, 7, 2};
+    insertIndex = 0;
+    std::cout << INFO_COLOR << "Inserts8: " << RESET_COLOR << "Список: " << listInserts << ". Список после переноса списка " << insertList << " после [" << insertIndex << "]: ";
+    listInserts.Insert(insertIndex, std::move(insertList));
+    std::cout << listInserts << "." << "Переносимый список: " << insertList << std::endl;
+    
+    listInserts = List<int>{1, 2, 3};
+    insertList = List<int>{5, 7, 2};
+    insertIndex = 3;
+    std::cout << INFO_COLOR << "Inserts9: " << RESET_COLOR << "Список: " << listInserts << ". Список после переноса списка " << insertList << " после [" << insertIndex << "]: ";
+    listInserts.Insert(insertIndex, std::move(insertList));
+    std::cout << listInserts << "." << "Переносимый список: " << insertList << std::endl;
+
+    listInserts = List<int>{1, 2, 3};
+    std::vector<double> insertVec{2.5, 6.2, 5.9};
+    insertIndex = 1;
+    std::cout << INFO_COLOR << "Inserts10: " << RESET_COLOR << "Список: " << listInserts << ". Список после вставки вектора " << insertVec << " после [" << insertIndex << "]: ";
+    listInserts.Insert(insertIndex, insertVec);
+    std::cout << listInserts << "." << std::endl;
+
+    listInserts = List<int>{1, 2, 3};
+    insertVec = std::vector<double>{2.5, 6.2, 5.9};
+    insertIndex = 0;
+    std::cout << INFO_COLOR << "Inserts11: " << RESET_COLOR << "Список: " << listInserts << ". Список после вставки вектора " << insertVec << " после [" << insertIndex << "]: ";
+    listInserts.Insert(insertIndex, insertVec);
+    std::cout << listInserts << "." << std::endl;
+
+    listInserts = List<int>{1, 2, 3};
+    insertVec = std::vector<double>{2.5, 6.2, 5.9};
+    insertIndex = 3;
+    std::cout << INFO_COLOR << "Inserts12: " << RESET_COLOR << "Список: " << listInserts << ". Список после вставки вектора " << insertVec << " после [" << insertIndex << "]: ";
+    listInserts.Insert(insertIndex, insertVec);
+    std::cout << listInserts << "." << std::endl;
+
+    listInserts = List<int>{1, 2, 3};
+    insertVec = std::vector<double>{2.5, 6.2, 5.9};
+    insertIndex = 2;
+    std::cout << INFO_COLOR << "Inserts13: " << RESET_COLOR << "Список: " << listInserts << ". Список после вставки вектора " << insertVec << " после [begin() + " << insertIndex << "]: ";
+    listInserts.Insert(listInserts.begin() + insertIndex, insertVec);
+    std::cout << listInserts << "." << std::endl;
+
+    listInserts = List<int>{1, 2, 3};
+    insertVec = std::vector<double>{2.5, 6.2, 5.9};
+    insertIndex = 0;
+    std::cout << INFO_COLOR << "Inserts14: " << RESET_COLOR << "Список: " << listInserts << ". Список после вставки вектора " << insertVec << " после [begin() + " << insertIndex << "]: ";
+    listInserts.Insert(listInserts.begin() + insertIndex, insertVec);
+    std::cout << listInserts << "." << std::endl;
 
     std::cout << std::endl;
+
     // Clear testing
     List<int> listClear{1, 2, 3};
     std::cout << INFO_COLOR << "Clear1: " << RESET_COLOR << "Список: " << listClear << ". Список после Clear: ";
