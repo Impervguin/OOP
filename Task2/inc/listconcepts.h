@@ -23,6 +23,12 @@ concept Comparable = requires(T t, T u){
     {u != t}-> std::same_as<bool>;
 };
 
+template <typename T>
+concept Assignable = requires(T &t, T &t2) {t = t2;};
+
+template <typename T>
+concept Copyable = requires(T &t) {T(t);};
+
 template <typename container>
 concept Container = requires(container c)
 { 

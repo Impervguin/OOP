@@ -23,8 +23,9 @@ class List : public BaseContainer {
         List() noexcept;
         explicit List(const List<T>& list);
         List<T>& operator=(const List<T> &list);
+
         List(List<T> &&list) noexcept;
-        List<T>& operator=(List<T> &&list);
+        List<T>& operator=(List<T> &&list) noexcept;
         
         template <Convertible<value_type> U>
         List(size_t size, const U& data);
@@ -147,19 +148,21 @@ class List : public BaseContainer {
         // Взятие подсписка
         List<T> SubList(const ListIterator<T> &begin, const ListIterator<T> &end);
         List<T> SubList(const ListIterator<T> &begin, size_t count);
-        List<T> SubList(size_t index, size_t count);
+        List<T> SubList(const ConstListIterator<T> &begin, const ConstListIterator<T> &end) const;
+        List<T> SubList(const ConstListIterator<T> &begin, size_t count) const;
+        List<T> SubList(size_t index, size_t count) const;
     
         // Методы работы со списками целиком
         void Clear() noexcept;
         void Reverse() noexcept;
 
         // Методы сравнения
-        bool operator==(const List<T> &list) const noexcept;
-        bool operator!=(const List<T> &list) const noexcept;
-        bool operator<(const List<T> &list) const noexcept;
-        bool operator>(const List<T> &list) const noexcept;
-        bool operator<=(const List<T> &list) const noexcept;
-        bool operator>=(const List<T> &list) const noexcept;
+        bool operator==(const List<T> &list) const;
+        bool operator!=(const List<T> &list) const;
+        bool operator<(const List<T> &list) const;
+        bool operator>(const List<T> &list) const;
+        bool operator<=(const List<T> &list) const;
+        bool operator>=(const List<T> &list) const;
 
     protected:
         class ListNode : public std::enable_shared_from_this<ListNode>
@@ -192,26 +195,27 @@ class List : public BaseContainer {
         // Методы вставок
         void pushBack(std::shared_ptr<ListNode> &node) noexcept;
         void pushFront(std::shared_ptr<ListNode> &node) noexcept;
-        void insert(const ListIterator<T> &iterator, std::shared_ptr<ListNode> &node) noexcept;
-        void insert(size_t index, std::shared_ptr<ListNode> &node) noexcept;
+        void insert(const ListIterator<T> &iterator, std::shared_ptr<ListNode> &node);
+        void insert(size_t index, std::shared_ptr<ListNode> &node);
 
         // Методы получения узлов по индексу
-        std::shared_ptr<ListNode> get(size_t index) noexcept;
-        const std::shared_ptr<ListNode> get(size_t index) const noexcept;
+        std::shared_ptr<ListNode> get(size_t index);
+        const std::shared_ptr<ListNode> get(size_t index) const;
         
         // Методы удаления
-        std::shared_ptr<ListNode> popBack() noexcept;
-        std::shared_ptr<ListNode> popFront() noexcept;
-        std::shared_ptr<ListNode> pop(size_t index) noexcept;
-        std::shared_ptr<ListNode> pop(const ListIterator<T> &iterator) noexcept;
-        List<T> pop(const ListIterator<T> &begin, const ListIterator<T> &end) noexcept;
+        std::shared_ptr<ListNode> popBack();
+        std::shared_ptr<ListNode> popFront();
+        std::shared_ptr<ListNode> pop(size_t index);
+        std::shared_ptr<ListNode> pop(const ListIterator<T> &iterator);
+        List<T> pop(const ListIterator<T> &begin, const ListIterator<T> &end);
 
         // Метод взятия подсписка
         List<T> subList(const ListIterator<T> &begin, const ListIterator<T> &end);
+        List<T> subList(const ConstListIterator<T> &begin, const ConstListIterator<T> &end) const;
 
 
         // Внутренний метод сравнения
-        int cmpList(const List<T> &list) const noexcept;
+        int cmpList(const List<T> &list) const;
 
 
         // Проверки с exceptions
@@ -232,11 +236,9 @@ class List : public BaseContainer {
 template <typename T>
 std::ostream& operator<<(std::ostream& os, const List<T>& list);
 
-template <typename T, typename U>
-requires Convertible<U, typename List<T>::value_type>
+template <typename T, Convertible<T> U>
 List<T> operator+(const U& data, const List<T> &list);
-template <typename T, typename U>
-requires Convertible<U, typename List<T>::value_type>
+template <typename T, Convertible<T> U>
 List<T> operator+(U&& data, const List<T> &list);
 
 #endif // LIST_H__

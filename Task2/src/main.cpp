@@ -324,85 +324,114 @@ int main(void)
     size_t subListStart = 1, subListEnd = 4;
     std::cout << INFO_COLOR << "SubLists1: " << RESET_COLOR << "Список: " << listSubLists << ". Полученный список при SubList [begin() + " << subListStart << "; begin() + " << subListEnd << "]: ";
     auto subList = listSubLists.SubList(listSubLists.begin() + subListStart, listSubLists.begin() + subListEnd);
-    std::cout << subList << ". Исходный список: " << listSubLists << "." << std::endl;
+    std::cout << subList << "." << std::endl;
 
     listSubLists = List<int>{5, 9, 6, 2, 3, 7, 1};
     subListStart = 0, subListEnd = 4;
     std::cout << INFO_COLOR << "SubLists2: " << RESET_COLOR << "Список: " << listSubLists << ". Полученный список при SubList [begin() + " << subListStart << "; begin() + " << subListEnd << "]: ";
     subList = listSubLists.SubList(listSubLists.begin() + subListStart, listSubLists.begin() + subListEnd);
-    std::cout << subList << ". Исходный список: " << listSubLists << "." << std::endl;
+    std::cout << subList << "." << std::endl;
 
     listSubLists = List<int>{5, 9, 6, 2, 3, 7, 1};
     subListStart = 1, subListEnd = 6;
     std::cout << INFO_COLOR << "SubLists3: " << RESET_COLOR << "Список: " << listSubLists << ". Полученный список при SubList [begin() + " << subListStart << "; begin() + " << subListEnd << "]: ";
     subList = listSubLists.SubList(listSubLists.begin() + subListStart, listSubLists.begin() + subListEnd);
-    std::cout << subList << ". Исходный список: " << listSubLists << "." << std::endl;
+    std::cout << subList << "." << std::endl;
 
     listSubLists = List<int>{5, 9, 6, 2, 3, 7, 1};
     subListStart = 0, subListEnd = 6;
     std::cout << INFO_COLOR << "SubLists4: " << RESET_COLOR << "Список: " << listSubLists << ". Полученный список при SubList [begin() + " << subListStart << "; begin() + " << subListEnd << "]: ";
     subList = listSubLists.SubList(listSubLists.begin() + subListStart, listSubLists.begin() + subListEnd);
-    std::cout << subList << ". Исходный список: " << listSubLists << "." << std::endl;
+    std::cout << subList << "." << std::endl;
     
     listSubLists = List<int>{5, 9, 6, 2, 3, 7, 1};
     subListStart = 1;
     size_t subListCount = 3;
     std::cout << INFO_COLOR << "SubLists5: " << RESET_COLOR << "Список: " << listSubLists << ". Полученный список при SubList начиная с begin() + " << subListStart << " размером " << subListCount << ": ";
     subList = listSubLists.SubList(listSubLists.begin() + subListStart, subListCount);
-    std::cout << subList << ". Исходный список: " << listSubLists << "." << std::endl;
+    std::cout << subList << "." << std::endl;
 
     listSubLists = List<int>{5, 9, 6, 2, 3, 7, 1};
     subListStart = 0;
     subListCount = 4;
     std::cout << INFO_COLOR << "SubLists6: " << RESET_COLOR << "Список: " << listSubLists << ". Полученный список при SubList начиная с begin() + " << subListStart << " размером " << subListCount << ": ";
     subList = listSubLists.SubList(listSubLists.begin() + subListStart, subListCount);
-    std::cout << subList << ". Исходный список: " << listSubLists << "." << std::endl;
+    std::cout << subList << "." << std::endl;
 
     listSubLists = List<int>{5, 9, 6, 2, 3, 7, 1};
     subListStart = 1;
     subListCount = 6;
     std::cout << INFO_COLOR << "SubLists7: " << RESET_COLOR << "Список: " << listSubLists << ". Полученный список при SubList начиная с begin() + " << subListStart << " размером " << subListCount << ": ";
     subList = listSubLists.SubList(listSubLists.begin() + subListStart, subListCount);
-    std::cout << subList << ". Исходный список: " << listSubLists << "." << std::endl;
+    std::cout << subList << "." << std::endl;
 
     listSubLists = List<int>{5, 9, 6, 2, 3, 7, 1};
     subListStart = 0;
     subListCount = 7;
     std::cout << INFO_COLOR << "SubLists8: " << RESET_COLOR << "Список: " << listSubLists << ". Полученный список при SubList начиная с begin() + " << subListStart << " размером " << subListCount << ": ";
     subList = listSubLists.SubList(listSubLists.begin() + subListStart, subListCount);
-    std::cout << subList << ". Исходный список: " << listSubLists << "." << std::endl;
+    std::cout << subList << "." << std::endl;
 
     listSubLists = List<int>{5, 9, 6, 2, 3, 7, 1};
     subListStart = 1;
     subListCount = 3;
     std::cout << INFO_COLOR << "SubLists9: " << RESET_COLOR << "Список: " << listSubLists << ". Полученный список при SubList начиная с " << subListStart << " размером " << subListCount << ": ";
     subList = listSubLists.SubList(subListStart, subListCount);
-    std::cout << subList << ". Исходный список: " << listSubLists << "." << std::endl;
+    std::cout << subList << "." << std::endl;
 
     listSubLists = List<int>{5, 9, 6, 2, 3, 7, 1};
     subListStart = 0;
     subListCount = 4;
     std::cout << INFO_COLOR << "SubLists10: " << RESET_COLOR << "Список: " << listSubLists << ". Полученный список при SubList начиная с " << subListStart << " размером " << subListCount << ": ";
     subList = listSubLists.SubList(subListStart, subListCount);
-    std::cout << subList << ". Исходный список: " << listSubLists << "." << std::endl;
+    std::cout << subList << "." << std::endl;
 
     listSubLists = List<int>{5, 9, 6, 2, 3, 7, 1};
     subListStart = 1;
     subListCount = 6;
     std::cout << INFO_COLOR << "SubLists11: " << RESET_COLOR << "Список: " << listSubLists << ". Полученный список при SubList начиная с  " << subListStart << " размером " << subListCount << ": ";
     subList = listSubLists.SubList(subListStart, subListCount);
-    std::cout << subList << ". Исходный список: " << listSubLists << "." << std::endl;
+    std::cout << subList << "." << std::endl;
 
     listSubLists = List<int>{5, 9, 6, 2, 3, 7, 1};
     subListStart = 0;
     subListCount = 7;
     std::cout << INFO_COLOR << "SubLists12: " << RESET_COLOR << "Список: " << listSubLists << ". Полученный список при SubList начиная с " << subListStart << " размером " << subListCount << ": ";
     subList = listSubLists.SubList(subListStart, subListCount);
-    std::cout << subList << ". Исходный список: " << listSubLists << "." << std::endl;
+    std::cout << subList << "." << std::endl;
+
+    const List<int> constListSubLists{5, 9, 6, 2, 3, 7, 1};
+    subListStart = 1;
+    subListEnd = 4;
+    std::cout << INFO_COLOR << "SubLists13 (const): " << RESET_COLOR << "Список: " << constListSubLists << ". Полученный список при SubList начиная с begin() + " << subListStart << " до begin() + " << subListEnd << ": ";
+    subList = constListSubLists.SubList(constListSubLists.cbegin() + subListStart, constListSubLists.cbegin() + subListEnd);
+    std::cout << subList << "." << std::endl;
+
+    const List<int> constListSubLists13{5, 9, 6, 2, 3, 7, 1};
+    subListStart = 0;
+    subListEnd = 4;
+    std::cout << INFO_COLOR << "SubLists14 (const): " << RESET_COLOR << "Список: " << constListSubLists13 << ". Полученный список при SubList начиная с begin() + " << subListStart << " до begin() + " << subListEnd << ": ";
+    subList = constListSubLists13.SubList(constListSubLists13.cbegin() + subListStart, constListSubLists13.cbegin() + subListEnd);
+    std::cout << subList << "." << std::endl;
+
+    const List<int> constListSubLists15{5, 9, 6, 2, 3, 7, 1};
+    subListStart = 1;
+    subListEnd = 6;
+    std::cout << INFO_COLOR << "SubLists15 (const): " << RESET_COLOR << "Список: " << constListSubLists15 << ". Полученный список при SubList начиная с begin() + " << subListStart << " до begin() + " << subListEnd << ": ";
+    subList = constListSubLists15.SubList(constListSubLists15.cbegin() + subListStart, constListSubLists15.cbegin() + subListEnd);
+    std::cout << subList << "." << std::endl;
+
+    const List<int> constListSubLists16{5, 9, 6, 2, 3, 7, 1};
+    subListStart = 0;
+    subListEnd = 6;
+    std::cout << INFO_COLOR << "SubLists16 (const): " << RESET_COLOR << "Список: " << constListSubLists16 << ". Полученный список при SubList начиная с begin() + " << subListStart << " до begin() + " << subListEnd << ": ";
+    subList = constListSubLists16.SubList(constListSubLists16.cbegin() + subListStart, constListSubLists16.cbegin() + subListEnd);
+    std::cout << subList << "." << std::endl;
+
 
     std::cout << std::endl;
 
-    
+     
     // insert testing
     List<int> listInserts = List<int>{1, 2, 3};
     size_t insertIndex = 1;
@@ -558,5 +587,12 @@ int main(void)
     std::cout << INFO_COLOR << listCmp2 << " > " << listCmp3 << RESET_COLOR <<  " = " << (listCmp2 > listCmp3) << std::endl;
     std::cout << INFO_COLOR << listCmp2 << " == " << listCmp3 << RESET_COLOR <<  " = " << (listCmp2 == listCmp3) << std::endl;
 
+    auto it = listCmp1.begin();
+    while (true) {
+        std::cout << *(it++) << std::endl;
+    }
+    const List<int> list1{1,2, 3, 4, 5};
+    std::cout << INFO_COLOR << *list1.begin() << std::endl;
+    std::cout<< INFO_COLOR <<*(++list1.begin()) << std::endl;
     return 0;
 }

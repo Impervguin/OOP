@@ -4,14 +4,16 @@
 #include <exception>
 #include <string>
 
+
 class BaseException : public std::exception
 {
 protected:
-    std::string errMsg;
+    static const size_t errSize = 512;
+    char errMsg[errSize] = "";
 public:
-   BaseException(const std::string &time, const std::string &filename,
-                  const size_t line, const std::string &class_name,
-                  const std::string &method_name, const std::string &info);
+   BaseException(const char *time, const char *filename,
+                  const size_t line, const char *class_name,
+                  const char *method_name, const char *info);
     virtual const char *what() const noexcept override;
 };
 

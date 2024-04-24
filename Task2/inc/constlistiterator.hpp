@@ -44,13 +44,14 @@ ConstListIterator<T>::pointer ConstListIterator<T>::operator->() const {
 
 template <Comparable T>
 ConstListIterator<T> &ConstListIterator<T>::operator++() {
-    if (!this->wptr.expired())
-        this->wptr = this->wptr.lock()->GetNext();
+    this->checkValid(__LINE__);
+    this->wptr = this->wptr.lock()->GetNext();
     return *this;
 }
 
 template <Comparable T>
 ConstListIterator<T> ConstListIterator<T>::operator++(int) {
+    this->checkValid(__LINE__);
     ConstListIterator<T> ret(*this);
     this->wptr = this->wptr.lock()->GetNext();
     return ret;
@@ -59,6 +60,7 @@ ConstListIterator<T> ConstListIterator<T>::operator++(int) {
 template <Comparable T>
 template <IncrementableandComparable U>
 ConstListIterator<T> &ConstListIterator<T>::operator+=(U steps) {
+    this->checkValid(__LINE__);
     for (U i = 0; i < steps; i++) {
         ++(*this);
     }
@@ -68,11 +70,24 @@ ConstListIterator<T> &ConstListIterator<T>::operator+=(U steps) {
 template <Comparable T>
 template <IncrementableandComparable U>
 ConstListIterator<T> ConstListIterator<T>::operator+(U steps) {
+    this->checkValid(__LINE__);
     ConstListIterator<T> ret(*this);
     for (U i = 0; i < steps; i++) {
         ++ret;
     }
     return ret;
 }
+
+template <Comparable T>
+template <IncrementableandComparable U>
+const ConstListIterator<T> ConstListIterator<T>::operator+(U steps) const {
+    this->checkValid(__LINE__);
+    ConstListIterator<T> ret(*this);
+    for (U i = 0; i < steps; i++) {
+        ++ret;
+    }
+    return ret;
+}
+
 
 #endif // CONSTLISTITERATOR_HPP__

@@ -12,8 +12,7 @@ class List;
 template <Comparable T>
 class BaseListIterator {
     public:
-        virtual ~BaseListIterator() = default;
-
+        virtual ~BaseListIterator() = 0;
         bool IsValid() const noexcept;
         operator bool() const noexcept;
 

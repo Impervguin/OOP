@@ -43,4 +43,7 @@ void BaseListIterator<T>::checkValid(size_t line) const
     }
 }
 
+template <Comparable T>
+BaseListIterator<T>::~BaseListIterator() {}
+
 #endif // BASELISTITERATOR_H__
