@@ -6,14 +6,14 @@
 #include "list.h"
 
 
-template <Comparable T>
+template <AssignCopyComparable T>
 List<T>::List() noexcept {
     head = nullptr;
     tail = nullptr;
     csize = 0;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 template <Convertible<typename List<T>::value_type> U>
 List<T>::List(std::initializer_list<U> list) {
     head = nullptr;
@@ -25,7 +25,7 @@ List<T>::List(std::initializer_list<U> list) {
     }
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 template <Convertible<typename List<T>::value_type> U>
 List<T>::List(size_t size, const U& data) {
     // csize = size;
@@ -38,7 +38,7 @@ List<T>::List(size_t size, const U& data) {
     }
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 List<T>::List(const List<T>& list) {
     csize = 0;
     head = nullptr;
@@ -49,7 +49,7 @@ List<T>::List(const List<T>& list) {
     }
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 List<T>::List(List<T>&& list) noexcept {
     head = list.head;
     tail = list.tail;
@@ -60,7 +60,7 @@ List<T>::List(List<T>&& list) noexcept {
 }
 
 
-template <Comparable T>
+template <AssignCopyComparable T>
 template <ConvertibleContainer<typename List<T>::value_type> C>
 List<T>::List(const C &container) {
     csize = 0;
@@ -72,19 +72,19 @@ List<T>::List(const C &container) {
     }
 }
 
-template <Comparable T>
-template <ConvertibleContainer<typename List<T>::value_type> C>
-List<T>::List(C &&container) {
-    csize = 0;
-    head = nullptr;
-    tail = nullptr;
-    for (auto it = container.begin(); it!= container.end(); ++it) {
-        auto node = List<T>::ListNode::CreateNode(std::forward<T>(T(*it)), nullptr);
-        pushBack(node);
-    }
-}
+// template <AssignCopyComparable T>
+// template <ConvertibleContainer<typename List<T>::value_type> C>
+// List<T>::List(C &&container) {
+//     csize = 0;
+//     head = nullptr;
+//     tail = nullptr;
+//     for (auto it = container.begin(); it!= container.end(); ++it) {
+//         auto node = List<T>::ListNode::CreateNode(std::forward<T>(T(*it)), nullptr);
+//         pushBack(node);
+//     }
+// }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 template <ConvertibleForwardIterator<typename List<T>::value_type> Iter>
 List<T>::List(const Iter &begin, const Iter &end) {
     csize = 0;
@@ -96,7 +96,7 @@ List<T>::List(const Iter &begin, const Iter &end) {
     }
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 List<T>& List<T>::operator=(const List<T>& list) {
     if (this == &list) {
         return *this;
@@ -106,7 +106,7 @@ List<T>& List<T>::operator=(const List<T>& list) {
     return *this;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 List<T>& List<T>::operator=(List<T>&& list) noexcept {
     head = list.head;
     tail = list.tail;
@@ -117,7 +117,7 @@ List<T>& List<T>::operator=(List<T>&& list) noexcept {
     return *this;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 template <ConvertibleContainer<typename List<T>::value_type> C>
 List<T> &List<T>::operator=(const C &container) {
     Clear();
@@ -125,18 +125,20 @@ List<T> &List<T>::operator=(const C &container) {
     return *this;
 }
 
-template <Comparable T>
-template <ConvertibleContainer<typename List<T>::value_type> C>
-List<T> &List<T>::operator=(C &&container) {
+template <AssignCopyComparable T>
+List<T> &List<T>::operator=(std::initializer_list<T> list) {
     Clear();
-    PushBack(std::move(container));
+    for (auto it = list.begin(); it!= list.end(); it++) {
+        auto node = List<T>::ListNode::CreateNode(*it, nullptr);
+        pushBack(node);
+    }
     return *this;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 List<T>::~List() = default;
 
-template <Comparable T>
+template <AssignCopyComparable T>
 void List<T>::checkEmpty(size_t line) const {
     if (IsEmpty()) {
         time_t now = time(nullptr);
@@ -144,7 +146,7 @@ void List<T>::checkEmpty(size_t line) const {
     }
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 void List<T>::checkForeignIterator(const ListIterator<T> &iterator, size_t line) {
     auto it = begin();
     for (; it != end() && it != iterator; ++it);
@@ -153,7 +155,7 @@ void List<T>::checkForeignIterator(const ListIterator<T> &iterator, size_t line)
         throw UseOfForeignIterator(ctime(&now), __FILE__, line, typeid(*this).name(), __FUNCTION__);
     }
 }
-template <Comparable T>
+template <AssignCopyComparable T>
 void List<T>::checkForeignIterator(const ConstListIterator<T> &iterator, size_t line) const {
     auto it = cbegin();
     for (; it != cend() && it != iterator; ++it);
@@ -164,7 +166,7 @@ void List<T>::checkForeignIterator(const ConstListIterator<T> &iterator, size_t 
 }
 
 
-template <Comparable T>
+template <AssignCopyComparable T>
 void List<T>::checkListRange(const ListIterator<T> &begin, const ListIterator<T> &end, size_t line) {
     checkForeignIterator(begin, line);
     checkForeignIterator(end, line);
@@ -176,7 +178,7 @@ void List<T>::checkListRange(const ListIterator<T> &begin, const ListIterator<T>
     }
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 void List<T>::checkListRange(const ConstListIterator<T> &begin, const ConstListIterator<T> &end, size_t line) const {
     checkForeignIterator(begin, line);
     checkForeignIterator(end, line);
@@ -188,7 +190,7 @@ void List<T>::checkListRange(const ConstListIterator<T> &begin, const ConstListI
     }
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 void List<T>::checkIndex(size_t index, size_t line) const {
     if (index >= size()) {
         time_t now = time(nullptr);
@@ -196,21 +198,20 @@ void List<T>::checkIndex(size_t index, size_t line) const {
     }
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 template <Convertible<typename List<T>::value_type> U>
 void List<T>::PushBack(const U& data) {
-    auto node = List<T>::ListNode::CreateNode(T(data), nullptr);
-    pushBack(node);
-}
-
-template <Comparable T>
-template <Convertible<typename List<T>::value_type> U>
-void List<T>::PushBack(U&& data) {
     auto node = List<T>::ListNode::CreateNode(std::forward<T>(T(data)), nullptr);
     pushBack(node);
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
+void List<T>::PushBack(T&& data) {
+    auto node = List<T>::ListNode::CreateNode(std::forward<T>(data), nullptr);
+    pushBack(node);
+}
+
+template <AssignCopyComparable T>
 template <ConvertibleContainer<typename List<T>::value_type> C>
 void List<T>::PushBack(const C& container) {
     for (auto it = container.cbegin(); it!= container.cend(); it++) {
@@ -219,16 +220,7 @@ void List<T>::PushBack(const C& container) {
     }
 }
 
-template <Comparable T>
-template <ConvertibleContainer<typename List<T>::value_type> C>
-void List<T>::PushBack(C &&container) {
-    for (auto it = container.cbegin(); it!= container.cend(); it++) {
-        auto node = List<T>::ListNode::CreateNode(std::forward<T>(T(*it)), nullptr);
-        pushBack(node);
-    }
-}
-
-template <Comparable T>
+template <AssignCopyComparable T>
 void List<T>::PushBack(List<T>&& list) noexcept {
     tail->SetNext(list.head);
     tail = list.tail;
@@ -238,42 +230,34 @@ void List<T>::PushBack(List<T>&& list) noexcept {
     list.csize = 0;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 template <ConvertibleContainer<typename List<T>::value_type> C>
 List<T> &List<T>::operator+=(const C& container) {
     PushBack(container);
     return *this;
 }
 
-template <Comparable T>
-template <ConvertibleContainer<typename List<T>::value_type> C>
-List<T> &List<T>::operator+=(C&& container) {
-    PushBack(std::forward<C>(container));
-    return *this;
-}
 
-
-template <Comparable T>
+template <AssignCopyComparable T>
 List<T> &List<T>::operator+=(List<T>&& list) noexcept {
     PushBack(std::forward<List<T>>(list));
     return *this;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 template <Convertible<typename List<T>::value_type> U>
 List<T> &List<T>::operator+=(const U &data) {
-    PushBack(T(data));
-    return *this;
-}
-
-template <Comparable T>
-template <Convertible<typename List<T>::value_type> U>
-List<T> &List<T>::operator+=(U &&data) {
     PushBack(std::forward<T>(T(data)));
     return *this;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
+List<T> &List<T>::operator+=(T &&data) {
+    PushBack(std::forward<T>(data));
+    return *this;
+}
+
+template <AssignCopyComparable T>
 template <ConvertibleContainer<typename List<T>::value_type> C>
 List<T> List<T>::operator+(const C& container) const {
     List<T> result(*this);
@@ -281,31 +265,22 @@ List<T> List<T>::operator+(const C& container) const {
     return result;
 }
 
-template <Comparable T>
-template <ConvertibleContainer<typename List<T>::value_type> C>
-List<T> List<T>::operator+(C &&container) const {
-    List<T> result(*this);
-    result.PushBack(std::forward<C>(container));
-    return result;
-}
-
-template <Comparable T>
+template <AssignCopyComparable T>
 template <Convertible<typename List<T>::value_type> U>
 List<T> List<T>::operator+(const U &data) const {
-    List<T> result(*this);
-    result.PushBack(T(data));
-    return result;
-}
-
-template <Comparable T>
-template <Convertible<typename List<T>::value_type> U>
-List<T> List<T>::operator+(U &&data) const {
     List<T> result(*this);
     result.PushBack(std::forward<T>(T(data)));
     return result;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
+List<T> List<T>::operator+(T &&data) const {
+    List<T> result(*this);
+    result.PushBack(std::forward<T>(data));
+    return result;
+}
+
+template <AssignCopyComparable T>
 List<T> List<T>::operator+(List<T>&& list) const {
     List<T> result(*this);
     result.PushBack(std::forward<List<T>>(list));
@@ -314,21 +289,20 @@ List<T> List<T>::operator+(List<T>&& list) const {
     return result;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 template <Convertible<typename List<T>::value_type> U>
 void List<T>::PushFront(const U& data) {
     auto node = List<T>::ListNode::CreateNode(std::forward<T>(T(data)), nullptr);
     pushFront(node);
 }
 
-template <Comparable T>
-template <Convertible<typename List<T>::value_type> U>
-void List<T>::PushFront(U&& data) {
-    auto node = List<T>::ListNode::CreateNode(std::forward<T>(T(data)), nullptr);
+template <AssignCopyComparable T>
+void List<T>::PushFront(T&& data) {
+    auto node = List<T>::ListNode::CreateNode(std::forward<T>(data), nullptr);
     pushFront(node);
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 template <ConvertibleContainer<typename List<T>::value_type> C>
 void List<T>::PushFront(const C& container) {
     List<T> newList(container);
@@ -336,15 +310,7 @@ void List<T>::PushFront(const C& container) {
     *this = std::move(newList);
 }
 
-template <Comparable T>
-template <ConvertibleContainer<typename List<T>::value_type> C>
-void List<T>::PushFront(C &&container) {
-    List<T> newList(container);
-    newList.PushBack(std::move(*this));
-    *this = std::move(newList);
-}
-
-template <Comparable T>
+template <AssignCopyComparable T>
 void List<T>::PushFront(List<T>&& list) noexcept {
     list.tail->SetNext(head);
     head = list.head;
@@ -354,35 +320,35 @@ void List<T>::PushFront(List<T>&& list) noexcept {
     list.csize = 0;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 T List<T>::PopFront() {
     return *popFront()->GetData();
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 T List<T>::PopBack() {
     return *popBack()->GetData();
 }
 
 
-template <Comparable T>
+template <AssignCopyComparable T>
 void List<T>::Remove(size_t index) {
     pop(index);
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 void List<T>::Remove(const ListIterator<T> &it) {
    pop(it);
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 void List<T>::Remove(const ListIterator<T> &begin, const ListIterator<T> &end) {
     checkEmpty(__LINE__);
     checkListRange(begin, end, __LINE__);
     pop(begin, end);
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 void List<T>::Remove(const ListIterator<T> &begin, size_t count) {
     checkEmpty(__LINE__);
     checkForeignIterator(begin, __LINE__);
@@ -399,7 +365,7 @@ void List<T>::Remove(const ListIterator<T> &begin, size_t count) {
     pop(begin, it);
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 void List<T>::Remove(size_t index, size_t count) {
     checkEmpty(__LINE__);
     checkIndex(index, __LINE__);
@@ -414,24 +380,24 @@ void List<T>::Remove(size_t index, size_t count) {
     pop(begin, it);
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 T List<T>::Pop(size_t index) {
     return *pop(index)->GetData();
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 T List<T>::Pop(const ListIterator<T> &it) {
     return *pop(it)->GetData();
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 List<T> List<T>::Pop(const ListIterator<T> &begin, const ListIterator<T> &end) {
     checkEmpty(__LINE__);
     checkListRange(begin, end, __LINE__);
     return pop(begin, end);
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 List<T> List<T>::Pop(const ListIterator<T> &begin, size_t count) {
     checkEmpty(__LINE__);
     checkForeignIterator(begin, __LINE__);
@@ -448,7 +414,7 @@ List<T> List<T>::Pop(const ListIterator<T> &begin, size_t count) {
     return pop(begin, it);
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 List<T> List<T>::Pop(size_t index, size_t count) {
     checkEmpty(__LINE__);
     checkIndex(index, __LINE__);
@@ -463,14 +429,14 @@ List<T> List<T>::Pop(size_t index, size_t count) {
     return pop(begin, it);
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 List<T> List<T>::SubList(const ListIterator<T> &begin, const ListIterator<T> &end) {
     checkEmpty(__LINE__);
     checkListRange(begin, end, __LINE__);
     return subList(begin, end);
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 List<T> List<T>::SubList(const ListIterator<T> &begin, size_t count) {
     checkEmpty(__LINE__);
     checkForeignIterator(begin, __LINE__);
@@ -487,14 +453,14 @@ List<T> List<T>::SubList(const ListIterator<T> &begin, size_t count) {
     return subList(begin, it);
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 List<T> List<T>::SubList(const ConstListIterator<T> &begin, const ConstListIterator<T> &end) const {
     checkEmpty(__LINE__);
     checkListRange(begin, end, __LINE__);
     return subList(begin, end);
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 List<T> List<T>::SubList(const ConstListIterator<T> &begin, size_t count) const {
     checkEmpty(__LINE__);
     checkForeignIterator(begin, __LINE__);
@@ -512,7 +478,7 @@ List<T> List<T>::SubList(const ConstListIterator<T> &begin, size_t count) const 
 }
 
 
-template <Comparable T>
+template <AssignCopyComparable T>
 List<T> List<T>::SubList(size_t index, size_t count) const {
     checkEmpty(__LINE__);
     checkIndex(index, __LINE__);
@@ -527,7 +493,7 @@ List<T> List<T>::SubList(size_t index, size_t count) const {
     return subList(begin, it);
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 template <Convertible<typename List<T>::value_type> U>
 void List<T>::Insert(size_t index, const U& data) {
     if (index != size())
@@ -536,16 +502,15 @@ void List<T>::Insert(size_t index, const U& data) {
     insert(index, node);
 }
 
-template <Comparable T>
-template <Convertible<typename List<T>::value_type> U>
-void List<T>::Insert(size_t index, U&& data) {
+template <AssignCopyComparable T>
+void List<T>::Insert(size_t index, T&& data) {
     if (index != size())
         checkIndex(index, __LINE__);
-    auto node = List<T>::ListNode::CreateNode(std::forward<T>(T(data)), nullptr);
+    auto node = List<T>::ListNode::CreateNode(std::forward<T>(data), nullptr);
     insert(index, node);
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 template <ConvertibleContainer<typename List<T>::value_type> C>
 void List<T>::Insert(size_t index, const C& container) {
     if (index != size())
@@ -565,27 +530,7 @@ void List<T>::Insert(size_t index, const C& container) {
     }
 }
 
-template <Comparable T>
-template <ConvertibleContainer<typename List<T>::value_type> C>
-void List<T>::Insert(size_t index, C&& container) {
-    if (index != size())
-        checkIndex(index, __LINE__);
-
-    if (index == 0)
-    {   
-        PushFront(container);
-        return;
-    }
-        
-    auto iter = begin();
-    for (size_t i = 0; i < index - 1; i++, iter++);
-    for (auto it = container.begin(); it != container.end(); ++it, ++iter) {
-        auto node = List<T>::ListNode::CreateNode(std::forward<T>(T(*it)), nullptr);
-        insert(iter, node);
-    }
-}
-
-template <Comparable T>
+template <AssignCopyComparable T>
 void List<T>::Insert(size_t index, List<T>&& list) {
     if (index != size())
         checkIndex(index, __LINE__);
@@ -601,7 +546,7 @@ void List<T>::Insert(size_t index, List<T>&& list) {
     list.Clear();
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 template <Convertible<typename List<T>::value_type> U>
 void List<T>::Insert(const ListIterator<T> &it, const U& data) {
     checkForeignIterator(it, __LINE__);
@@ -609,15 +554,14 @@ void List<T>::Insert(const ListIterator<T> &it, const U& data) {
     insert(it, node);
 }
 
-template <Comparable T>
-template <Convertible<typename List<T>::value_type> U>
-void List<T>::Insert(const ListIterator<T> &it, U&& data) {
+template <AssignCopyComparable T>
+void List<T>::Insert(const ListIterator<T> &it, T&& data) {
     checkForeignIterator(it, __LINE__);
-    auto node = List<T>::ListNode::CreateNode(std::forward<T>(T(data)), nullptr);
+    auto node = List<T>::ListNode::CreateNode(std::forward<T>(data), nullptr);
     insert(it, node);
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 template <ConvertibleContainer<typename List<T>::value_type> C>
 void List<T>::Insert(const ListIterator<T> &it, const C& container) {
     checkForeignIterator(it, __LINE__);
@@ -628,18 +572,7 @@ void List<T>::Insert(const ListIterator<T> &it, const C& container) {
     }
 }
 
-template <Comparable T>
-template <ConvertibleContainer<typename List<T>::value_type> C>
-void List<T>::Insert(const ListIterator<T> &it, C&& container) {
-    checkForeignIterator(it, __LINE__);
-    auto cit = it;
-    for (auto iter = container.begin(); iter != container.end(); ++iter, ++cit) {
-        auto node = List<T>::ListNode::CreateNode(std::forward<T>(T(*iter)), nullptr);
-        insert(cit, node);
-    }
-}
-
-template <Comparable T>
+template <AssignCopyComparable T>
 void List<T>::Insert(const ListIterator<T> &it, List<T>&& list) {
     checkForeignIterator(it, __LINE__);
     if (it + 1 == end()) {
@@ -653,14 +586,14 @@ void List<T>::Insert(const ListIterator<T> &it, List<T>&& list) {
     list.Clear();
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 void List<T>::Clear() noexcept {
     head = nullptr;
     tail = nullptr;
     csize = 0;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 void List<T>::Reverse() noexcept {
     List<T> newList;
     while (csize > 0) {
@@ -670,22 +603,22 @@ void List<T>::Reverse() noexcept {
     *this = std::move(newList);
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 bool List<T>::IsEmpty() const noexcept {
     return csize == 0;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 size_t List<T>::GetSize() const noexcept {
     return csize;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 List<T>::size_type List<T>::size() const noexcept {
     return csize;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 void List<T>::pushBack(std::shared_ptr<List<T>::ListNode> &node) noexcept {
     node->SetNext(nullptr);
     csize++;
@@ -698,7 +631,7 @@ void List<T>::pushBack(std::shared_ptr<List<T>::ListNode> &node) noexcept {
     tail = node;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 void List<T>::pushFront(std::shared_ptr<List<T>::ListNode> &node) noexcept {
     node->SetNext(head);
     csize++;
@@ -710,7 +643,7 @@ void List<T>::pushFront(std::shared_ptr<List<T>::ListNode> &node) noexcept {
     head = node;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 std::shared_ptr<typename List<T>::ListNode> List<T>::popFront(void)  {
     csize--;
     auto node = head;
@@ -721,7 +654,7 @@ std::shared_ptr<typename List<T>::ListNode> List<T>::popFront(void)  {
     return node;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 std::shared_ptr<typename List<T>::ListNode> List<T>::popBack(void)  {
     if (head == tail) {
         auto node = head;
@@ -740,21 +673,21 @@ std::shared_ptr<typename List<T>::ListNode> List<T>::popBack(void)  {
     return node;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 const std::shared_ptr<typename List<T>::ListNode> List<T>::get(size_t index) const  {
     auto it = cbegin();
     for (size_t i = 0; i < index && it!= cend(); i++, it++);
     return it.getNode();
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 std::shared_ptr<typename List<T>::ListNode> List<T>::get(size_t index)  {
     auto it = begin();
     for (size_t i = 0; i < index && it != end(); i++, it++);
     return it.getNode();
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 std::shared_ptr<typename List<T>::ListNode> List<T>::pop(size_t index)  {
     if (index == 0) {
         return popFront();
@@ -772,7 +705,7 @@ std::shared_ptr<typename List<T>::ListNode> List<T>::pop(size_t index)  {
 
 
 
-template <Comparable T>
+template <AssignCopyComparable T>
 std::shared_ptr<typename List<T>::ListNode> List<T>::pop(const ListIterator<T>& iterator)  {
     if (iterator == begin()) 
     {
@@ -790,7 +723,7 @@ std::shared_ptr<typename List<T>::ListNode> List<T>::pop(const ListIterator<T>& 
     return node;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 List<T> List<T>::pop(const ListIterator<T>& begin, const ListIterator<T>& end)  {
     size_t count = distance(begin, end) + 1;
     List<T> newList;
@@ -817,17 +750,17 @@ List<T> List<T>::pop(const ListIterator<T>& begin, const ListIterator<T>& end)  
     return newList;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 List<T> List<T>::subList(const ListIterator<T>& begin, const ListIterator<T>& end) {
     return List<T>(begin, end + 1);
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 List<T> List<T>::subList(const ConstListIterator<T>& begin, const ConstListIterator<T>& end) const {
     return List<T>(begin, end + 1);
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 void List<T>::insert(const ListIterator<T>& iterator, std::shared_ptr<List<T>::ListNode> &node)  {
     if (iterator + 1 == end()) {
         pushBack(node);
@@ -839,7 +772,7 @@ void List<T>::insert(const ListIterator<T>& iterator, std::shared_ptr<List<T>::L
     csize++;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 void List<T>::insert(size_t index, std::shared_ptr<List<T>::ListNode> &node)  {
     if (index == size()) {
         pushBack(node);
@@ -855,13 +788,13 @@ void List<T>::insert(size_t index, std::shared_ptr<List<T>::ListNode> &node)  {
     csize++;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 ListIterator<T> List<T>::begin() noexcept {
     return ListIterator<T>(head);
 }
 
 
-template <Comparable T>
+template <AssignCopyComparable T>
 ListIterator<T> List<T>::end() noexcept {
     if (head == nullptr) {
         return ListIterator<T>(nullptr);
@@ -869,13 +802,13 @@ ListIterator<T> List<T>::end() noexcept {
     return ListIterator<T>(tail) + 1;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 ConstListIterator<T> List<T>::begin() const noexcept {
     return ConstListIterator<T>(head);
 }
 
 
-template <Comparable T>
+template <AssignCopyComparable T>
 ConstListIterator<T> List<T>::end() const noexcept {
     if (head == nullptr) {
         return ConstListIterator<T>(nullptr);
@@ -883,12 +816,12 @@ ConstListIterator<T> List<T>::end() const noexcept {
     return ConstListIterator<T>(tail) + 1;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 ConstListIterator<T> List<T>::cbegin() const noexcept {
     return ConstListIterator<T>(head);
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 ConstListIterator<T> List<T>::cend() const noexcept {
     if (head == nullptr) {
         return ConstListIterator<T>(nullptr);
@@ -896,7 +829,7 @@ ConstListIterator<T> List<T>::cend() const noexcept {
     return ConstListIterator<T>(tail) + 1;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 int List<T>::cmpList(const List<T> &other) const {
     auto cit1 = cbegin();
     auto cit2 = other.cbegin();
@@ -931,37 +864,37 @@ List<T> operator+(U&& data, const List<T> &list) {
     return result;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 bool List<T>::operator==(const List<T> &list) const  {
     return cmpList(list) == 0;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 bool List<T>::operator!=(const List<T> &list) const  {
     return cmpList(list)!= 0;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 bool List<T>::operator<(const List<T> &list) const  {
     return cmpList(list) < 0;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 bool List<T>::operator>(const List<T> &list) const  {
     return cmpList(list) > 0;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 bool List<T>::operator<=(const List<T> &list) const  {
     return cmpList(list) <= 0;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 bool List<T>::operator>=(const List<T> &list) const  {
     return cmpList(list) >= 0;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 std::ostream& operator<<(std::ostream& os, const List<T>& list) {
     os << "{";
     auto a = list.cbegin();

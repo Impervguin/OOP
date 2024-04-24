@@ -6,10 +6,10 @@
 #include <memory>
 #include "listconcepts.h"
 
-template <Comparable T>
+template <AssignCopyComparable T>
 class List;
 
-template <Comparable T>
+template <AssignCopyComparable T>
 class BaseListIterator {
     public:
         virtual ~BaseListIterator() = 0;

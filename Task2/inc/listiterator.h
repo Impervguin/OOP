@@ -8,10 +8,13 @@
 #include "listconcepts.h"
 #include "baselistiterator.h"
 
-template <Comparable T>
+template <AssignCopyComparable T>
 class List;
 
-template <Comparable T>
+template <AssignCopyComparable T>
+class ConstListIterator;
+
+template <AssignCopyComparable T>
 class ListIterator : public BaseListIterator<T>
 {
     public:
@@ -52,6 +55,7 @@ class ListIterator : public BaseListIterator<T>
         const ListIterator<T> operator+(U steps) const;
         
         friend class List<T>;
+        friend class ConstListIterator<T>;
         
 };
 

@@ -10,6 +10,24 @@
 #define INFO_COLOR "\033[36m"
 #define RESET_COLOR "\033[0m"
 
+class NotCopyableInt
+{
+    public:
+    int value;
+    NotCopyableInt(int value) : value(value) {}
+    NotCopyableInt(const NotCopyableInt& other) = delete;
+    NotCopyableInt& operator=(const NotCopyableInt& other) = delete;
+    ~NotCopyableInt() = default;
+
+    bool operator==(const NotCopyableInt& other) {return value == other.value;};
+    bool operator>(const NotCopyableInt& other) {return value > other.value;};
+    bool operator<(const NotCopyableInt& other) {return value < other.value;};
+    bool operator>=(const NotCopyableInt& other) {return value >= other.value;};
+    bool operator<=(const NotCopyableInt& other) {return value <= other.value;};
+    bool operator!=(const NotCopyableInt& other) {return value!= other.value;};
+
+};
+
 template <typename T>
 std::ostream& operator<<(std::ostream& os, const std::vector<T>& vector) {
     os << "{";
@@ -48,8 +66,11 @@ int main(void)
     std::cout << INFO_COLOR << "Init9:" << RESET_COLOR << "Инициализация через initializer_list double: " << List<int>{2.5, 1.2, 5.6} << std::endl;
     std::cout << INFO_COLOR << "Init10:" << RESET_COLOR << "Инициализация с указанием размера и константы double: " << List<int>(5, 2.6) << std::endl; 
     std::cout << INFO_COLOR << "Init11:" << RESET_COLOR << "Инициализация через вектор double " << Vector1 << "переносом: " << List<int>(std::move(Vector1)) << std::endl;
-
+    List1 = {1, 2, 3, 4, 5, 7};
+    std::cout << INFO_COLOR << "Init12:" << RESET_COLOR << "Инициализация через = initializer_list int: " << List1 <<  std::endl;
     std::cout << std::endl;
+
+    // List<NotCopyableInt> a;
 
     // Iterator testing
 
@@ -69,6 +90,13 @@ int main(void)
         (*it)++;
     }
     std::cout << ItList << std::endl;
+
+    ItList = List<int>{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+    std::cout << INFO_COLOR << "Iter4:" << RESET_COLOR << "Изменение типа итератора на конст" << ItList << ": ";
+    for (ConstListIterator<int> it = ItList.begin(); it != ItList.cend(); ++it) {
+        std::cout << *it << " ";
+    }
+
     std::cout << std::endl;
 
     // PushBack testing

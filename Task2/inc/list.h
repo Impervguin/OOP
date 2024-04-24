@@ -7,7 +7,7 @@
 #include "basecontainer.h"
 #include <iostream>
 
-template <Comparable T>
+template <AssignCopyComparable T>
 class List : public BaseContainer {  
     public:
         using value_type = T;
@@ -31,7 +31,8 @@ class List : public BaseContainer {
         List(size_t size, const U& data);
 
         template <Convertible<value_type> U>
-        List(std::initializer_list<U> list);
+        explicit List(std::initializer_list<U> list);
+        List<T> &operator=(std::initializer_list<T> list);
 
         template <ConvertibleForwardIterator<T> Iter>
         List(const Iter &begin, const Iter &end);
@@ -40,11 +41,6 @@ class List : public BaseContainer {
         explicit List(const C &container);
         template <ConvertibleContainer<value_type> C>
         List<T> &operator=(const C &container);
-        
-        template <ConvertibleContainer<value_type> C>
-        List(C &&container);
-        template <ConvertibleContainer<value_type> C>
-        List<T> &operator=(C &&container);
         
         ~List();
 
@@ -67,20 +63,13 @@ class List : public BaseContainer {
         template <Convertible<value_type> U>
         List<T>& operator+=(const U &data);
 
-        template <Convertible<value_type> U>
-        void PushBack(U &&data);
-        template <Convertible<value_type> U>
-        List<T>& operator+=(U &&data);
+        void PushBack(T &&data);
+        List<T>& operator+=(T &&data);
 
         template <ConvertibleContainer<value_type> C>
         void PushBack(const C &container);
         template <ConvertibleContainer<value_type> C>
         List<T>& operator+=(const C &container);
-        
-        template <ConvertibleContainer<value_type> C>
-        void PushBack(C &&container);
-        template <ConvertibleContainer<value_type> C>
-        List<T>& operator+=(C &&container);
         
         void PushBack(List<T> &&list) noexcept;
         List<T>& operator+=(List<T> &&list) noexcept;
@@ -89,44 +78,32 @@ class List : public BaseContainer {
         List<T> operator+(List<T> &&list) const;
         template <ConvertibleContainer<value_type> C>
         List<T> operator+(const C &container) const;
-        template <ConvertibleContainer<value_type> C>
-        List<T> operator+(C &&container) const;
         template <Convertible<value_type> U>
         List<T> operator+(const U &data) const;
-        template <Convertible<value_type> U>
-        List<T> operator+(U &&data) const;
+        List<T> operator+(T &&data) const;
 
 
         // Вставка в начало
         template <Convertible<value_type> U>
         void PushFront(const U &data);
-        template <Convertible<value_type> U>
-        void PushFront(U &&data);
+        void PushFront(T &&data);
         template <ConvertibleContainer<value_type> C>
         void PushFront(const C &container);
-        template <ConvertibleContainer<value_type> C>
-        void PushFront(C &&container);
         void PushFront(List<T> &&list) noexcept;
 
         // Вставка внутрь списка
         template <Convertible<value_type> U>
         void Insert(size_t index, const U &data);
-        template <Convertible<value_type> U>
-        void Insert(size_t index, U &&data);
+        void Insert(size_t index, T &&data);
         template <ConvertibleContainer<value_type> C>
         void Insert(size_t index, const C &container);
-        template <ConvertibleContainer<value_type> C>
-        void Insert(size_t index, C &&container);
         void Insert(size_t index, List<T> &&list);
 
-        template <Convertible<value_type> U>
-        void Insert(const ListIterator<T> &it, U &&data);
+        void Insert(const ListIterator<T> &it, T &&data);
         template <Convertible<value_type> U>
         void Insert(const ListIterator<T> &it, const U &data);
         template <ConvertibleContainer<value_type> C>
         void Insert(const ListIterator<T> &it, const C &container);
-        template <ConvertibleContainer<value_type> C>
-        void Insert(const ListIterator<T> &it, C &&container);
         void Insert(const ListIterator<T> &it, List<T> &&list);
 
         // Удаление элементов возвратом значения

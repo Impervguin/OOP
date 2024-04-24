@@ -29,6 +29,12 @@ concept Assignable = requires(T &t, T &t2) {t = t2;};
 template <typename T>
 concept Copyable = requires(T &t) {T(t);};
 
+template <typename T>
+concept AssignCopyable = Copyable<T> && Assignable<T>;
+
+template <typename T>
+concept AssignCopyComparable = Comparable<T> && AssignCopyable<T>;
+
 template <typename container>
 concept Container = requires(container c)
 { 
@@ -46,6 +52,8 @@ concept Container = requires(container c)
 
 template <typename container, typename T>
 concept ConvertibleContainer = Container<container> && Convertible<typename container::value_type, T>;
+
+
 
 
 template <typename T>

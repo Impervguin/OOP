@@ -3,13 +3,13 @@
 
 #include "baselistiterator.h"
 
-template <Comparable T>
+template <AssignCopyComparable T>
 std::shared_ptr<typename List<T>::ListNode> BaseListIterator<T>::getNode() const {
     checkValid(__LINE__);
     return wptr.lock();
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 bool BaseListIterator<T>::IsValid() const noexcept {
     if (wptr.lock() == nullptr)
         return false;
@@ -18,22 +18,22 @@ bool BaseListIterator<T>::IsValid() const noexcept {
     return true;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 BaseListIterator<T>::operator bool() const noexcept {
     return IsValid();
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 bool BaseListIterator<T>::operator==(const BaseListIterator<T>& other) const noexcept {
     return wptr.lock() == other.wptr.lock();
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 bool BaseListIterator<T>::operator!=(const BaseListIterator<T>& other) const noexcept {
     return wptr.lock() != other.wptr.lock();
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 void BaseListIterator<T>::checkValid(size_t line) const
 {
     if (!IsValid())
@@ -43,7 +43,7 @@ void BaseListIterator<T>::checkValid(size_t line) const
     }
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 BaseListIterator<T>::~BaseListIterator() {}
 
 #endif // BASELISTITERATOR_H__

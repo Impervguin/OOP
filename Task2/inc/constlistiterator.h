@@ -8,10 +8,13 @@
 #include "listconcepts.h"
 #include "baselistiterator.h"
 
-template <Comparable T>
+template <AssignCopyComparable T>
 class List;
 
-template <Comparable T> 
+template <AssignCopyComparable T>
+class ListIterator;
+
+template <AssignCopyComparable T> 
 class ConstListIterator : public BaseListIterator<T>
 {
     public:
@@ -24,6 +27,8 @@ class ConstListIterator : public BaseListIterator<T>
         // Конструкторы
         ConstListIterator(const ConstListIterator<T>& other) noexcept;
         ConstListIterator(ConstListIterator<T>&& other) noexcept;
+        ConstListIterator(const ListIterator<T> &other) noexcept;
+        ConstListIterator(ListIterator<T> &&other) noexcept;
         ConstListIterator<T> &operator=(const ConstListIterator<T>& other) noexcept;
         ConstListIterator<T> &operator=(ConstListIterator<T>&& other) noexcept;
     protected:

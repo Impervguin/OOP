@@ -3,53 +3,64 @@
 
 #include "constlistiterator.h"
 
-template <Comparable T>
+template <AssignCopyComparable T>
 ConstListIterator<T>::ConstListIterator(const ConstListIterator<T>& other) noexcept {
     this->wptr = other.wptr.lock();
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 ConstListIterator<T>::ConstListIterator(ConstListIterator<T>&& other) noexcept {
     this->wptr = other.wptr.lock();
     other.wptr.reset();
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
+ConstListIterator<T>::ConstListIterator(const ListIterator<T>& other) noexcept {
+    this->wptr = other.wptr.lock();
+}
+
+template <AssignCopyComparable T>
+ConstListIterator<T>::ConstListIterator(ListIterator<T>&& other) noexcept {
+    this->wptr = other.wptr.lock();
+    other.wptr.reset();
+}
+
+template <AssignCopyComparable T>
 ConstListIterator<T>& ConstListIterator<T>::operator=(ConstListIterator<T>&& other) noexcept {
     this->wptr = other.wptr.lock();
     other.wptr.reset();
     return *this;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 ConstListIterator<T>& ConstListIterator<T>::operator=(const ConstListIterator<T>& other) noexcept {
     this->wptr = other.wptr.lock();
     return *this;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 ConstListIterator<T>::ConstListIterator(const std::shared_ptr<typename List<T>::ListNode>& node) noexcept {
     this->wptr = node;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 ConstListIterator<T>::reference ConstListIterator<T>::operator*() const {
     return *this->wptr.lock()->GetData();
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 ConstListIterator<T>::pointer ConstListIterator<T>::operator->() const {
     return this->wptr.lock()->GetData();
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 ConstListIterator<T> &ConstListIterator<T>::operator++() {
     this->checkValid(__LINE__);
     this->wptr = this->wptr.lock()->GetNext();
     return *this;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 ConstListIterator<T> ConstListIterator<T>::operator++(int) {
     this->checkValid(__LINE__);
     ConstListIterator<T> ret(*this);
@@ -57,7 +68,7 @@ ConstListIterator<T> ConstListIterator<T>::operator++(int) {
     return ret;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 template <IncrementableandComparable U>
 ConstListIterator<T> &ConstListIterator<T>::operator+=(U steps) {
     this->checkValid(__LINE__);
@@ -67,7 +78,7 @@ ConstListIterator<T> &ConstListIterator<T>::operator+=(U steps) {
     return *this;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 template <IncrementableandComparable U>
 ConstListIterator<T> ConstListIterator<T>::operator+(U steps) {
     this->checkValid(__LINE__);
@@ -78,7 +89,7 @@ ConstListIterator<T> ConstListIterator<T>::operator+(U steps) {
     return ret;
 }
 
-template <Comparable T>
+template <AssignCopyComparable T>
 template <IncrementableandComparable U>
 const ConstListIterator<T> ConstListIterator<T>::operator+(U steps) const {
     this->checkValid(__LINE__);
