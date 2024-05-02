@@ -5,7 +5,10 @@
 
 template <AssignCopyComparable T>
 std::shared_ptr<typename List<T>::ListNode> BaseListIterator<T>::getNode() const {
-    checkValid(__LINE__);
+    if (!*this) {
+        time_t cur_time = time(NULL);
+        throw IteratorExpiredException(ctime(&cur_time), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }  
     return wptr.lock();
 }
 
@@ -31,16 +34,6 @@ bool BaseListIterator<T>::operator==(const BaseListIterator<T>& other) const noe
 template <AssignCopyComparable T>
 bool BaseListIterator<T>::operator!=(const BaseListIterator<T>& other) const noexcept {
     return wptr.lock() != other.wptr.lock();
-}
-
-template <AssignCopyComparable T>
-void BaseListIterator<T>::checkValid(size_t line) const
-{
-    if (!IsValid())
-    {
-        time_t cur_time = time(NULL);
-        throw IteratorExpiredException(ctime(&cur_time), __FILE__, line, typeid(*this).name(), __FUNCTION__);
-    }
 }
 
 template <AssignCopyComparable T>

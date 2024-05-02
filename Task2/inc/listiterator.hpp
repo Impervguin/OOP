@@ -36,38 +36,56 @@ ListIterator<T>::ListIterator(const std::shared_ptr<typename List<T>::ListNode>&
 
 template <AssignCopyComparable T>
 ListIterator<T>::reference ListIterator<T>::operator*() {
-    this->checkValid(__LINE__);
+    if (!*this) {
+        time_t cur_time = time(NULL);
+        throw IteratorExpiredException(ctime(&cur_time), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }  
     return *this->wptr.lock()->GetData();
 }
 
 template <AssignCopyComparable T>
 const ListIterator<T>::reference ListIterator<T>::operator*() const {
-    this->checkValid(__LINE__);
+    if (!*this) {
+        time_t cur_time = time(NULL);
+        throw IteratorExpiredException(ctime(&cur_time), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }  
     return *this->wptr.lock()->GetData();
 }
 
 template <AssignCopyComparable T>
 ListIterator<T>::pointer ListIterator<T>::operator->() {
-    this->checkValid(__LINE__);
+    if (!*this) {
+        time_t cur_time = time(NULL);
+        throw IteratorExpiredException(ctime(&cur_time), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }  
     return this->wptr.lock()->GetData();
 }
 
 template <AssignCopyComparable T>
 const ListIterator<T>::pointer ListIterator<T>::operator->() const {
-    this->checkValid(__LINE__);
+    if (!*this) {
+        time_t cur_time = time(NULL);
+        throw IteratorExpiredException(ctime(&cur_time), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }  
     return this->wptr.lock()->GetData();
 }
 
 template <AssignCopyComparable T>
 ListIterator<T> &ListIterator<T>::operator++() {
-    this->checkValid(__LINE__);    
+    if (!*this) {
+        time_t cur_time = time(NULL);
+        throw IteratorExpiredException(ctime(&cur_time), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }      
     this->wptr = this->wptr.lock()->GetNext();
     return *this;
 }
 
 template <AssignCopyComparable T>
 ListIterator<T> ListIterator<T>::operator++(int) {
-    this->checkValid(__LINE__);
+    if (!*this) {
+        time_t cur_time = time(NULL);
+        throw IteratorExpiredException(ctime(&cur_time), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }  
     ListIterator<T> ret(*this);
     this->wptr = this->wptr.lock()->GetNext();
     return ret;
@@ -76,7 +94,10 @@ ListIterator<T> ListIterator<T>::operator++(int) {
 template <AssignCopyComparable T>
 template <IncrementableandComparable U>
 ListIterator<T> &ListIterator<T>::operator+=(U steps) {
-    this->checkValid(__LINE__);
+    if (!*this) {
+        time_t cur_time = time(NULL);
+        throw IteratorExpiredException(ctime(&cur_time), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }  
     for (U i = 0; i < steps; i++) {
         ++(*this);
     }
@@ -86,7 +107,10 @@ ListIterator<T> &ListIterator<T>::operator+=(U steps) {
 template <AssignCopyComparable T>
 template <IncrementableandComparable U>
 ListIterator<T> ListIterator<T>::operator+(U steps) {
-    this->checkValid(__LINE__);
+    if (!*this) {
+        time_t cur_time = time(NULL);
+        throw IteratorExpiredException(ctime(&cur_time), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }  
     ListIterator<T> ret(*this);
     for (U i = 0; i < steps; i++) {
         ++ret;
@@ -97,7 +121,10 @@ ListIterator<T> ListIterator<T>::operator+(U steps) {
 template <AssignCopyComparable T>
 template <IncrementableandComparable U>
 const ListIterator<T> ListIterator<T>::operator+(U steps) const {
-    this->checkValid(__LINE__);
+    if (!*this) {
+        time_t cur_time = time(NULL);
+        throw IteratorExpiredException(ctime(&cur_time), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }  
     ListIterator<T> ret(*this);
     for (U i = 0; i < steps; i++) {
         ++ret;

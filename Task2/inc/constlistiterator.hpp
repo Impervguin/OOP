@@ -55,14 +55,20 @@ ConstListIterator<T>::pointer ConstListIterator<T>::operator->() const {
 
 template <AssignCopyComparable T>
 ConstListIterator<T> &ConstListIterator<T>::operator++() {
-    this->checkValid(__LINE__);
+    if (!*this) {
+        time_t cur_time = time(NULL);
+        throw IteratorExpiredException(ctime(&cur_time), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }
     this->wptr = this->wptr.lock()->GetNext();
     return *this;
 }
 
 template <AssignCopyComparable T>
 ConstListIterator<T> ConstListIterator<T>::operator++(int) {
-    this->checkValid(__LINE__);
+    if (!*this) {
+        time_t cur_time = time(NULL);
+        throw IteratorExpiredException(ctime(&cur_time), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }    
     ConstListIterator<T> ret(*this);
     this->wptr = this->wptr.lock()->GetNext();
     return ret;
@@ -71,7 +77,10 @@ ConstListIterator<T> ConstListIterator<T>::operator++(int) {
 template <AssignCopyComparable T>
 template <IncrementableandComparable U>
 ConstListIterator<T> &ConstListIterator<T>::operator+=(U steps) {
-    this->checkValid(__LINE__);
+    if (!*this) {
+        time_t cur_time = time(NULL);
+        throw IteratorExpiredException(ctime(&cur_time), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }  
     for (U i = 0; i < steps; i++) {
         ++(*this);
     }
@@ -81,7 +90,10 @@ ConstListIterator<T> &ConstListIterator<T>::operator+=(U steps) {
 template <AssignCopyComparable T>
 template <IncrementableandComparable U>
 ConstListIterator<T> ConstListIterator<T>::operator+(U steps) {
-    this->checkValid(__LINE__);
+    if (!*this) {
+        time_t cur_time = time(NULL);
+        throw IteratorExpiredException(ctime(&cur_time), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }  
     ConstListIterator<T> ret(*this);
     for (U i = 0; i < steps; i++) {
         ++ret;
@@ -92,7 +104,10 @@ ConstListIterator<T> ConstListIterator<T>::operator+(U steps) {
 template <AssignCopyComparable T>
 template <IncrementableandComparable U>
 const ConstListIterator<T> ConstListIterator<T>::operator+(U steps) const {
-    this->checkValid(__LINE__);
+    if (!*this) {
+        time_t cur_time = time(NULL);
+        throw IteratorExpiredException(ctime(&cur_time), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }  
     ConstListIterator<T> ret(*this);
     for (U i = 0; i < steps; i++) {
         ++ret;

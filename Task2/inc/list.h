@@ -32,7 +32,9 @@ class List : public BaseContainer {
 
         template <Convertible<value_type> U>
         explicit List(std::initializer_list<U> list);
-        List<T> &operator=(std::initializer_list<T> list);
+        
+        template <Convertible<value_type> U>
+        List<T> &operator=(std::initializer_list<U> list);
 
         template <ConvertibleForwardIterator<T> Iter>
         List(const Iter &begin, const Iter &end);
@@ -75,6 +77,14 @@ class List : public BaseContainer {
         List<T>& operator+=(List<T> &&list) noexcept;
 
         // Методы сложения
+        List<T> AddList(List<T> &&list) const;
+        template <ConvertibleContainer<value_type> C>
+        List<T> AddList(const C &container) const;
+        template <Convertible<value_type> U>
+        List<T> AddList(const U &data) const;
+        List<T> AddList(T &&data) const;
+
+
         List<T> operator+(List<T> &&list) const;
         template <ConvertibleContainer<value_type> C>
         List<T> operator+(const C &container) const;
@@ -92,13 +102,6 @@ class List : public BaseContainer {
         void PushFront(List<T> &&list) noexcept;
 
         // Вставка внутрь списка
-        template <Convertible<value_type> U>
-        void Insert(size_t index, const U &data);
-        void Insert(size_t index, T &&data);
-        template <ConvertibleContainer<value_type> C>
-        void Insert(size_t index, const C &container);
-        void Insert(size_t index, List<T> &&list);
-
         void Insert(const ListIterator<T> &it, T &&data);
         template <Convertible<value_type> U>
         void Insert(const ListIterator<T> &it, const U &data);
@@ -109,25 +112,16 @@ class List : public BaseContainer {
         // Удаление элементов возвратом значения
         T PopBack();
         T PopFront();
-        T Pop(size_t index);
         T Pop(const ListIterator<T> &iterator);
         List<T> Pop(const ListIterator<T> &begin, const ListIterator<T> &end);
-        List<T> Pop(const ListIterator<T> &begin, size_t count);
-        List<T> Pop(size_t index, size_t count);
 
         // Удаление элементов
-        void Remove(size_t index);
         void Remove(const ListIterator<T> &iterator);
         void Remove(const ListIterator<T> &begin, const ListIterator<T> &end);
-        void Remove(const ListIterator<T> &begin, size_t count);
-        void Remove(size_t index, size_t count);
 
         // Взятие подсписка
         List<T> SubList(const ListIterator<T> &begin, const ListIterator<T> &end);
-        List<T> SubList(const ListIterator<T> &begin, size_t count);
         List<T> SubList(const ConstListIterator<T> &begin, const ConstListIterator<T> &end) const;
-        List<T> SubList(const ConstListIterator<T> &begin, size_t count) const;
-        List<T> SubList(size_t index, size_t count) const;
     
         // Методы работы со списками целиком
         void Clear() noexcept;
@@ -173,16 +167,10 @@ class List : public BaseContainer {
         void pushBack(std::shared_ptr<ListNode> &node) noexcept;
         void pushFront(std::shared_ptr<ListNode> &node) noexcept;
         void insert(const ListIterator<T> &iterator, std::shared_ptr<ListNode> &node);
-        void insert(size_t index, std::shared_ptr<ListNode> &node);
-
-        // Методы получения узлов по индексу
-        std::shared_ptr<ListNode> get(size_t index);
-        const std::shared_ptr<ListNode> get(size_t index) const;
         
         // Методы удаления
         std::shared_ptr<ListNode> popBack();
         std::shared_ptr<ListNode> popFront();
-        std::shared_ptr<ListNode> pop(size_t index);
         std::shared_ptr<ListNode> pop(const ListIterator<T> &iterator);
         List<T> pop(const ListIterator<T> &begin, const ListIterator<T> &end);
 
@@ -196,12 +184,11 @@ class List : public BaseContainer {
 
 
         // Проверки с exceptions
-        void checkEmpty(size_t line) const;
-        void checkForeignIterator(const ListIterator<T> &iterator, size_t line);
-        void checkForeignIterator(const ConstListIterator<T> &iterator, size_t line) const;
-        void checkListRange(const ListIterator<T> &begin, const ListIterator<T> &end, size_t line);
-        void checkListRange(const ConstListIterator<T> &begin, const ConstListIterator<T> &end, size_t line) const;
-        void checkIndex(size_t index, size_t line) const;
+        bool checkEmpty() const noexcept;
+        bool checkForeignIterator(const ListIterator<T> &iterator) noexcept;
+        bool checkForeignIterator(const ConstListIterator<T> &iterator) const noexcept;
+        bool checkListRange(const ListIterator<T> &begin, const ListIterator<T> &end) noexcept;
+        bool checkListRange(const ConstListIterator<T> &begin, const ConstListIterator<T> &end) const noexcept;
     
     protected:
         std::shared_ptr<ListNode> head;
@@ -217,5 +204,12 @@ template <typename T, Convertible<T> U>
 List<T> operator+(const U& data, const List<T> &list);
 template <typename T, Convertible<T> U>
 List<T> operator+(U&& data, const List<T> &list);
+
+#include "list.hpp"
+#include "listnode.hpp"
+#include "baselistiterator.hpp"
+#include "listiterator.hpp"
+#include "constlistiterator.hpp"
+
 
 #endif // LIST_H__

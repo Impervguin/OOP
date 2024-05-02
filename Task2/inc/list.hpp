@@ -126,10 +126,11 @@ List<T> &List<T>::operator=(const C &container) {
 }
 
 template <AssignCopyComparable T>
-List<T> &List<T>::operator=(std::initializer_list<T> list) {
+template <Convertible<typename List<T>::value_type> U>
+List<T> &List<T>::operator=(std::initializer_list<U> list) {
     Clear();
     for (auto it = list.begin(); it!= list.end(); it++) {
-        auto node = List<T>::ListNode::CreateNode(*it, nullptr);
+        auto node = List<T>::ListNode::CreateNode(T(*it), nullptr);
         pushBack(node);
     }
     return *this;
@@ -139,63 +140,41 @@ template <AssignCopyComparable T>
 List<T>::~List() = default;
 
 template <AssignCopyComparable T>
-void List<T>::checkEmpty(size_t line) const {
-    if (IsEmpty()) {
-        time_t now = time(nullptr);
-        throw PopEmptyException(ctime(&now), __FILE__, line, typeid(*this).name(), __FUNCTION__);
-    }
+bool List<T>::checkEmpty() const noexcept {
+    return !IsEmpty();
 }
 
 template <AssignCopyComparable T>
-void List<T>::checkForeignIterator(const ListIterator<T> &iterator, size_t line) {
+bool List<T>::checkForeignIterator(const ListIterator<T> &iterator) noexcept {
     auto it = begin();
     for (; it != end() && it != iterator; ++it);
-    if (it == end()) {
-        time_t now = time(nullptr);
-        throw UseOfForeignIterator(ctime(&now), __FILE__, line, typeid(*this).name(), __FUNCTION__);
-    }
+    return it != end();
 }
 template <AssignCopyComparable T>
-void List<T>::checkForeignIterator(const ConstListIterator<T> &iterator, size_t line) const {
+bool List<T>::checkForeignIterator(const ConstListIterator<T> &iterator) const noexcept {
     auto it = cbegin();
     for (; it != cend() && it != iterator; ++it);
-    if (it == end()) {
-        time_t now = time(nullptr);
-        throw UseOfForeignIterator(ctime(&now), __FILE__, line, typeid(*this).name(), __FUNCTION__);
-    }
+    return it != cend();
 }
 
-
 template <AssignCopyComparable T>
-void List<T>::checkListRange(const ListIterator<T> &begin, const ListIterator<T> &end, size_t line) {
-    checkForeignIterator(begin, line);
-    checkForeignIterator(end, line);
+bool List<T>::checkListRange(const ListIterator<T> &begin, const ListIterator<T> &end) noexcept {
     auto it = this->begin();
-    for (; it != end && it != begin; ++it);
-    if (it == end) {
-        time_t now = time(nullptr);
-        throw InvalidListRange(ctime(&now), __FILE__, line, typeid(*this).name(), __FUNCTION__);
-    }
+    for (; it != end && it != begin && it != this->end(); ++it);
+    if (it == this->end() || it == end)
+        return false;
+    for (; it != end && it != this->end(); ++it);
+    return it != this->end();
 }
 
 template <AssignCopyComparable T>
-void List<T>::checkListRange(const ConstListIterator<T> &begin, const ConstListIterator<T> &end, size_t line) const {
-    checkForeignIterator(begin, line);
-    checkForeignIterator(end, line);
+bool List<T>::checkListRange(const ConstListIterator<T> &begin, const ConstListIterator<T> &end) const noexcept {
     auto it = this->cbegin();
-    for (; it != end && it != begin; ++it);
-    if (it == end) {
-        time_t now = time(nullptr);
-        throw InvalidListRange(ctime(&now), __FILE__, line, typeid(*this).name(), __FUNCTION__);
-    }
-}
-
-template <AssignCopyComparable T>
-void List<T>::checkIndex(size_t index, size_t line) const {
-    if (index >= size()) {
-        time_t now = time(nullptr);
-        throw IndexOutOfRangeException(ctime(&now), __FILE__, line, typeid(*this).name(), __FUNCTION__);
-    }
+    for (; it != end && it != begin && it != this->cend(); ++it);
+    if (it == this->cend() || it == end)
+        return false;
+    for (; it != end && it != this->cend(); ++it);
+    return it != this->cend();
 }
 
 template <AssignCopyComparable T>
@@ -255,6 +234,38 @@ template <AssignCopyComparable T>
 List<T> &List<T>::operator+=(T &&data) {
     PushBack(std::forward<T>(data));
     return *this;
+}
+
+template <AssignCopyComparable T>
+template <ConvertibleContainer<typename List<T>::value_type> C>
+List<T> List<T>::AddList(const C& container) const {
+    List<T> result(*this);
+    result.PushBack(container);
+    return result;
+}
+
+template <AssignCopyComparable T>
+template <Convertible<typename List<T>::value_type> U>
+List<T> List<T>::AddList(const U &data) const {
+    List<T> result(*this);
+    result.PushBack(std::forward<T>(T(data)));
+    return result;
+}
+
+template <AssignCopyComparable T>
+List<T> List<T>::AddList(T &&data) const {
+    List<T> result(*this);
+    result.PushBack(std::forward<T>(data));
+    return result;
+}
+
+template <AssignCopyComparable T>
+List<T> List<T>::AddList(List<T>&& list) const {
+    List<T> result(*this);
+    result.PushBack(std::forward<List<T>>(list));
+    list.head = nullptr;
+    list.csize = 0;
+    return result;
 }
 
 template <AssignCopyComparable T>
@@ -332,57 +343,21 @@ T List<T>::PopBack() {
 
 
 template <AssignCopyComparable T>
-void List<T>::Remove(size_t index) {
-    pop(index);
-}
-
-template <AssignCopyComparable T>
 void List<T>::Remove(const ListIterator<T> &it) {
    pop(it);
 }
 
 template <AssignCopyComparable T>
 void List<T>::Remove(const ListIterator<T> &begin, const ListIterator<T> &end) {
-    checkEmpty(__LINE__);
-    checkListRange(begin, end, __LINE__);
+    if (!checkEmpty()) {
+        time_t now = time(nullptr);
+        throw PopEmptyException(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }
+    if (!checkListRange(begin, end)) {
+        time_t now = time(nullptr);
+        throw InvalidListRange(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }
     pop(begin, end);
-}
-
-template <AssignCopyComparable T>
-void List<T>::Remove(const ListIterator<T> &begin, size_t count) {
-    checkEmpty(__LINE__);
-    checkForeignIterator(begin, __LINE__);
-    if (count == 0) {
-        return;
-    }
-    
-    auto it = this->begin();
-    size_t i = 0;
-    for (; it != begin; ++it, ++i);
-    checkIndex(i + count - 1, __LINE__);
-
-    for (size_t i = 0; i < count - 1; ++it, ++i);
-    pop(begin, it);
-}
-
-template <AssignCopyComparable T>
-void List<T>::Remove(size_t index, size_t count) {
-    checkEmpty(__LINE__);
-    checkIndex(index, __LINE__);
-    checkIndex(index + count - 1, __LINE__);
-    if (count == 0) {
-        return;
-    }
-    auto it = this->begin();
-    for (size_t i = 0; i < index; ++it, ++i);
-    auto begin = it;
-    for (size_t i = 0; i < count - 1; ++it, ++i);
-    pop(begin, it);
-}
-
-template <AssignCopyComparable T>
-T List<T>::Pop(size_t index) {
-    return *pop(index)->GetData();
 }
 
 template <AssignCopyComparable T>
@@ -392,171 +367,63 @@ T List<T>::Pop(const ListIterator<T> &it) {
 
 template <AssignCopyComparable T>
 List<T> List<T>::Pop(const ListIterator<T> &begin, const ListIterator<T> &end) {
-    checkEmpty(__LINE__);
-    checkListRange(begin, end, __LINE__);
+    if (!checkEmpty()) {
+        time_t now = time(nullptr);
+        throw PopEmptyException(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }
+    if (!checkListRange(begin, end)) {
+        time_t now = time(nullptr);
+        throw InvalidListRange(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }
     return pop(begin, end);
 }
 
-template <AssignCopyComparable T>
-List<T> List<T>::Pop(const ListIterator<T> &begin, size_t count) {
-    checkEmpty(__LINE__);
-    checkForeignIterator(begin, __LINE__);
-    if (count == 0) {
-        return List<T>();
-    }
-    
-    auto it = this->begin();
-    size_t i = 0;
-    for (; it != begin; ++it, ++i);
-    checkIndex(i + count - 1, __LINE__);
-
-    for (size_t i = 0; i < count - 1; ++it, ++i);
-    return pop(begin, it);
-}
-
-template <AssignCopyComparable T>
-List<T> List<T>::Pop(size_t index, size_t count) {
-    checkEmpty(__LINE__);
-    checkIndex(index, __LINE__);
-    checkIndex(index + count - 1, __LINE__);
-    if (count == 0) {
-        return List<T>();
-    }
-    auto it = this->begin();
-    for (size_t i = 0; i < index; ++it, ++i);
-    auto begin = it;
-    for (size_t i = 0; i < count - 1; ++it, ++i);
-    return pop(begin, it);
-}
 
 template <AssignCopyComparable T>
 List<T> List<T>::SubList(const ListIterator<T> &begin, const ListIterator<T> &end) {
-    checkEmpty(__LINE__);
-    checkListRange(begin, end, __LINE__);
+    if (!checkEmpty()) {
+        time_t now = time(nullptr);
+        throw PopEmptyException(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }
+    if (!checkListRange(begin, end)) {
+        time_t now = time(nullptr);
+        throw InvalidListRange(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }
     return subList(begin, end);
 }
 
-template <AssignCopyComparable T>
-List<T> List<T>::SubList(const ListIterator<T> &begin, size_t count) {
-    checkEmpty(__LINE__);
-    checkForeignIterator(begin, __LINE__);
-    if (count == 0) {
-        return List<T>();
-    }
-    
-    auto it = this->begin();
-    size_t i = 0;
-    for (; it != begin; ++it, ++i);
-    checkIndex(i + count - 1, __LINE__);
-
-    for (size_t i = 0; i < count - 1; ++it, ++i);
-    return subList(begin, it);
-}
 
 template <AssignCopyComparable T>
 List<T> List<T>::SubList(const ConstListIterator<T> &begin, const ConstListIterator<T> &end) const {
-    checkEmpty(__LINE__);
-    checkListRange(begin, end, __LINE__);
+    if (!checkEmpty()) {
+        time_t now = time(nullptr);
+        throw PopEmptyException(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }
+    if (!checkListRange(begin, end)) {
+        time_t now = time(nullptr);
+        throw InvalidListRange(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }
     return subList(begin, end);
 }
 
-template <AssignCopyComparable T>
-List<T> List<T>::SubList(const ConstListIterator<T> &begin, size_t count) const {
-    checkEmpty(__LINE__);
-    checkForeignIterator(begin, __LINE__);
-    if (count == 0) {
-        return List<T>();
-    }
-    
-    auto it = this->cbegin();
-    size_t i = 0;
-    for (; it != begin; ++it, ++i);
-    checkIndex(i + count - 1, __LINE__);
-
-    for (size_t i = 0; i < count - 1; ++it, ++i);
-    return subList(begin, it);
-}
-
-
-template <AssignCopyComparable T>
-List<T> List<T>::SubList(size_t index, size_t count) const {
-    checkEmpty(__LINE__);
-    checkIndex(index, __LINE__);
-    checkIndex(index + count - 1, __LINE__);
-    if (count == 0) {
-        return List<T>();
-    }
-    auto it = this->cbegin();
-    for (size_t i = 0; i < index; ++it, ++i);
-    auto begin = it;
-    for (size_t i = 0; i < count - 1; ++it, ++i);
-    return subList(begin, it);
-}
-
-template <AssignCopyComparable T>
-template <Convertible<typename List<T>::value_type> U>
-void List<T>::Insert(size_t index, const U& data) {
-    if (index != size())
-        checkIndex(index, __LINE__);
-    auto node = List<T>::ListNode::CreateNode(std::forward<T>(T(data)), nullptr);
-    insert(index, node);
-}
-
-template <AssignCopyComparable T>
-void List<T>::Insert(size_t index, T&& data) {
-    if (index != size())
-        checkIndex(index, __LINE__);
-    auto node = List<T>::ListNode::CreateNode(std::forward<T>(data), nullptr);
-    insert(index, node);
-}
-
-template <AssignCopyComparable T>
-template <ConvertibleContainer<typename List<T>::value_type> C>
-void List<T>::Insert(size_t index, const C& container) {
-    if (index != size())
-        checkIndex(index, __LINE__);
-
-    if (index == 0)
-    {
-        PushFront(container);
-        return;
-    }
-        
-    auto iter = begin();
-    for (size_t i = 0; i < index - 1; i++, ++iter);
-    for (auto it = container.begin(); it != container.end(); ++it, ++iter) {
-        auto node = List<T>::ListNode::CreateNode(std::forward<T>(T(*it)), nullptr);
-        insert(iter, node);
-    }
-}
-
-template <AssignCopyComparable T>
-void List<T>::Insert(size_t index, List<T>&& list) {
-    if (index != size())
-        checkIndex(index, __LINE__);
-    if (index == 0) {
-        PushFront(std::forward<List<T>>(list));
-    } else if (index == list.size()) {
-        PushBack(std::forward<List<T>>(list));
-    } else {
-        auto node = get(index - 1);
-        list.tail->SetNext(node->GetNext());
-        node->SetNext(list.head);
-    }
-    list.Clear();
-}
 
 template <AssignCopyComparable T>
 template <Convertible<typename List<T>::value_type> U>
 void List<T>::Insert(const ListIterator<T> &it, const U& data) {
-    checkForeignIterator(it, __LINE__);
+    if (!checkForeignIterator(it)) {
+        time_t now = time(nullptr);
+        throw UseOfForeignIterator(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }
     auto node = List<T>::ListNode::CreateNode(std::forward<T>(T(data)), nullptr);
     insert(it, node);
 }
 
 template <AssignCopyComparable T>
 void List<T>::Insert(const ListIterator<T> &it, T&& data) {
-    checkForeignIterator(it, __LINE__);
+    if (!checkForeignIterator(it)) {
+        time_t now = time(nullptr);
+        throw UseOfForeignIterator(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }
     auto node = List<T>::ListNode::CreateNode(std::forward<T>(data), nullptr);
     insert(it, node);
 }
@@ -564,7 +431,10 @@ void List<T>::Insert(const ListIterator<T> &it, T&& data) {
 template <AssignCopyComparable T>
 template <ConvertibleContainer<typename List<T>::value_type> C>
 void List<T>::Insert(const ListIterator<T> &it, const C& container) {
-    checkForeignIterator(it, __LINE__);
+    if (!checkForeignIterator(it)) {
+        time_t now = time(nullptr);
+        throw UseOfForeignIterator(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }
     auto cit = it;
     for (auto iter = container.begin(); iter != container.end(); ++iter, ++cit) {
         auto node = List<T>::ListNode::CreateNode(std::forward<T>(T(*iter)), nullptr);
@@ -574,7 +444,10 @@ void List<T>::Insert(const ListIterator<T> &it, const C& container) {
 
 template <AssignCopyComparable T>
 void List<T>::Insert(const ListIterator<T> &it, List<T>&& list) {
-    checkForeignIterator(it, __LINE__);
+    if (!checkForeignIterator(it)) {
+        time_t now = time(nullptr);
+        throw UseOfForeignIterator(ctime(&now), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+    }
     if (it + 1 == end()) {
         PushBack(std::forward<List<T>>(list));
         return;
@@ -673,36 +546,6 @@ std::shared_ptr<typename List<T>::ListNode> List<T>::popBack(void)  {
     return node;
 }
 
-template <AssignCopyComparable T>
-const std::shared_ptr<typename List<T>::ListNode> List<T>::get(size_t index) const  {
-    auto it = cbegin();
-    for (size_t i = 0; i < index && it!= cend(); i++, it++);
-    return it.getNode();
-}
-
-template <AssignCopyComparable T>
-std::shared_ptr<typename List<T>::ListNode> List<T>::get(size_t index)  {
-    auto it = begin();
-    for (size_t i = 0; i < index && it != end(); i++, it++);
-    return it.getNode();
-}
-
-template <AssignCopyComparable T>
-std::shared_ptr<typename List<T>::ListNode> List<T>::pop(size_t index)  {
-    if (index == 0) {
-        return popFront();
-    }
-    if (index == size() - 1) {
-        return popBack();
-    }
-    auto it = begin();
-    for (size_t i = 0; i < index - 1 && it!= end(); i++, ++it);
-    csize--;
-    auto node = it.getNode()->GetNext();
-    it.getNode()->SetNext(it.getNode()->GetNext()->GetNext());
-    return node;
-}
-
 
 
 template <AssignCopyComparable T>
@@ -767,22 +610,6 @@ void List<T>::insert(const ListIterator<T>& iterator, std::shared_ptr<List<T>::L
         return;
     }
     auto nodeIt = iterator.getNode();
-    node->SetNext(nodeIt->GetNext());
-    nodeIt->SetNext(node);
-    csize++;
-}
-
-template <AssignCopyComparable T>
-void List<T>::insert(size_t index, std::shared_ptr<List<T>::ListNode> &node)  {
-    if (index == size()) {
-        pushBack(node);
-        return;
-    }
-    if (index == 0) {
-        pushFront(node);
-        return;
-    }
-    auto nodeIt = get(index - 1);
     node->SetNext(nodeIt->GetNext());
     nodeIt->SetNext(node);
     csize++;

@@ -5,6 +5,7 @@
 #include <iterator>
 #include <memory>
 #include "listconcepts.h"
+#include "exceptions.h"
 
 template <AssignCopyComparable T>
 class List;
@@ -21,7 +22,6 @@ class BaseListIterator {
 
         friend class List<T>;
     protected:
-        void checkValid(size_t line) const;
         std::shared_ptr<typename List<T>::ListNode> getNode() const;
         std::weak_ptr<typename List<T>::ListNode> wptr;
 };

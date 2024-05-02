@@ -30,10 +30,13 @@ template <typename T>
 concept Copyable = requires(T &t) {T(t);};
 
 template <typename T>
+concept Moveable = requires(T &&t) {T(t);};
+
+template <typename T>
 concept AssignCopyable = Copyable<T> && Assignable<T>;
 
 template <typename T>
-concept AssignCopyComparable = Comparable<T> && AssignCopyable<T>;
+concept AssignCopyComparable = Comparable<T> && AssignCopyable<T> && Moveable<T>;
 
 template <typename container>
 concept Container = requires(container c)
