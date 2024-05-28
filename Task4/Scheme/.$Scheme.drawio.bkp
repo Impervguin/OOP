@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2024-05-28T11:25:01.086Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.4.0 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="LJueGnonluioas_OQ_G1" version="24.4.0" type="device">
+<mxfile host="Electron" modified="2024-05-28T11:24:44.387Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.4.0 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="ZJvFHDhjoBXaoF7DxCX3" version="24.4.0" type="device">
   <diagram name="Page-1" id="58cdce13-f638-feb5-8d6f-7d28b1aa9fa0">
     <mxGraphModel dx="1004" dy="694" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="none" math="0" shadow="0">
       <root>
@@ -128,7 +128,7 @@
             <mxPoint x="50" y="710.3333333333335" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="ngimooDo5sWMY0rWT6id-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;curved=1;" edge="1" parent="1" source="8HFCMOC2fO_R-oTeLwZA-25" target="ngimooDo5sWMY0rWT6id-1">
+        <mxCell id="ngimooDo5sWMY0rWT6id-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" edge="1" parent="1" source="8HFCMOC2fO_R-oTeLwZA-25" target="ngimooDo5sWMY0rWT6id-1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="ngimooDo5sWMY0rWT6id-7" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Остановка&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="ngimooDo5sWMY0rWT6id-6">

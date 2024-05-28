@@ -35,10 +35,9 @@ void LiftDoors::closingSlot() {
 
 void LiftDoors::OpeningSlot() {
     if (_status == CLOSED || _status == CLOSING) {
+        _closingTimer.stop();
         std::cout << "Двери открываются" << std::endl;
         _status = OPENING;
-        auto remainingTime = _closingTimer.remainingTime();
-        _closingTimer.stop();
-        _openingTimer.start(OPENING_TIME - remainingTime);
+        _openingTimer.start(OPENING_TIME);
     }
 }

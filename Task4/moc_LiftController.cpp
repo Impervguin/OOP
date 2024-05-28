@@ -23,7 +23,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_LiftController_t {
     QByteArrayData data[16];
-    char stringdata0[204];
+    char stringdata0[216];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -44,18 +44,18 @@ QT_MOC_LITERAL(8, 89, 15), // "GotTargetSignal"
 QT_MOC_LITERAL(9, 105, 12), // "currentFloor"
 QT_MOC_LITERAL(10, 118, 11), // "neededFloor"
 QT_MOC_LITERAL(11, 130, 15), // "CabinStopSignal"
-QT_MOC_LITERAL(12, 146, 4), // "open"
-QT_MOC_LITERAL(13, 151, 16), // "ButtonPushedSlot"
-QT_MOC_LITERAL(14, 168, 16), // "FloorReachedSlot"
-QT_MOC_LITERAL(15, 185, 18) // "ControllerStopSlot"
+QT_MOC_LITERAL(12, 146, 16), // "CabinPauseSignal"
+QT_MOC_LITERAL(13, 163, 16), // "ButtonPushedSlot"
+QT_MOC_LITERAL(14, 180, 16), // "FloorReachedSlot"
+QT_MOC_LITERAL(15, 197, 18) // "ControllerStopSlot"
 
     },
     "LiftController\0ControllerStopSignal\0"
     "\0FloorReachedSignal\0size_t\0floor\0"
     "Direction\0direction\0GotTargetSignal\0"
     "currentFloor\0neededFloor\0CabinStopSignal\0"
-    "open\0ButtonPushedSlot\0FloorReachedSlot\0"
-    "ControllerStopSlot"
+    "CabinPauseSignal\0ButtonPushedSlot\0"
+    "FloorReachedSlot\0ControllerStopSlot"
 };
 #undef QT_MOC_LITERAL
 
@@ -65,29 +65,31 @@ static const uint qt_meta_data_LiftController[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-       7,   14, // methods
+       8,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       4,       // signalCount
+       5,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,   49,    2, 0x06 /* Public */,
-       3,    2,   50,    2, 0x06 /* Public */,
-       8,    2,   55,    2, 0x06 /* Public */,
-      11,    3,   60,    2, 0x06 /* Public */,
+       1,    0,   54,    2, 0x06 /* Public */,
+       3,    2,   55,    2, 0x06 /* Public */,
+       8,    2,   60,    2, 0x06 /* Public */,
+      11,    2,   65,    2, 0x06 /* Public */,
+      12,    2,   70,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      13,    1,   67,    2, 0x0a /* Public */,
-      14,    2,   70,    2, 0x0a /* Public */,
-      15,    0,   75,    2, 0x0a /* Public */,
+      13,    1,   75,    2, 0x0a /* Public */,
+      14,    2,   78,    2, 0x0a /* Public */,
+      15,    0,   83,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void,
     QMetaType::Void, 0x80000000 | 4, 0x80000000 | 6,    5,    7,
     QMetaType::Void, 0x80000000 | 4, 0x80000000 | 4,    9,   10,
-    QMetaType::Void, QMetaType::Bool, 0x80000000 | 4, 0x80000000 | 4,   12,    9,   10,
+    QMetaType::Void, 0x80000000 | 4, 0x80000000 | 4,    9,   10,
+    QMetaType::Void, 0x80000000 | 4, 0x80000000 | 4,    9,   10,
 
  // slots: parameters
     QMetaType::Void, 0x80000000 | 4,    5,
@@ -106,10 +108,11 @@ void LiftController::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         case 0: _t->ControllerStopSignal(); break;
         case 1: _t->FloorReachedSignal((*reinterpret_cast< size_t(*)>(_a[1])),(*reinterpret_cast< Direction(*)>(_a[2]))); break;
         case 2: _t->GotTargetSignal((*reinterpret_cast< size_t(*)>(_a[1])),(*reinterpret_cast< size_t(*)>(_a[2]))); break;
-        case 3: _t->CabinStopSignal((*reinterpret_cast< bool(*)>(_a[1])),(*reinterpret_cast< size_t(*)>(_a[2])),(*reinterpret_cast< size_t(*)>(_a[3]))); break;
-        case 4: _t->ButtonPushedSlot((*reinterpret_cast< size_t(*)>(_a[1]))); break;
-        case 5: _t->FloorReachedSlot((*reinterpret_cast< size_t(*)>(_a[1])),(*reinterpret_cast< Direction(*)>(_a[2]))); break;
-        case 6: _t->ControllerStopSlot(); break;
+        case 3: _t->CabinStopSignal((*reinterpret_cast< size_t(*)>(_a[1])),(*reinterpret_cast< size_t(*)>(_a[2]))); break;
+        case 4: _t->CabinPauseSignal((*reinterpret_cast< size_t(*)>(_a[1])),(*reinterpret_cast< size_t(*)>(_a[2]))); break;
+        case 5: _t->ButtonPushedSlot((*reinterpret_cast< size_t(*)>(_a[1]))); break;
+        case 6: _t->FloorReachedSlot((*reinterpret_cast< size_t(*)>(_a[1])),(*reinterpret_cast< Direction(*)>(_a[2]))); break;
+        case 7: _t->ControllerStopSlot(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -136,9 +139,16 @@ void LiftController::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
             }
         }
         {
-            using _t = void (LiftController::*)(bool , size_t , size_t );
+            using _t = void (LiftController::*)(size_t , size_t );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&LiftController::CabinStopSignal)) {
                 *result = 3;
+                return;
+            }
+        }
+        {
+            using _t = void (LiftController::*)(size_t , size_t );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&LiftController::CabinPauseSignal)) {
+                *result = 4;
                 return;
             }
         }
@@ -174,13 +184,13 @@ int LiftController::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 7)
+        if (_id < 8)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 7;
+        _id -= 8;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 7)
+        if (_id < 8)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 7;
+        _id -= 8;
     }
     return _id;
 }
@@ -206,10 +216,17 @@ void LiftController::GotTargetSignal(size_t _t1, size_t _t2)
 }
 
 // SIGNAL 3
-void LiftController::CabinStopSignal(bool _t1, size_t _t2, size_t _t3)
+void LiftController::CabinStopSignal(size_t _t1, size_t _t2)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t3))) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
     QMetaObject::activate(this, &staticMetaObject, 3, _a);
+}
+
+// SIGNAL 4
+void LiftController::CabinPauseSignal(size_t _t1, size_t _t2)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
+    QMetaObject::activate(this, &staticMetaObject, 4, _a);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

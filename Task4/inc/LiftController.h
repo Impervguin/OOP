@@ -39,7 +39,9 @@ class LiftController : public QWidget {
         void ControllerStopSignal();
         void FloorReachedSignal(size_t floor, Direction direction);
         void GotTargetSignal(size_t currentFloor, size_t neededFloor);
-        void CabinStopSignal(bool open, size_t currentFloor, size_t neededFloor);
+        void CabinStopSignal(size_t currentFloor, size_t neededFloor);
+        void CabinPauseSignal(size_t currentFloor, size_t neededFloor);
+        
 
 
     private:

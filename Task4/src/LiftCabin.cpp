@@ -24,31 +24,36 @@ void LiftCabin::GetCommandSlot(size_t currentFloor, size_t targetFloor) {
 }
 
 void LiftCabin::moveSlot() {
-    if (_status == STAND || _status == GOTCOMMAND)
+    if (_status == PAUSE || _status == GOTCOMMAND)
         _status = MOVING;
     else
         _currentFloor += _direction;
     
     std::cout << "Лифт на " << _currentFloor << " этаже." << std::endl;
 
-    if (_currentFloor != _targetFloor) {
-        _moveTimer.start(MOVETIME);
-    } else {
-        StopCabinSlot(false, _currentFloor, _targetFloor);
-    }
+    _moveTimer.start(MOVETIME);
     emit FloorPassedSignal(_currentFloor, _direction); 
 }
 
-void LiftCabin::StopCabinSlot(bool openDoors, size_t currentFloor, size_t neededFloor) {
-    (void) openDoors;
-    if (_status == STAND || _status == MOVING) {
+void LiftCabin::StopCabinSlot(size_t currentFloor, size_t neededFloor) {
+    if (_status == MOVING) {
         _status = STAND;
+        _currentFloor = currentFloor;
+        _targetFloor = neededFloor;
+        _direction = STOP;
+        _moveTimer.stop();
+        std::cout << "Лифт остановился на " << _currentFloor << " этаже." << std::endl;
+    }
+}
+
+void LiftCabin::PauseCabinSlot(size_t currentFloor, size_t neededFloor) {
+    if (_status == MOVING || _status == STAND) {
+        _status = PAUSE;
         _currentFloor = currentFloor;
         _targetFloor = neededFloor;
         _direction = _currentFloor > _targetFloor ? DOWN : UP;
         _moveTimer.stop();
         std::cout << "Остановка на " << _currentFloor << " этаже." << std::endl;
-        if (openDoors)
-            emit OpenDoorsSignal();
+        emit OpenDoorsSignal();
     }
 }

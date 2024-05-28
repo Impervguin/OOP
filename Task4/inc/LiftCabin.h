@@ -12,6 +12,7 @@ class LiftCabin : public QObject {
     enum ListCabinStatus {
         STAND,
         GOTCOMMAND,
+        PAUSE,
         MOVING
     };
 
@@ -21,7 +22,8 @@ class LiftCabin : public QObject {
     
     public slots:
         void GetCommandSlot(size_t currentFloor, size_t neededFloor);
-        void StopCabinSlot(bool openDoors, size_t currentFloor, size_t neededFloor);
+        void PauseCabinSlot(size_t currentFloor, size_t neededFloor);
+        void StopCabinSlot(size_t currentFloor, size_t neededFloor);
 
     private:
         Direction _direction;

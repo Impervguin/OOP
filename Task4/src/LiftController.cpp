@@ -19,7 +19,7 @@ LiftController::LiftController(QWidget *parent) : QWidget(parent) {
         
         _inbuttons.push_back(button);
         connect(button.get(), SIGNAL(PressedSignal(size_t)), this, SLOT(ButtonPushedSlot(size_t)));
-        _layout->addWidget(button.get(), 0, i);
+        _layout->addWidget(button.get(), FLOORS - i + 1, 0);
     }
     _layout->addWidget(new QLabel("Внутренние кнопки"), 0, 0);
     for (size_t i = 1; i <= FLOORS; i++) {
@@ -27,9 +27,9 @@ LiftController::LiftController(QWidget *parent) : QWidget(parent) {
         
         _outbuttons.push_back(button);
         connect(button.get(), SIGNAL(PressedSignal(size_t)), this, SLOT(ButtonPushedSlot(size_t)));
-        _layout->addWidget(button.get(), 1, i);
+        _layout->addWidget(button.get(), FLOORS - i + 1, 1);
     }
-    _layout->addWidget(new QLabel("Внешние кнопки"), 1, 0);
+    _layout->addWidget(new QLabel("Внешние кнопки"), 0, 1);
 }
 
 
@@ -51,15 +51,16 @@ void LiftController::FloorReachedSlot(size_t floor, Direction direction) {
         _currentFloor = floor;
         _direction = direction;
 
+        if (!GetNextFloor(_targetFloor)) {
+            
+            emit ControllerStopSignal();
+        }
+
         if (!_floors[_currentFloor - 1]) {
             _inbuttons[_currentFloor - 1]->DoneButtonActionSlot();
             _outbuttons[_currentFloor - 1]->DoneButtonActionSlot();
             _floors[_currentFloor - 1] = true;
-
-            if (GetNextFloor(_targetFloor))
-                emit CabinStopSignal(true, _currentFloor, _targetFloor);
-            else
-                emit ControllerStopSignal();
+            emit CabinPauseSignal( _currentFloor, _targetFloor);  
         }
     }
 }
@@ -69,7 +70,7 @@ void LiftController::ControllerStopSlot() {
         _status = IDLE;
         _direction = STOP;
         _targetFloor = _currentFloor;
-        emit CabinStopSignal(true, _currentFloor, _targetFloor);
+        emit CabinStopSignal(_currentFloor, _targetFloor);
     }
 }
 
