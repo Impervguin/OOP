@@ -22,7 +22,7 @@ class LiftCabin : public QObject {
     
     public slots:
         void GetCommandSlot(size_t currentFloor, size_t neededFloor);
-        void PauseCabinSlot(size_t currentFloor, size_t neededFloor);
+        void PauseCabinSlot(size_t currentFloor, size_t neededFloor, Direction direction);
         void StopCabinSlot(size_t currentFloor, size_t neededFloor);
 
     private:

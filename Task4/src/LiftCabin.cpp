@@ -46,7 +46,8 @@ void LiftCabin::StopCabinSlot(size_t currentFloor, size_t neededFloor) {
     }
 }
 
-void LiftCabin::PauseCabinSlot(size_t currentFloor, size_t neededFloor) {
+void LiftCabin::PauseCabinSlot(size_t currentFloor, size_t neededFloor, Direction direction) {
+    (void) direction;
     if (_status == MOVING || _status == STAND) {
         _status = PAUSE;
         _currentFloor = currentFloor;

@@ -77,9 +77,9 @@ static const uint qt_meta_data_LiftCabin[] = {
 
  // slots: name, argc, parameters, tag, flags
        9,    2,   56,    2, 0x0a /* Public */,
-      12,    2,   61,    2, 0x0a /* Public */,
-      13,    2,   66,    2, 0x0a /* Public */,
-      14,    0,   71,    2, 0x08 /* Private */,
+      12,    3,   61,    2, 0x0a /* Public */,
+      13,    2,   68,    2, 0x0a /* Public */,
+      14,    0,   73,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3, 0x80000000 | 5,    4,    6,
@@ -88,7 +88,7 @@ static const uint qt_meta_data_LiftCabin[] = {
 
  // slots: parameters
     QMetaType::Void, 0x80000000 | 3, 0x80000000 | 3,   10,   11,
-    QMetaType::Void, 0x80000000 | 3, 0x80000000 | 3,   10,   11,
+    QMetaType::Void, 0x80000000 | 3, 0x80000000 | 3, 0x80000000 | 5,   10,   11,    6,
     QMetaType::Void, 0x80000000 | 3, 0x80000000 | 3,   10,   11,
     QMetaType::Void,
 
@@ -105,7 +105,7 @@ void LiftCabin::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         case 1: _t->OpenDoorsSignal(); break;
         case 2: _t->MoveSignal(); break;
         case 3: _t->GetCommandSlot((*reinterpret_cast< size_t(*)>(_a[1])),(*reinterpret_cast< size_t(*)>(_a[2]))); break;
-        case 4: _t->PauseCabinSlot((*reinterpret_cast< size_t(*)>(_a[1])),(*reinterpret_cast< size_t(*)>(_a[2]))); break;
+        case 4: _t->PauseCabinSlot((*reinterpret_cast< size_t(*)>(_a[1])),(*reinterpret_cast< size_t(*)>(_a[2])),(*reinterpret_cast< Direction(*)>(_a[3]))); break;
         case 5: _t->StopCabinSlot((*reinterpret_cast< size_t(*)>(_a[1])),(*reinterpret_cast< size_t(*)>(_a[2]))); break;
         case 6: _t->moveSlot(); break;
         default: ;
