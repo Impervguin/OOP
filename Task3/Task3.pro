@@ -88,6 +88,7 @@ inc/transform/RotateAction.h \
 inc/transform/ScaleAction.h \
 inc/transform/ShiftAction.h \
 inc/transform/TransformAction.h \
+inc/transform/CameraProjectionAction.h \
 inc/visitor/Visitor.h \
 inc/visitor/DrawVisitor.h \
 src/mainwindow.hpp \
@@ -160,6 +161,7 @@ SOURCES += ./src/builder/BaseBoneModelBuilder.cpp \
 ./src/transform/ScaleAction.cpp \
 ./src/transform/ShiftAction.cpp \
 ./src/transform/TransformAction.cpp \
+./src/transform/CameraProjectionAction.cpp \
 ./src/visitor/DrawVisitor.cpp \
 ./src/main.cpp \
 ./src/mainwindow.cpp \

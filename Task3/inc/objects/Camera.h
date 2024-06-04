@@ -2,10 +2,12 @@
 #include "InvisibleObject.h"
 #include "TransformAction.h"
 #include "DrawVisitor.h"
+#include "CameraProjectionAction.h"
 
 
 class Camera : public InvisibleObject {
     friend class DrawVisitor;
+    friend class CameraProjectionAction;
     public:
         Camera();
         Camera(double x, double y, double z);
@@ -21,4 +23,7 @@ class Camera : public InvisibleObject {
 
     protected:
         Point _self;
+        Point _normalForward;
+        Point _normalUp;
+        Point _normalRight;
 };

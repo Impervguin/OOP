@@ -7,6 +7,7 @@ void ListModelStructure::Transform(const TransformAction& action) {
     for (Point& point : _points) {
         action.TransformPoint(point);
     }
+    action.TransformPoint(_center);
 }
 
 std::vector<Point> ListModelStructure::GetPoints() const {
