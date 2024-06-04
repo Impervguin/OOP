@@ -62,13 +62,9 @@ class BSTree : public BaseContainer {
         const_reverse_iterator crbegin() const noexcept;
         const_reverse_iterator crend() const noexcept;
         
-
         virtual size_t size() const noexcept;
 
-
-
         void Clear() noexcept;
-
 
         // Добавление элементов
         template <Convertible<value_type> U>
@@ -76,7 +72,98 @@ class BSTree : public BaseContainer {
         template <Convertible<value_type> U>
         BSTree<T>& operator+=(const U &data);
 
+        void Add(T&& data);
+        BSTree<T>& operator+=(T&& data);
 
+
+        template <ConvertibleContainer<value_type> C>
+        void Add(const C &container);
+        template <ConvertibleContainer<value_type> C>
+        BSTree<T>& operator+=(const C &container);
+        
+        void Add(BSTree<T> &&bstree) noexcept;
+        BSTree<T>& operator+=(BSTree<T> &&bstree) noexcept;
+
+        // Добавление с копированием
+        template <Convertible<value_type> U>
+        BSTree<T> CopyAdd(const U &data) const;
+        template <Convertible<value_type> U>
+        BSTree<T> operator+(const U &data) const;
+
+        BSTree<T> CopyAdd(T&& data) const;
+        BSTree<T> operator+(T&& data) const;
+
+
+        template <ConvertibleContainer<value_type> C>
+        BSTree<T> CopyAdd(const C &container) const;
+        template <ConvertibleContainer<value_type> C>
+        BSTree<T> operator+(const C &container) const;
+        
+        BSTree<T> CopyAdd(BSTree<T> &&bstree) const noexcept;
+        BSTree<T> operator+(BSTree<T> &&bstree) const noexcept;
+
+        // Поиск в дереве
+        template <Convertible<value_type> U>
+        bool Find(const U &data) const noexcept;
+
+        template <ConvertibleContainer<value_type> C>
+        bool Find(const C &container) const noexcept;
+
+        // Удаление элементов
+        template <Convertible<value_type> U>
+        void Remove(const U &data) noexcept;
+        template <Convertible<value_type> U>
+        BSTree<T>& operator-=(const U &data) noexcept;
+
+        template <ConvertibleContainer<value_type> C>
+        void Remove(const C &container) noexcept;
+        template <ConvertibleContainer<value_type> C>
+        BSTree<T>& operator-=(const C &container) noexcept;
+
+        // Удаление с копированием
+        template <Convertible<value_type> U>
+        BSTree<T> CopyRemove(const U &data) const;
+        template <Convertible<value_type> U>
+        BSTree<T> operator-(const U &data) const;
+
+        template <ConvertibleContainer<value_type> C>
+        BSTree<T> CopyRemove(const C &container) const;
+        template <ConvertibleContainer<value_type> C>
+        BSTree<T> operator-(const C &container) const;
+
+        // Пересечение
+        template <ConvertibleContainer<value_type> C>
+        void Intersection(const C &container) noexcept;
+        template <ConvertibleContainer<value_type> C>
+        BSTree<T> &operator&=(const C &container) noexcept;
+        
+        template <ConvertibleContainer<value_type> C>
+        BSTree<T> IntersectionCopy(const C &container) const;
+        template <ConvertibleContainer<value_type> C>
+        BSTree<T> operator&(const C &container) const;
+
+        // Симметрическая Разность
+        template <ConvertibleContainer<value_type> C>
+        void SymmetricDifference(const C &container);
+        template <ConvertibleContainer<value_type> C>
+        BSTree<T> &operator^=(const C &container);
+
+        template <ConvertibleContainer<value_type> C>
+        BSTree<T> SymmetricDifferenceCopy(const C &container) const;
+        template <ConvertibleContainer<value_type> C>
+        BSTree<T> operator^(const C &container) const;
+
+        void SymmetricDifference(BSTree<T> &&bstree) noexcept;
+        BSTree<T> &operator^=(BSTree<T> &&bstree) noexcept;
+        BSTree<T> SymmetricDifferenceCopy(BSTree<T> &&bstree) const noexcept;
+        BSTree<T> operator^(BSTree<T> &&bstree) const noexcept;
+        
+
+        // Сравнение
+        bool IsEqual(const BSTree<T> &bstree) const noexcept;
+        bool IsNotEqual(const BSTree<T> &bstree) const noexcept;
+        bool operator==(const BSTree<T> &bstree) const noexcept;
+        bool operator!=(const BSTree<T> &bstree) const noexcept;
 
 
 
@@ -85,8 +172,6 @@ class BSTree : public BaseContainer {
         {
             public:
                 TreeNode() = delete;
-                TreeNode(const T &data) = delete;
-                TreeNode(T &&data) = delete;
                 ~TreeNode() = default;
 
                 template <typename... Args>
@@ -107,10 +192,24 @@ class BSTree : public BaseContainer {
                 std::shared_ptr<TreeNode> _left;
                 std::shared_ptr<TreeNode> _right;
                 TreeNode(const T &data, std::shared_ptr<TreeNode> left, std::shared_ptr<TreeNode> right);
+                TreeNode(const T &data);
+                TreeNode(T&& data, std::shared_ptr<TreeNode> left, std::shared_ptr<TreeNode> right);
+                TreeNode(T&& data);
         };
     protected:
         std::shared_ptr<TreeNode> _root;
-        size_t _size;  
+        size_t _size; 
+
+        void add(std::shared_ptr<TreeNode> node) noexcept;
+        void recursiveAdd(std::shared_ptr<TreeNode> root) noexcept;
+        std::shared_ptr<TreeNode> find(const T &data) const noexcept;
+        std::shared_ptr<TreeNode> remove(const T &data) noexcept;
+        template <ConvertibleContainer<value_type> C>
+        void intersection(const C &container) noexcept;
+        template <ConvertibleContainer<value_type> C>
+        void symmetricDifference(const C &container);
+        void recursiveSymmetricDifference(std::shared_ptr<TreeNode> root);
+        bool compare(const BSTree<T> &bstree) const noexcept;
 };
 
 template <AssignCopyComparable T>

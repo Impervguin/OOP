@@ -39,9 +39,9 @@ class ReverseTreeIterator : public BaseTreeIterator<T> {
     public:
 
         // Разыменование
-        reference operator*();
+        // reference operator*();
         const reference operator*() const;
-        pointer operator->();
+        // pointer operator->();
         const pointer operator->() const;
 
 

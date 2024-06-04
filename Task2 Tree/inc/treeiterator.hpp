@@ -43,14 +43,14 @@ TreeIterator<T>::TreeIterator(std::shared_ptr<nodeTree> root, std::shared_ptr<no
 : BaseTreeIterator<T>(root, current, index) {}
 
 
-template <AssignCopyComparable T>
-TreeIterator<T>::reference TreeIterator<T>::operator*() {
-    if (!*this) {
-        time_t cur_time = time(NULL);
-        throw IteratorExpiredException(ctime(&cur_time), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
-    }  
-    return *this->_current.lock()->GetData();
-}
+// template <AssignCopyComparable T>
+// TreeIterator<T>::reference TreeIterator<T>::operator*() {
+//     if (!*this) {
+//         time_t cur_time = time(NULL);
+//         throw IteratorExpiredException(ctime(&cur_time), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+//     }  
+//     return *this->_current.lock()->GetData();
+// }
 
 template <AssignCopyComparable T>
 const TreeIterator<T>::reference TreeIterator<T>::operator*() const  {
@@ -61,14 +61,14 @@ const TreeIterator<T>::reference TreeIterator<T>::operator*() const  {
     return *this->_current.lock()->GetData();
 }
 
-template <AssignCopyComparable T>
-TreeIterator<T>::pointer TreeIterator<T>::operator->()  {
-    if (!*this) {
-        time_t cur_time = time(NULL);
-        throw IteratorExpiredException(ctime(&cur_time), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
-    }  
-    return this->_current.lock()->GetData();
-}
+// template <AssignCopyComparable T>
+// TreeIterator<T>::pointer TreeIterator<T>::operator->()  {
+//     if (!*this) {
+//         time_t cur_time = time(NULL);
+//         throw IteratorExpiredException(ctime(&cur_time), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+//     }  
+//     return this->_current.lock()->GetData();
+// }
 
 template <AssignCopyComparable T>
 const TreeIterator<T>::pointer TreeIterator<T>::operator->() const  {

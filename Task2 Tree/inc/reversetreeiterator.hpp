@@ -50,14 +50,14 @@ ReverseTreeIterator<T>::ReverseTreeIterator(std::shared_ptr<nodeTree> root, std:
 : BaseTreeIterator<T>(root, current, index) {}
 
 
-template <AssignCopyComparable T>
-ReverseTreeIterator<T>::reference ReverseTreeIterator<T>::operator*() {
-    if (!*this) {
-        time_t cur_time = time(NULL);
-        throw IteratorExpiredException(ctime(&cur_time), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
-    }  
-    return *this->_current.lock()->GetData();
-}
+// template <AssignCopyComparable T>
+// ReverseTreeIterator<T>::reference ReverseTreeIterator<T>::operator*() {
+//     if (!*this) {
+//         time_t cur_time = time(NULL);
+//         throw IteratorExpiredException(ctime(&cur_time), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+//     }  
+//     return *this->_current.lock()->GetData();
+// }
 
 template <AssignCopyComparable T>
 const ReverseTreeIterator<T>::reference ReverseTreeIterator<T>::operator*() const  {
@@ -68,14 +68,14 @@ const ReverseTreeIterator<T>::reference ReverseTreeIterator<T>::operator*() cons
     return *this->_current.lock()->GetData();
 }
 
-template <AssignCopyComparable T>
-ReverseTreeIterator<T>::pointer ReverseTreeIterator<T>::operator->()  {
-    if (!*this) {
-        time_t cur_time = time(NULL);
-        throw IteratorExpiredException(ctime(&cur_time), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
-    }  
-    return this->_current.lock()->GetData();
-}
+// template <AssignCopyComparable T>
+// ReverseTreeIterator<T>::pointer ReverseTreeIterator<T>::operator->()  {
+//     if (!*this) {
+//         time_t cur_time = time(NULL);
+//         throw IteratorExpiredException(ctime(&cur_time), __FILE__, __LINE__, typeid(*this).name(), __FUNCTION__);
+//     }  
+//     return this->_current.lock()->GetData();
+// }
 
 template <AssignCopyComparable T>
 const ReverseTreeIterator<T>::pointer ReverseTreeIterator<T>::operator->() const  {

@@ -17,6 +17,18 @@ BSTree<T>::TreeNode::TreeNode(const T &data, std::shared_ptr<TreeNode> left, std
 : _data(data), _left(left), _right(right) {};
 
 template <AssignCopyComparable T>
+BSTree<T>::TreeNode::TreeNode(T &&data, std::shared_ptr<TreeNode> left, std::shared_ptr<TreeNode> right)
+: _data(data), _left(left), _right(right) {};
+
+template <AssignCopyComparable T>
+BSTree<T>::TreeNode::TreeNode(const T &data)
+: _data(data), _left(nullptr), _right(nullptr) {};
+
+template <AssignCopyComparable T>
+BSTree<T>::TreeNode::TreeNode(T &&data)
+: _data(data), _left(nullptr), _right(nullptr) {};
+
+template <AssignCopyComparable T>
 void BSTree<T>::TreeNode::SetLeft(const std::shared_ptr<TreeNode> node) {
     _left = node;
 }
