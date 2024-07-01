@@ -1,10 +1,9 @@
-#ifndef BASELISTITERATOR_H__
-#define BASELISTITERATOR_H__
+#pragma once
 
 #include <cstdlib>
 #include <iterator>
 #include <memory>
-#include "listconcepts.h"
+#include "concepts.h"
 #include "exceptions.h"
 
 template <AssignCopyComparable T>
