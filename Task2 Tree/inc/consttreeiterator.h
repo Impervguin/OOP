@@ -1,6 +1,6 @@
 #pragma once
 #include "basetreeiterator.h"
-#include "treeiterator.h"
+// #include "treeiterator.h"
 #include "concepts.h"
 #include <memory>
 #include <iterator>
@@ -23,11 +23,6 @@ class ConstTreeIterator : public BaseTreeIterator<T> {
     // Конструкторы
     public:
         ConstTreeIterator() = delete;
-        ConstTreeIterator(const TreeIterator<T>& other) noexcept;
-        ConstTreeIterator(TreeIterator<T>&& other) noexcept;
-        ConstTreeIterator &operator=(const TreeIterator<T>& other) noexcept;
-        ConstTreeIterator(const TreeIterator<T>&& other) noexcept;
-
 
         ConstTreeIterator(const ConstTreeIterator<T>& other) noexcept;
         ConstTreeIterator(ConstTreeIterator<T>&& other) noexcept;

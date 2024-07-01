@@ -1,6 +1,6 @@
 #pragma once
 #include "basetreeiterator.h"
-#include "reversetreeiterator.h"
+// #include "reversetreeiterator.h"
 #include "concepts.h"
 #include <memory>
 #include <iterator>
@@ -24,10 +24,6 @@ class ConstReverseTreeIterator : public BaseTreeIterator<T> {
     // Конструкторы
     public:
         ConstReverseTreeIterator() = delete;
-        ConstReverseTreeIterator(const ReverseTreeIterator<T>& other) noexcept;
-        ConstReverseTreeIterator(ReverseTreeIterator<T>&& other) noexcept;
-        ConstReverseTreeIterator &operator=(const ReverseTreeIterator<T>& other) noexcept;
-        ConstReverseTreeIterator(const ReverseTreeIterator<T>&& other) noexcept;
 
         ConstReverseTreeIterator(const ConstReverseTreeIterator<T>& other) noexcept;
         ConstReverseTreeIterator(ConstReverseTreeIterator<T>&& other) noexcept;

@@ -34,38 +34,38 @@ ConstReverseTreeIterator<T>::ConstReverseTreeIterator(const ConstReverseTreeIter
     this->_stackPrev = other._stackPrev;
 }
 
-template <AssignCopyComparable T>
-ConstReverseTreeIterator<T>::ConstReverseTreeIterator(const ReverseTreeIterator<T>& other) noexcept
-: BaseTreeIterator<T>(other._root, other._current, other._index) {
-    this->_stackNext = other._stackNext;
-    this->_stackPrev = other._stackPrev;
-}
+// template <AssignCopyComparable T>
+// ConstReverseTreeIterator<T>::ConstReverseTreeIterator(const ReverseTreeIterator<T>& other) noexcept
+// : BaseTreeIterator<T>(other._root, other._current, other._index) {
+//     this->_stackNext = other._stackNext;
+//     this->_stackPrev = other._stackPrev;
+// }
 
-template <AssignCopyComparable T>
-ConstReverseTreeIterator<T>::ConstReverseTreeIterator(ReverseTreeIterator<T>&& other) noexcept
-: BaseTreeIterator<T>(other._root, other._current, other._index) {
-    this->_stackNext = other._stackNext;
-    this->_stackPrev = other._stackPrev;
-}
+// template <AssignCopyComparable T>
+// ConstReverseTreeIterator<T>::ConstReverseTreeIterator(ReverseTreeIterator<T>&& other) noexcept
+// : BaseTreeIterator<T>(other._root, other._current, other._index) {
+//     this->_stackNext = other._stackNext;
+//     this->_stackPrev = other._stackPrev;
+// }
 
-template <AssignCopyComparable T>
-ConstReverseTreeIterator<T> &ConstReverseTreeIterator<T>::operator=(const ReverseTreeIterator<T>& other) noexcept {
-    this->_root = other._root;
-    this->_current = other._current;
-    this->_index = other._index;
-    this->_stackNext = other._stackNext;
-    this->_stackPrev = other._stackPrev;
-    return *this;
-}
+// template <AssignCopyComparable T>
+// ConstReverseTreeIterator<T> &ConstReverseTreeIterator<T>::operator=(const ReverseTreeIterator<T>& other) noexcept {
+//     this->_root = other._root;
+//     this->_current = other._current;
+//     this->_index = other._index;
+//     this->_stackNext = other._stackNext;
+//     this->_stackPrev = other._stackPrev;
+//     return *this;
+// }
 
-template <AssignCopyComparable T>
-ConstReverseTreeIterator<T>::ConstReverseTreeIterator(const ReverseTreeIterator<T>&& other) noexcept {
-    this->_root = other._root;
-    this->_current = other._current;
-    this->_index = other._index;
-    this->_stackNext = other._stackNext;
-    this->_stackPrev = other._stackPrev;
-}
+// template <AssignCopyComparable T>
+// ConstReverseTreeIterator<T>::ConstReverseTreeIterator(const ReverseTreeIterator<T>&& other) noexcept {
+//     this->_root = other._root;
+//     this->_current = other._current;
+//     this->_index = other._index;
+//     this->_stackNext = other._stackNext;
+//     this->_stackPrev = other._stackPrev;
+// }
 
 
 template <AssignCopyComparable T>

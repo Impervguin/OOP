@@ -1,26 +1,27 @@
 #pragma once
-#include "treeiterator.h"
+// #include "treeiterator.h"
 #include "consttreeiterator.h"
-#include "reversetreeiterator.h"
+// #include "reversetreeiterator.h"
 #include "constreversetreeiterator.h"
 #include "concepts.h"
 #include "basecontainer.h"
 #include <iostream>
+#include <type_traits>
 
 
 template <AssignCopyComparable T>
 class BSTree : public BaseContainer {
     friend class BaseTreeIterator<T>;
-    friend class TreeIterator<T>;
+    // friend class TreeIterator<T>;
     friend class ConstTreeIterator<T>;
-    friend class ReverseTreeIterator<T>;
+    // friend class ReverseTreeIterator<T>;
     friend class ConstReverseTreeIterator<T>;
     public:
         using value_type = T;
         using size_type = size_t;
-        using iterator =  TreeIterator<T>;
+        using iterator =  ConstTreeIterator<T>;
         using const_iterator = ConstTreeIterator<T>;
-        using reverse_iterator = ReverseTreeIterator<T>;
+        using reverse_iterator = ConstReverseTreeIterator<T>;
         using const_reverse_iterator = ConstReverseTreeIterator<T>;
 
         // Конструкторы
@@ -86,21 +87,21 @@ class BSTree : public BaseContainer {
 
         // Добавление с копированием
         template <Convertible<value_type> U>
-        BSTree<T> CopyAdd(const U &data) const;
+        BSTree<std::common_type_t<T, U>> CopyAdd(const U &data) const;
         template <Convertible<value_type> U>
-        BSTree<T> operator+(const U &data) const;
+        BSTree<std::common_type_t<T, U>> operator+(const U &data) const;
 
         BSTree<T> CopyAdd(T&& data) const;
         BSTree<T> operator+(T&& data) const;
 
 
         template <ConvertibleContainer<value_type> C>
-        BSTree<T> CopyAdd(const C &container) const;
+        BSTree<std::common_type_t<T, typename C::value_type>> CopyAdd(const C &container) const;
         template <ConvertibleContainer<value_type> C>
-        BSTree<T> operator+(const C &container) const;
+        BSTree<std::common_type_t<T, typename C::value_type>> operator+(const C &container) const;
         
-        BSTree<T> CopyAdd(BSTree<T> &&bstree) const noexcept;
-        BSTree<T> operator+(BSTree<T> &&bstree) const noexcept;
+        BSTree<T> CopyAdd(BSTree<T> &&bstree) const;
+        BSTree<T> operator+(BSTree<T> &&bstree) const;
 
         // Поиск в дереве
         template <Convertible<value_type> U>
@@ -122,14 +123,14 @@ class BSTree : public BaseContainer {
 
         // Удаление с копированием
         template <Convertible<value_type> U>
-        BSTree<T> CopyRemove(const U &data) const;
+        BSTree<std::common_type_t<T, U>> CopyRemove(const U &data) const;
         template <Convertible<value_type> U>
-        BSTree<T> operator-(const U &data) const;
+        BSTree<std::common_type_t<T, U>> operator-(const U &data) const;
 
         template <ConvertibleContainer<value_type> C>
-        BSTree<T> CopyRemove(const C &container) const;
+        BSTree<std::common_type_t<T, typename C::value_type>> CopyRemove(const C &container) const;
         template <ConvertibleContainer<value_type> C>
-        BSTree<T> operator-(const C &container) const;
+        BSTree<std::common_type_t<T, typename C::value_type>> operator-(const C &container) const;
 
         // Пересечение
         template <ConvertibleContainer<value_type> C>
@@ -138,9 +139,9 @@ class BSTree : public BaseContainer {
         BSTree<T> &operator&=(const C &container) noexcept;
         
         template <ConvertibleContainer<value_type> C>
-        BSTree<T> IntersectionCopy(const C &container) const;
+        BSTree<std::common_type_t<T, typename C::value_type>> IntersectionCopy(const C &container) const;
         template <ConvertibleContainer<value_type> C>
-        BSTree<T> operator&(const C &container) const;
+        BSTree<std::common_type_t<T, typename C::value_type>> operator&(const C &container) const;
 
         // Симметрическая Разность
         template <ConvertibleContainer<value_type> C>
@@ -149,9 +150,9 @@ class BSTree : public BaseContainer {
         BSTree<T> &operator^=(const C &container);
 
         template <ConvertibleContainer<value_type> C>
-        BSTree<T> SymmetricDifferenceCopy(const C &container) const;
+        BSTree<std::common_type_t<T, typename C::value_type>> SymmetricDifferenceCopy(const C &container) const;
         template <ConvertibleContainer<value_type> C>
-        BSTree<T> operator^(const C &container) const;
+        BSTree<std::common_type_t<T, typename C::value_type>> operator^(const C &container) const;
 
         void SymmetricDifference(BSTree<T> &&bstree) noexcept;
         BSTree<T> &operator^=(BSTree<T> &&bstree) noexcept;
@@ -160,8 +161,8 @@ class BSTree : public BaseContainer {
         
 
         // Сравнение
-        bool IsEqual(const BSTree<T> &bstree) const noexcept;
-        bool IsNotEqual(const BSTree<T> &bstree) const noexcept;
+        bool IsEquivalent(const BSTree<T> &bstree) const noexcept;
+        bool IsNotEquivalent(const BSTree<T> &bstree) const noexcept;
         bool operator==(const BSTree<T> &bstree) const noexcept;
         bool operator!=(const BSTree<T> &bstree) const noexcept;
 

@@ -215,15 +215,15 @@ BSTree<T>& BSTree<T>::operator+=(BSTree<T> &&bstree) noexcept {
 // Добавление с копированием
 template <AssignCopyComparable T>
 template <Convertible<typename BSTree<T>::value_type> U>
-BSTree<T> BSTree<T>::CopyAdd(const U &data) const {
-    BSTree<T> copy(*this);
+BSTree<std::common_type_t<T, U>> BSTree<T>::CopyAdd(const U &data) const {
+    BSTree<std::common_type_t<T, U>> copy(*this);
     copy.Add(data);
     return copy;
 }
 
 template <AssignCopyComparable T>
 template <Convertible<typename BSTree<T>::value_type> U>
-BSTree<T> BSTree<T>::operator+(const U &data) const {
+BSTree<std::common_type_t<T, U>> BSTree<T>::operator+(const U &data) const {
     return CopyAdd(data);
 }
 
@@ -242,27 +242,27 @@ BSTree<T> BSTree<T>::operator+(T&& data) const {
 
 template <AssignCopyComparable T>
 template <ConvertibleContainer<typename BSTree<T>::value_type> C>
-BSTree<T> BSTree<T>::CopyAdd(const C &container) const {
-    BSTree<T> copy(*this);
+BSTree<std::common_type_t<T, typename C::value_type>> BSTree<T>::CopyAdd(const C &container) const {
+    BSTree<std::common_type_t<T, typename C::value_type>> copy(*this);
     copy.Add(container);
     return copy;
 }
 
 template <AssignCopyComparable T>
 template <ConvertibleContainer<typename BSTree<T>::value_type> C>
-BSTree<T> BSTree<T>::operator+(const C &container) const {
+BSTree<std::common_type_t<T, typename C::value_type>> BSTree<T>::operator+(const C &container) const {
     return CopyAdd(container);
 }
 
 template <AssignCopyComparable T>
-BSTree<T> BSTree<T>::CopyAdd(BSTree<T> &&bstree) const noexcept {
+BSTree<T> BSTree<T>::CopyAdd(BSTree<T> &&bstree) const {
     BSTree<T> copy(*this);
     copy.Add(std::forward<BSTree<T> >(bstree));
     return copy;
 }
 
 template <AssignCopyComparable T>
-BSTree<T> BSTree<T>::operator+(BSTree<T> &&bstree) const noexcept {
+BSTree<T> BSTree<T>::operator+(BSTree<T> &&bstree) const {
     return CopyAdd(std::forward<BSTree<T> >(bstree));
 }
 
@@ -320,29 +320,29 @@ BSTree<T>& BSTree<T>::operator-=(const C &container) noexcept {
 // Удаление с копированием
 template <AssignCopyComparable T>
 template <Convertible<typename BSTree<T>::value_type> U>
-BSTree<T> BSTree<T>::CopyRemove(const U &data) const {
-    BSTree<T> copy(*this);
+BSTree<std::common_type_t<T, U>> BSTree<T>::CopyRemove(const U &data) const {
+    BSTree<std::common_type_t<T, U>> copy(*this);
     copy.Remove(data);
     return copy;
 }
 
 template <AssignCopyComparable T>
 template <Convertible<typename BSTree<T>::value_type> U>
-BSTree<T> BSTree<T>::operator-(const U &data) const {
+BSTree<std::common_type_t<T, U>> BSTree<T>::operator-(const U &data) const {
     return CopyRemove(data);
 }
 
 template <AssignCopyComparable T>
 template <ConvertibleContainer<typename BSTree<T>::value_type> C>
-BSTree<T> BSTree<T>::CopyRemove(const C &container) const {
-    BSTree<T> copy(*this);
+BSTree<std::common_type_t<T, typename C::value_type>> BSTree<T>::CopyRemove(const C &container) const {
+    BSTree<std::common_type_t<T, typename C::value_type>> copy(*this);
     copy.Remove(container);
     return copy;
 }
 
 template <AssignCopyComparable T>
 template <ConvertibleContainer<typename BSTree<T>::value_type> C>
-BSTree<T> BSTree<T>::operator-(const C &container) const {
+BSTree<std::common_type_t<T, typename C::value_type>> BSTree<T>::operator-(const C &container) const {
     return CopyRemove(container);
 }
 
@@ -362,15 +362,15 @@ BSTree<T> &BSTree<T>::operator&=(const C &container) noexcept {
 
 template <AssignCopyComparable T>
 template <ConvertibleContainer<typename BSTree<T>::value_type> C>
-BSTree<T> BSTree<T>::IntersectionCopy(const C &container) const {
-    BSTree<T> copy(*this);
+BSTree<std::common_type_t<T, typename C::value_type>> BSTree<T>::IntersectionCopy(const C &container) const {
+    BSTree<std::common_type_t<T, typename C::value_type>> copy(*this);
     copy.Intersection(container);
     return copy;
 }
 
 template <AssignCopyComparable T>
 template <ConvertibleContainer<typename BSTree<T>::value_type> C>
-BSTree<T> BSTree<T>::operator&(const C &container) const {
+BSTree<std::common_type_t<T, typename C::value_type>> BSTree<T>::operator&(const C &container) const {
     return IntersectionCopy(container);
 }
 
@@ -390,7 +390,7 @@ BSTree<T> &BSTree<T>::operator^=(const C &container) {
 
 template <AssignCopyComparable T>
 template <ConvertibleContainer<typename BSTree<T>::value_type> C>
-BSTree<T> BSTree<T>::SymmetricDifferenceCopy(const C &container) const {
+BSTree<std::common_type_t<T, typename C::value_type>> BSTree<T>::SymmetricDifferenceCopy(const C &container) const {
     BSTree<T> copy(*this);
     copy.SymmetricDifference(container);
     return copy;
@@ -398,7 +398,7 @@ BSTree<T> BSTree<T>::SymmetricDifferenceCopy(const C &container) const {
 
 template <AssignCopyComparable T>
 template <ConvertibleContainer<typename BSTree<T>::value_type> C>
-BSTree<T> BSTree<T>::operator^(const C &container) const {
+BSTree<std::common_type_t<T, typename C::value_type>> BSTree<T>::operator^(const C &container) const {
     return SymmetricDifferenceCopy(container);
 }
 
@@ -427,23 +427,23 @@ BSTree<T> BSTree<T>::operator^(BSTree<T> &&bstree) const noexcept {
 }
 
 template <AssignCopyComparable T>
-bool BSTree<T>::IsEqual(const BSTree<T> &bstree) const noexcept {
+bool BSTree<T>::IsEquivalent(const BSTree<T> &bstree) const noexcept {
     return compare(bstree);
 }
 
 template <AssignCopyComparable T>
-bool BSTree<T>::IsNotEqual(const BSTree<T> &bstree) const noexcept {
+bool BSTree<T>::IsNotEquivalent(const BSTree<T> &bstree) const noexcept {
     return !IsEqual(bstree);
 }
 
 template <AssignCopyComparable T>
 bool BSTree<T>::operator==(const BSTree<T> &bstree) const noexcept {
-    return IsEqual(bstree);
+    return IsEquivalent(bstree);
 }
 
 template <AssignCopyComparable T>
 bool BSTree<T>::operator!=(const BSTree<T> &bstree) const noexcept {
-    return IsNotEqual(bstree);
+    return IsNotEquivalent(bstree);
 }
 
 

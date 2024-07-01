@@ -1717,5 +1717,14 @@ int main() {
     intersection_copy_tests();
     symmetric_tests();
     symmetric_copy_test();
+
+    BSTree<int> tree{1, 2, 3, 4, 5, 6, 7, 8};
+    double a = 10.2;
+    auto ntree = tree.CopyAdd(a);
+
+    std::vector<double> vec{7.2, 12.4};
+    auto ntree2 = tree + vec;
+    std::cout << ntree << std::endl;
+    std::cout << ntree2 << std::endl;
     return 0;
 }

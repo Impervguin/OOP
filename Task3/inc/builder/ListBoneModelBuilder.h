@@ -9,4 +9,4 @@ class ListBoneModelBuilder : public BaseBoneModelBuilder {
         ListBoneModelBuilder();
         
         virtual ~ListBoneModelBuilder() = default;
-};  
+}; 
